@@ -27,7 +27,6 @@
     ],
     "web_accessible_resources": [
         "modules/*",
-        "main.css",
         "background.html"
     ]
 }
