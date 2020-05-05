@@ -2,7 +2,6 @@ var body   = document.body || document.getElementsByTagName('body')[0],
     newpar = document.createElement('div');
 
 newpar.style.width = "100%"
-newpar.style.height = "5%"
 newpar.style.zIndex = "100"
 newpar.style.backgroundColor = "coral"
 newpar.style.fontSize = 15
