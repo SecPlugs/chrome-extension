@@ -1,5 +1,4 @@
 import { fetchGet } from './modules/utils.js'
-let tabArray = []
 chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {    
     if(changeInfo.url && !changeInfo.url.includes("chrome")) {       
         let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + changeInfo.url
@@ -9,24 +8,24 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
         }
         fetchGet(url, headers)
         .then(data => {
-            if(data["score"] <= 40 && tabArray.indexOf(tabId) === -1){
+            if(data["score"] <= 40){
                 chrome.tabs.executeScript(tabId, 
-                    {code: 'var message = ' + '"Secplug Analysis: This is a malicious page"'},
+                    {code: 'var message = ' + '"Secplug Analysis: This is a malicious page";' 
+                           + 'var bg_color = "#ff8533"'},
                     function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                 )
-                tabArray.push(tabId)
-            }else if(data["score"] > 60 && tabArray.indexOf(tabId) === -1){
+            }else if(data["score"] > 60){
                         chrome.tabs.executeScript(tabId, 
-                            {code: 'var message = ' + '"Secplug Analysis: This is a clean page"'},
+                            {code: 'var message = ' + '"Secplug Analysis: This is a clean page";' 
+                            + 'var bg_color = "#33ff33"'},
                             function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                         )
-                        tabArray.push(tabId)
-            }else if(data["score"] > 40 && data["score"] <= 60 && tabArray.indexOf(tabId) === -1){
+            }else if(data["score"] > 40 && data["score"] <= 60){
                         chrome.tabs.executeScript(tabId, 
-                            {code: 'var message = ' + '"Secplug Analysis: We do not have threat info of this page"'},
+                            {code: 'var message = ' + '"Secplug Analysis: We do not have threat info of this page";' + 
+                            'var bg_color = "#66ffcc"'},
                             function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                         )
-                        tabArray.push(tabId)
             }
         }    
     )
