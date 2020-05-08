@@ -4,3 +4,11 @@ export const fetchGet = (url, headers_obj) => {
                           .catch()
     return request
 }
+
+export const fetchKey = () => {
+    return new Promise(function(resolve, reject){
+        chrome.storage.local.get({'secplug_api_key': ''}, function(key){            
+            resolve(key.secplug_api_key)
+        })
+    })
+}
