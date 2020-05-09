@@ -1,14 +1,23 @@
-export const fetchGet = (url, headers_obj) => {
-    const request =  fetch(url, {method: "GET", headers: headers_obj})
-                          .then(response => response.json())
-                          .catch()
-    return request
-}
-
 export const fetchKey = () => {
     return new Promise(function(resolve, reject){
-        chrome.storage.local.get({'secplug_api_key': ''}, function(key){            
-            resolve(key.secplug_api_key)
+        chrome.storage.local.get(['secplug_api_key'], function(key){
+            if(key.secplug_api_key){
+                resolve(key.secplug_api_key)
+            }else {
+                reject("API Key needs to be set")
+            }            
         })
     })
+}
+
+export const setKey = () => {    
+    text_val = document.getElementById('secplug-input-box').value
+    if(text_val && text_val.length){
+        chrome.storage.local.set({"secplug_api_key": text_val}, null)
+        document.getElementById("secplug-input-div").remove()
+    }
+}
+
+export const closeDiv = (id) => {    
+    document.getElementById(id).remove()
 }
