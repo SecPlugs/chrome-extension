@@ -12,6 +12,7 @@ newpar.style.fontFamily = "sans-serif, Lato, Times New Roman"
 newpar.style.position = "-webkit-sticky"
 newpar.style.position = "sticky"
 newpar.style.top = "0"
+newpar.style.opacity = "0.8"
 newpar.innerHTML = message;
 newpar.addEventListener("click", function(){
     closeDiv("secplug-error-div")

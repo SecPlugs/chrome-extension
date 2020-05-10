@@ -1,7 +1,8 @@
-import { fetchKey, setKey, closeDiv, setDefaultApiKey } from './modules/utils.js'
+import { fetchKey, closeDiv, setDefaultApiKey, setScan, getScan } from './modules/utils.js'
 chrome.runtime.onInstalled.addListener(function (details){
     if(details.reason === "install"){
         setDefaultApiKey()
+        setScan("passive")
     }
 })
 
@@ -20,8 +21,10 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
             .then(response => {
                 if(response.status === 403){
                     chrome.tabs.executeScript(tabId, 
-                        {code: 'var setKey = ' + setKey + '; var closeDiv = ' + closeDiv},
-                        function() {chrome.tabs.executeScript(tabId, {file: "input_key.js"})}
+                        {code: 'var message = ' + '"Please set up a Secplug API Key for continuing scanning";' 
+                               + 'var bg_color = "#ff8533";'
+                               + 'var closeDiv = ' + closeDiv},
+                        function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                     )
                 }else if(!response.ok){
                     throw Error(response.status)
@@ -58,8 +61,10 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
         })
         .catch(error => {
             chrome.tabs.executeScript(tabId, 
-                {code: 'var setKey = ' + setKey + '; var closeDiv = ' + closeDiv},
-                function() {chrome.tabs.executeScript(tabId, {file: "input_key.js"})}
+                {code: 'var message = ' + '"Please set up a Secplug API Key for continuing scanning";' 
+                       + 'var bg_color = "#ff8533";'
+                       + 'var closeDiv = ' + closeDiv},
+                function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
             )
         })
     }})

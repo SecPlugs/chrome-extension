@@ -11,7 +11,7 @@ export const fetchKey = () => {
 }
 
 export const setKey = () => {    
-    text_val = document.getElementById('secplug-input-box').value
+    let text_val = document.getElementById('secplug-input-box').value
     if(text_val && text_val.length){
         chrome.storage.local.set({"secplug_api_key": text_val}, null)
         document.getElementById("secplug-input-div").remove()
@@ -25,4 +25,20 @@ export const setDefaultApiKey = () => {
 
 export const closeDiv = (id) => {    
     document.getElementById(id).remove()
+}
+
+export const setScan = (scanOpt) => {
+    chrome.storage.local.set({"secplug_scan_opt": scanOpt}, null)
+}
+
+export const getScan = () => {
+    return new Promise(function(resolve, reject){
+        chrome.storage.local.get(['secplug_scan_opt'], function(key){
+            if(key.secplug_scan_opt){
+                resolve(key.secplug_scan_opt)
+            }else {
+                reject("Scan Option not selected")
+            }            
+        })
+    })
 }
