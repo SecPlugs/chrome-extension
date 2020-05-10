@@ -18,6 +18,11 @@ export const setKey = () => {
     }
 }
 
+export const setDefaultApiKey = () => {
+    let def_api_key = "HPWYXrUoZe1IorJe5Lfwt1TACtqquW0q57EbIQRz"
+    chrome.storage.local.set({"secplug_api_key": def_api_key}, null)
+}
+
 export const closeDiv = (id) => {    
     document.getElementById(id).remove()
 }

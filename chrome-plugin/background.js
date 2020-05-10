@@ -1,4 +1,10 @@
-import { fetchKey, setKey, closeDiv } from './modules/utils.js'
+import { fetchKey, setKey, closeDiv, setDefaultApiKey } from './modules/utils.js'
+chrome.runtime.onInstalled.addListener(function (details){
+    if(details.reason === "install"){
+        setDefaultApiKey()
+    }
+})
+
 
 chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {    
     if(changeInfo.url && !changeInfo.url.includes("chrome")) {  
