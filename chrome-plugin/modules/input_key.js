@@ -34,6 +34,7 @@ export const inputKey = () => {
     var buttonKey = document.createElement('input');
 
     newpar.setAttribute("id", "secplug-input-div");
+    newpar.style.height = "20%";
     newpar.style.width = "100%";
     newpar.style.zIndex = "10000";
     newpar.style.backgroundColor = "#e6f9ff";
@@ -55,7 +56,7 @@ export const inputKey = () => {
     inputBox.setAttribute("placeholder", "Enter Secplug API Key");
     inputBox.style.position = "-webkit-sticky";
     inputBox.style.position = "sticky";
-    inputBox.style.top = "0";
+    inputBox.style.top = "5%";
 
     buttonKey.setAttribute("id", "secplug-button-key");
     buttonKey.setAttribute("type", "submit");
@@ -66,7 +67,7 @@ export const inputKey = () => {
     buttonKey.style.marginLeft = "5px";
     buttonKey.style.position = "-webkit-sticky";
     buttonKey.style.position = "sticky";
-    buttonKey.style.top = "0";
+    buttonKey.style.top = "5%";
     buttonKey.addEventListener("click", function(event){
         if(event.target == event.currentTarget){
             setKey();
