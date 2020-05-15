@@ -37,7 +37,7 @@ export const inputKey = () => {
     newpar.style.height = "20%";
     newpar.style.width = "100%";
     newpar.style.zIndex = "10000";
-    newpar.style.backgroundColor = "#e6f9ff";
+    newpar.style.backgroundColor = "#ffeb99";
     newpar.style.fontSize = "15";
     newpar.style.textAlign = "center";
     newpar.style.verticalAlign = "middle";
