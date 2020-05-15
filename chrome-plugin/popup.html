@@ -2,49 +2,59 @@
     <head>
         <title>Click to Open Menu Options</title>
         <style>
+            .body {
+                padding: 0;
+                margin: 2px;
+                text-align: center;
+            }
             .flex-container {
-                height: 150px;
-                width: 200px;
+                height: 200px;
+                width: 250px;
+                flex-basis: 0;
                 background-color: #e6f9ff;
                 display: flex;
-                justify-content: space-between;
-                flex-direction: column;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                align-items: center;
+                text-align: center;
+                flex-direction: row;
                 font-family: apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-
             }
             .flex-link {
                 background-color: #219bd9;
                 color: white;
                 font-weight: 700;
                 font-size: 13;
+                line-height: 40px;
                 text-decoration: none;
-                padding: 1%;
-                
+                margin: 1%;
+                box-sizing: border-box;
+                flex-grow: 1;
+                height: 25%;
             }
             .flex-link:hover{
                 background-color: #256c74;
             }
             .flex-link:active{
-                background-color: #256c74;
+                background-color: #6666ff;
             }
-
             .secplugs-label{                                                
                 color: black;
                 align-self: center;
                 font-weight: 700;
                 font-size: 15;
             }
-        </style>
+        </style>  
+        <script type="module" src="./modules/input_key.js"></script>
     </head>
-    <body>
+    <body id="secplug-popup" class="body">
+        <label class="secplugs-label">Secplugs Secure</label>
         <div class="flex-container">
-            <label class="secplugs-label">Secplugs Secure</label>
+            <a href="#" id="scan_link" class="flex-link">Scan active page</a>
             <a href="#" id="manual_link" class="flex-link">Manual Scanning</a>
             <a href="#" id="auto_link" class="flex-link">Auto Scanning</a>
-            <a href="#" id="no_scan_link" class="flex-link">No Scanning</a>
-            <a href="#" id="api_link" class="flex-link">Enter Your own API Key</a>
+            <a href="#" id="api_link" class="flex-link">Enter API Key</a>
             <a href="https://secplugs.com/" target="_blank" class="flex-link">Visit Secplugs.com</a>
         </div>
-        <script type="module" src="./modules/input_key.js"></script>        
     </body>
-</html>>
+</html>

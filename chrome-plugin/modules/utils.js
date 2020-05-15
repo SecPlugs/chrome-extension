@@ -1,4 +1,4 @@
-export const fetchKey = () => {
+export const getKey = () => {
     return new Promise(function(resolve, reject){
         chrome.storage.local.get(['secplug_api_key'], function(key){
             if(key.secplug_api_key){
@@ -24,7 +24,12 @@ export const setDefaultApiKey = () => {
 }
 
 export const closeDiv = (id) => {    
-    document.getElementById(id).remove()
+    try{
+        document.getElementById(id).remove()
+    }catch(err){
+        return
+    }
+
 }
 
 export const setScan = (scanOpt) => {
@@ -38,6 +43,22 @@ export const getScan = () => {
                 resolve(key.secplug_scan_opt)
             }else {
                 reject("Scan Option not selected")
+            }            
+        })
+    })
+}
+
+export const setScanning = (state) => {
+    chrome.storage.local.set({"secplug_under_scan": state}, null)
+}
+
+export const isScanning = () => {
+    return new Promise(function(resolve, reject){
+        chrome.storage.local.get(['secplug_under_scan'], function(key){
+            if(key.secplug_under_scan === true){
+                resolve(key.secplug_under_scan)
+            }else {
+                return false
             }            
         })
     })

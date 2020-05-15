@@ -1,9 +1,30 @@
-import {setKey, closeDiv, setScan} from "./utils.js";
-document.addEventListener('DOMContentLoaded', function () {
+import {setKey, closeDiv, setScan, getScan, setScanning} from "./utils.js";
+document.addEventListener('DOMContentLoaded', function () {    
     document.getElementById("api_link").addEventListener("click", inputKey)
-    document.getElementById("no_scan_link").addEventListener("click", setScan("none"))
-    document.getElementById("auto_link").addEventListener("click", setScan("passive"))
-    document.getElementById("manual_link").addEventListener("click", setScan("manual"))
+    document.getElementById("auto_link").addEventListener("click", function(){
+        setScan("passive")
+        document.getElementById("auto_link").style.backgroundColor = "#6666ff"
+        window.close()
+    })
+    document.getElementById("manual_link").addEventListener("click", function(){
+        setScan("manual")
+        console.log("manual")
+        document.getElementById("manual_link").style.backgroundColor = "#6666ff"
+        window.close()
+    })
+    getScan()
+         .then(scanSetting => {
+             if(scanSetting === "manual"){
+                document.getElementById("manual_link").style.backgroundColor = "#6666ff"
+             }else{
+                document.getElementById("auto_link").style.backgroundColor = "#6666ff"
+             }
+         })
+    document.getElementById("scan_link").addEventListener("click", function(){
+        chrome.runtime.sendMessage({action: "scan_url"}, null)
+        setScanning(true)
+        window.close()
+    })
 });
 
 export const inputKey = () => {
