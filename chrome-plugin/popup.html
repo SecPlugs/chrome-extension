@@ -40,15 +40,31 @@
             }
             .secplugs-label{                                                
                 color: black;
-                align-self: center;
                 font-weight: 700;
-                font-size: 15;
+                font-size: 20;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            .secplug-logo {
+                height: 20px;
+                width: 20px;
+                text-align: left;
+                margin-right: 10px;
+            }
+            .image-div{
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
             }
         </style>  
         <script type="module" src="./modules/input_key.js"></script>
     </head>
     <body id="secplug-popup" class="body">
-        <label class="secplugs-label">Secplugs Secure</label>
+        <div class="image-div">
+            <img src="popup-logo.png" alt="Secplugs" class="secplug-logo">
+            <label class="secplugs-label">Secplugs Secure</label>
+        </div>
         <div class="flex-container">
             <a href="#" id="scan_link" class="flex-link">Scan active page</a>
             <a href="#" id="manual_link" class="flex-link">Manual Scanning</a>
