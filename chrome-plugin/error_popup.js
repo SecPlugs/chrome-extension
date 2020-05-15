@@ -5,14 +5,18 @@ newpar.setAttribute("id", "secplug-error-div")
 newpar.style.width = "100%"
 newpar.style.zIndex = "10000"
 newpar.style.backgroundColor = bg_color
-newpar.style.fontSize = "15"
+newpar.style.color = "black"
+newpar.style.opacity = "0.8"
 newpar.style.textAlign = "center"
 newpar.style.verticalAlign = "middle"
-newpar.style.fontFamily = "sans-serif, Lato, Times New Roman"
+newpar.style.fontFamily = "Courier New, Courier, monospace"
 newpar.style.position = "-webkit-sticky"
 newpar.style.position = "sticky"
 newpar.style.top = "0"
-newpar.style.opacity = "0.8"
+newpar.style.maxHeight = "20px"
+newpar.style.minHeight = "20px"
+newpar.style.fontSize = "15px"
+newpar.style.fontStretch = "expanded"
 newpar.innerHTML = message;
 newpar.addEventListener("click", function(){
     closeDiv("secplug-error-div")

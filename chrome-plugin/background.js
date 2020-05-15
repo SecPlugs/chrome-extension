@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
                             }else if(data["score"] > 60){
                                         chrome.tabs.executeScript(tabId, 
                                             {code: 'var message = ' + '"Secplug Analysis: This is a clean page";' 
-                                            + 'var bg_color = "#33ff33";'
+                                            + 'var bg_color = "#1aff1a";'
                                             + 'var closeDiv = ' + closeDiv},
                                             function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                                         )
@@ -120,7 +120,7 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
                         }else if(data["score"] > 60){
                                     chrome.tabs.executeScript(tabId, 
                                         {code: 'var message = ' + '"Secplug Analysis: This is a clean page";' 
-                                        + 'var bg_color = "#33ff33";'
+                                        + 'var bg_color = "#1aff1a";'
                                         + 'var closeDiv = ' + closeDiv},
                                         function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                                     )
