@@ -11,8 +11,7 @@
           "matches": [
             "<all_urls>"
           ],
-          "js": [
-              "modules/jquery-3.5.0.min.js",              
+          "js": [          
               "content.js"
             ]
         }

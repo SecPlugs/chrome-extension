@@ -1,4 +1,8 @@
 import { closeDiv, setDefaultApiKey, setScan, getScan, doScan } from './modules/utils.js'
+import logo from './logo.png'
+import popup from './popup-logo.png'
+import background from './background.html'
+import popup_html from './popup.html'
 
 chrome.runtime.onInstalled.addListener(function (details){
     if(details.reason === "install"){
