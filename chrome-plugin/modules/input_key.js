@@ -1,4 +1,4 @@
-import {setKey, closeDiv, setScan, getScan, setScanning} from "./utils.js";
+import {setKey, closeDiv, setScan, getScan} from "./utils.js";
 document.addEventListener('DOMContentLoaded', function () {    
     document.getElementById("api_link").addEventListener("click", inputKey)
     document.getElementById("auto_link").addEventListener("click", function(){
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
          })
     document.getElementById("scan_link").addEventListener("click", function(){
         chrome.runtime.sendMessage({action: "scan_url"}, null)
-        setScanning(true)
         window.close()
     })
 });

@@ -48,18 +48,65 @@ export const getScan = () => {
     })
 }
 
-export const setScanning = (state) => {
-    chrome.storage.local.set({"secplug_under_scan": state}, null)
-}
-
-export const isScanning = () => {
-    return new Promise(function(resolve, reject){
-        chrome.storage.local.get(['secplug_under_scan'], function(key){
-            if(key.secplug_under_scan === true){
-                resolve(key.secplug_under_scan)
-            }else {
-                return false
-            }            
+export const doScan = (url, tabId) => {
+    if(!url.includes("undefined") && !url.includes("chrome")) {  
+        getKey()
+            .then(api_key => {                        
+            let headers = {
+                "accept": "application/json",
+                "x-api-key": api_key
+            }
+            fetch(url, {method: "GET", headers: headers})
+            .then(response => {
+                if(response.status === 403){
+                    chrome.tabs.executeScript(tabId, 
+                        {code: 'var message = ' + '"Please set up a Secplug API Key for continuing scanning";' 
+                                + 'var bg_color = "#ff8533";'
+                                + 'var closeDiv = ' + closeDiv},
+                        function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
+                    )
+                }else if(!response.ok){
+                    throw Error(response.status)
+                }
+                return response.json()
+            })
+            .then(data => {                
+                if(data["score"] <= 40){
+                    chrome.tabs.executeScript(tabId, 
+                        {code: 'var message = ' + '"Secplug Analysis: This is a malicious page";' 
+                                + 'var bg_color = "#ff8533";'
+                                + 'var closeDiv = ' + closeDiv},
+                        function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
+                    )
+                }else if(data["score"] > 60){
+                            chrome.tabs.executeScript(tabId, 
+                                {code: 'var message = ' + '"Secplug Analysis: This is a clean page";' 
+                                + 'var bg_color = "#1aff1a";'
+                                + 'var closeDiv = ' + closeDiv},
+                                function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
+                            )
+                }else if(data["score"] > 40 && data["score"] <= 60){
+                            chrome.tabs.executeScript(tabId, 
+                                {code: 'var message = ' + '"Secplug Analysis: We do not have threat info of this page";' + 
+                                'var bg_color = "#66ffcc";'
+                                + 'var closeDiv = ' + closeDiv},
+                                function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
+                            )
+                }
+            })
+            .catch(error => {                
+                console.log(error)
+            })
         })
-    })
+        .catch(error => {
+            chrome.tabs.executeScript(tabId, 
+                {code: 'var message = ' + '"Please set up a Secplug API Key for continuing scanning";' 
+                        + 'var bg_color = "#ff8533";'
+                        + 'var closeDiv = ' + closeDiv},
+                function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
+            )
+        })
+    }else{
+        console.log(url + "is not to be scanned")
+    }
 }
