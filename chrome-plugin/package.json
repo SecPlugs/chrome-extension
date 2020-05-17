@@ -4,19 +4,23 @@
   "description": "Secplug's Chrome plugin",
   "main": "background.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest --coverage"
   },
   "author": "Deval Jain",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
+    "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^6.0.1",
     "file-loader": "^6.0.0",
+    "jest": "^26.0.1",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@bumble/jest-chrome": "^0.5.1",
     "webpack": "^4.43.0"
   }
 }
