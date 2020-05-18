@@ -53,6 +53,40 @@ describe('Test setKey in utils.js', ()=> {
         document.body.appendChild(div)
         utils.setKey()
         expect(chrome.storage.local.set).not.toHaveBeenCalledWith()
-        document.body.remove('secplug-input-div')
+    })
+})
+
+describe('Test setDefaultAPIKey in utils.js', () => {
+    it('setKey in local storage', () => {
+        utils.setDefaultApiKey()
+        expect(chrome.storage.local.set).toHaveBeenCalledWith({"secplug_api_key": "2VJIWQkIm67Dsk5Hl5jAB8vPPYSxhNun3ftKYxsl"}, null)
+    })
+})
+
+describe('Test closeDiv in utils.js', () => {
+    const originalDoc = global.document;
+    const getElementById = jest.fn();
+    beforeEach(() => {
+        global.document.getElementById = getElementById;
+    });
+    afterAll(() => {
+        global.document = originalDoc;
+    })
+
+    it('closeDiv will remove an element from DOM', () => {  
+        const div = document.createElement('div')
+        div.setAttribute("id", "secplug-input-div")      
+        document.body.appendChild(div)
+        const divParams = { "id": "secplug-input-div" }
+        getElementById.mockReturnValue(divParams);
+        utils.closeDiv("secplug-input-div")        
+        expect(document.getElementById).toHaveBeenCalledWith("secplug-input-div")
+    })
+})
+
+describe("setScan in utils.js", () => {
+    it('test if secplug_scan_opt gets set', () => {
+        utils.setScan("my-option")
+        expect(chrome.storage.local.set).toHaveBeenCalledWith({"secplug_scan_opt": "my-option"}, null)
     })
 })
