@@ -107,6 +107,6 @@ export const doScan = (url, tabId) => {
             )
         })
     }else{
-        console.log(url + "is not to be scanned")
+        console.log(url + " is not to be scanned")
     }
 }

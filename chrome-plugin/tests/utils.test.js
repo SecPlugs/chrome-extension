@@ -90,3 +90,101 @@ describe("setScan in utils.js", () => {
         expect(chrome.storage.local.set).toHaveBeenCalledWith({"secplug_scan_opt": "my-option"}, null)
     })
 })
+
+describe('Test getScan in utils.js', () => {
+    it('Test reject', () => {
+        const message = ['a']
+        const response = "b"
+        chrome.storage.local.get.mockImplementation(
+            (message, callback) => {
+                callback(response)
+            }
+        )
+        return utils.getScan().catch(data => {        
+            expect(data).toEqual("Scan Option not selected")
+        })
+    })
+    
+    it('Test resolve', () => {
+        const message = ['a']
+        const response = {"secplug_scan_opt": "invalid_opt"}
+        chrome.storage.local.get.mockImplementation(
+            (message, callback) => {
+                callback(response)
+            }
+        )
+        return utils.getScan().then(data => {
+            expect(data).toEqual("invalid_opt")
+        })
+    })
+})
+
+describe('Test doScan in utils.js', () => {
+    it('url includes chrome', () => {
+        let url = "chrome-url"
+        let tabId = 1
+        console.log = jest.fn()
+        utils.doScan(url, tabId)
+        expect(console.log).toHaveBeenCalledWith(url + ' is not to be scanned')
+    })
+
+    it('url doesnt include chrome', async() => {
+        let url = "http://invalid.com"
+        let tabId = 1
+        // const mock_getKey = jest.fn(utils, "getKey").mockImplementation(() => Promise.resolve('invalid_key'))
+        const response = {"secplug_api_key": "invalid_key"}
+        chrome.storage.local.get.mockImplementation(
+            (message, callback) => {
+                callback(response)
+            }
+        )
+        global.fetch = jest.fn()
+        let headers = {
+            "accept": "application/json",
+            "x-api-key": "invalid_key"
+        }
+        await utils.doScan(url, tabId)
+        expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
+        global.fetch.mockClear();
+        delete global.fetch        
+
+        let responseBody = {response: {data: 20}}
+        // global.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+        //     status: 200,
+        //     body: JSON.stringify(responseBody),
+        //     statusText: 'OK',
+        //     headers: {'Content-Type': 'application/json'},
+        //     sendAsJson: false
+        //   }))
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 200,
+            json: () => JSON.parse('{"score": 20}'),
+            ok: true
+
+        }))
+        await utils.doScan(url, tabId)
+        expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
+
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 200,
+            json: () => JSON.parse('{"score": 50}'),
+            ok: true
+
+        }))
+        await utils.doScan(url, tabId)
+        expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
+
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 200,
+            json: () => JSON.parse('{"score": 80}'),
+            ok: true
+
+        }))
+        await utils.doScan(url, tabId)
+        expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
+
+    })
+
+
+
+})
