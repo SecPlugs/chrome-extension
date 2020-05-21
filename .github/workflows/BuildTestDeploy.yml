@@ -15,14 +15,15 @@ jobs:
         uses: actions/checkout@master
       
       - name: install dependencies
-        run: |
-          cd chrome-plugin
-          npm install
+        working-directory: ./chrome-plugin
+        run: npm install
 
       - name: run unit test
+        working-directory: ./chrome-plugin
         if: success()
         run: npm run test
 
       - name: run build 
+        working-directory: ./chrome-plugin
         if: success()
         run: npm run build
