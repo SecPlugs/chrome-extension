@@ -1,0 +1,29 @@
+name: BuildTestDeploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  pipeline:
+    name: Install, Test, Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Code
+        uses: actions/checkout@master
+      
+      - name: install dependencies
+        working-directory: ./chrome-plugin
+        run: npm install
+
+      - name: run unit test
+        working-directory: ./chrome-plugin
+        if: success()
+        run: npm run test
+
+      - name: run build 
+        working-directory: ./chrome-plugin
+        if: success()
+        run: npm run build
