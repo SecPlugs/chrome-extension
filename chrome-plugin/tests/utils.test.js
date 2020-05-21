@@ -131,7 +131,7 @@ describe('Test doScan in utils.js', () => {
     it('url doesnt include chrome', async() => {
         let url = "http://invalid.com"
         let tabId = 1
-        // const mock_getKey = jest.fn(utils, "getKey").mockImplementation(() => Promise.resolve('invalid_key'))
+        
         const response = {"secplug_api_key": "invalid_key"}
         chrome.storage.local.get.mockImplementation(
             (message, callback) => {
@@ -149,13 +149,6 @@ describe('Test doScan in utils.js', () => {
         delete global.fetch        
 
         let responseBody = {response: {data: 20}}
-        // global.fetch = jest.fn().mockImplementation(() => Promise.resolve({
-        //     status: 200,
-        //     body: JSON.stringify(responseBody),
-        //     statusText: 'OK',
-        //     headers: {'Content-Type': 'application/json'},
-        //     sendAsJson: false
-        //   }))
         global.fetch = jest.fn(() => Promise.resolve({
             'status': 200,
             json: () => JSON.parse('{"score": 20}'),
