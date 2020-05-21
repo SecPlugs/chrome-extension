@@ -15,7 +15,9 @@ jobs:
         uses: actions/checkout@master
       
       - name: install dependencies
-        run: npm install
+        run: |
+          cd chrome-plugin
+          npm install
 
       - name: run unit test
         if: success()
