@@ -1,4 +1,6 @@
 import { closeDiv, setDefaultApiKey, setScan, getScan, doScan } from './modules/utils.js'
+
+// These imports are required for webpaack
 import logo from './logo.png'
 import popup from './popup-logo.png'
 import background from './background.html'
