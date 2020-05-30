@@ -14,6 +14,8 @@ export const setKey = () => {
     let text_val = document.getElementById('secplug-input-box').value
     if(text_val && text_val.length){
         chrome.storage.local.set({"secplug_api_key": text_val}, null)
+        chrome.storage.local.set({"secplug_key_type": "paid"}, null)
+        document.getElementById('visit_us').innerHTML = "Visit Secplugs.com"
         document.getElementById("secplug-input-div").remove()
     }
 }
@@ -21,6 +23,7 @@ export const setKey = () => {
 export const setDefaultApiKey = () => {
     let def_api_key = "RObZ64qyD435yWjIjqKQv6OzD811sGNz8ifxvFdq"
     chrome.storage.local.set({"secplug_api_key": def_api_key}, null)
+    chrome.storage.local.set({"secplug_key_type": "free"}, null)
 }
 
 export const closeDiv = (id) => {    
@@ -43,6 +46,18 @@ export const getScan = () => {
                 resolve(key.secplug_scan_opt)
             }else {
                 reject("Scan Option not selected")
+            }            
+        })
+    })
+}
+
+export const getKeyType = () => {
+    return new Promise(function(resolve, reject){
+        chrome.storage.local.get(['secplug_key_type'], function(key){
+            if(key.secplug_key_type){
+                resolve(key.secplug_key_type)
+            }else {
+                reject("API Key type not set")
             }            
         })
     })

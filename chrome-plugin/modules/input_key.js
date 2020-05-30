@@ -1,4 +1,4 @@
-import {setKey, closeDiv, setScan, getScan} from "./utils.js";
+import {setKey, closeDiv, setScan, getScan, getKeyType} from "./utils.js";
 document.addEventListener('DOMContentLoaded', function () {    
     document.getElementById("api_link").addEventListener("click", inputKey)
     document.getElementById("auto_link").addEventListener("click", function(){
@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById("manual_link").style.backgroundColor = "#6666ff"
              }else{
                 document.getElementById("auto_link").style.backgroundColor = "#6666ff"
+             }
+         })
+    getKeyType()
+         .then(keyType => {
+             if(keyType !== "paid"){
+                document.getElementById('visit_us').innerHTML = "Go Premium!"
              }
          })
     document.getElementById("scan_link").addEventListener("click", function(){
