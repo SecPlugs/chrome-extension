@@ -39,7 +39,10 @@ describe('Test setKey in utils.js', ()=> {
         let input = document.createElement('input')
         input.setAttribute("id", "secplug-input-box")
         input.setAttribute("value", "new_key")
+        let label = document.createElement('label')
+        label.setAttribute("id", "visit_us")
         div.appendChild(input)
+        div.appendChild(label)
         document.body.appendChild(div)
         utils.setKey()
         expect(chrome.storage.local.set).toHaveBeenCalledWith({"secplug_api_key": "new_key"}, null)
@@ -49,7 +52,10 @@ describe('Test setKey in utils.js', ()=> {
         input = document.createElement('input')
         input.setAttribute("id", "secplug-input-box")
         input.setAttribute("value", "")
+        label = document.createElement('label')
+        label.setAttribute("id", "visit_us")
         div.appendChild(input)
+        div.appendChild(label)
         document.body.appendChild(div)
         utils.setKey()
         expect(chrome.storage.local.set).not.toHaveBeenCalledWith()
@@ -88,6 +94,34 @@ describe("setScan in utils.js", () => {
     it('test if secplug_scan_opt gets set', () => {
         utils.setScan("my-option")
         expect(chrome.storage.local.set).toHaveBeenCalledWith({"secplug_scan_opt": "my-option"}, null)
+    })
+})
+
+describe('Test getKeyType in utils.js', () => {
+    it('Test reject', () => {
+        const message = ['a']
+        const response = "b"
+        chrome.storage.local.get.mockImplementation(
+            (message, callback) => {
+                callback(response)
+            }
+        )
+        return utils.getKeyType().catch(data => {        
+            expect(data).toEqual("API Key type not set")
+        })
+    })
+
+    it('Test resolve', () => {
+        const message = ['a']
+        const response = {"secplug_key_type": "invalid_key_type"}
+        chrome.storage.local.get.mockImplementation(
+            (message, callback) => {
+                callback(response)
+            }
+        )
+        return utils.getKeyType().then(data => {
+            expect(data).toEqual("invalid_key_type")
+        })
     })
 })
 
@@ -153,6 +187,24 @@ describe('Test doScan in utils.js', () => {
             'status': 200,
             json: () => JSON.parse('{"score": 20}'),
             ok: true
+
+        }))
+        await utils.doScan(url, tabId)
+        expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
+
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 403,
+            json: () => JSON.parse('{"score": 20}'),
+            ok: false
+
+        }))
+        await utils.doScan(url, tabId)
+        expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
+
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 400,
+            json: () => JSON.parse('{"score": 20}'),
+            ok: false
 
         }))
         await utils.doScan(url, tabId)
