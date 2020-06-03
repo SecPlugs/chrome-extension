@@ -34,6 +34,7 @@
         "modules/*",
         "background.html",
         "error_popup.js",
-        "utils.js"
+        "utils.js",
+        "popup-logo.png"
     ]
 }
