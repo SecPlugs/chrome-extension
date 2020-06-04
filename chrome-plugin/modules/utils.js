@@ -79,7 +79,7 @@ export const getKeyType = () => {
     })
 }
 
-export const doScan = (url, tabId) => {
+export const doScan = (url, tabId, scanSetting) => {
     if(!url.includes("undefined") && !url.includes("chrome")) {  
         getKey()
             .then(api_key => {                        
@@ -101,7 +101,24 @@ export const doScan = (url, tabId) => {
                 }
                 return response.json()
             })
-            .then(data => {                
+            .then(data => {
+                getScanCount().then(count => {
+                    chrome.browserAction.setBadgeText({
+                        tabId: tabId,
+                        text: count.toString()
+                    })
+                    setTimeout(function(){
+                        chrome.browserAction.setBadgeText({
+                            tabId: tabId,
+                            text: ""
+                        })
+                    }, 10000)  
+                    chrome.browserAction.setBadgeBackgroundColor({
+                        tabId: tabId,
+                        color: "#595959"
+                    })
+                    setScanCount(count)
+                })              
                 if(data["score"] <= 40){                    
                     chrome.tabs.executeScript(tabId, 
                         {code: 'var message = ' + '"This is a malicious page";' 
@@ -109,14 +126,15 @@ export const doScan = (url, tabId) => {
                                 + 'var closeDiv = ' + closeDiv},
                         function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                     )
-                }else if(data["score"] > 60){                            
-                            // Uncomment below code to show a scan result popup
-                            // chrome.tabs.executeScript(tabId, 
-                            //     {code: 'var message = ' + '"This is a clean page";' 
-                            //     + 'var bg_color = "#e6ffcc";'
-                            //     + 'var closeDiv = ' + closeDiv},
-                            //     function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
-                            // )
+                }else if(data["score"] > 60){                                                        
+                        if(scanSetting === "manual") {
+                            chrome.tabs.executeScript(tabId, 
+                                {code: 'var message = ' + '"This is a clean page";' 
+                                + 'var bg_color = "#e6ffcc";'
+                                + 'var closeDiv = ' + closeDiv},
+                                function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
+                            )
+                        }                            
                 }else if(data["score"] > 40 && data["score"] <= 60){                            
                             chrome.tabs.executeScript(tabId, 
                                 {code: 'var message = ' + '"We do not have threat info of this page";' + 
