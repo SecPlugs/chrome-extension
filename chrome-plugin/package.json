@@ -21,6 +21,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.10.1",
     "@bumble/jest-chrome": "^0.5.1",
     "webpack": "^4.43.0"
   }
