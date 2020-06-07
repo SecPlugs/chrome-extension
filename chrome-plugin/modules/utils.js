@@ -89,9 +89,9 @@ export const doScan = (url, tabId, scanSetting) => {
             }
             fetch(url, {method: "GET", headers: headers})
             .then(response => {
-                if(response.status === 403){                    
+                if(response.status === 403 || response.status === 429){                    
                     chrome.tabs.executeScript(tabId, 
-                        {code: 'var message = ' + '"Please set up a Secplug API Key for continuing scanning";' 
+                        {code: 'var message = ' + '"Ensure key is correct with sufficient credits";' 
                                 + 'var bg_color = "#ffff99";'
                                 + 'var closeDiv = ' + closeDiv},
                         function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
@@ -107,12 +107,17 @@ export const doScan = (url, tabId, scanSetting) => {
                         tabId: tabId,
                         text: count.toString()
                     })
+                    chrome.browserAction.setIcon({path: "./green_logo.png"});
                     setTimeout(function(){
                         chrome.browserAction.setBadgeText({
                             tabId: tabId,
                             text: ""
                         })
-                    }, 10000)  
+                        chrome.browserAction.setIcon({path: "./logo.png"});
+                    }, 10000)
+                    setTimeout(function(){                        
+                        chrome.browserAction.setIcon({path: "./logo.png"});
+                    }, 3000)
                     chrome.browserAction.setBadgeBackgroundColor({
                         tabId: tabId,
                         color: "#595959"

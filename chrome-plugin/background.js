@@ -3,6 +3,7 @@ import { closeDiv, setDefaultApiKey, setScan, getScan, doScan, setScanCount } fr
 // These imports are required for webpaack
 import logo from './logo.png'
 import popup from './popup-logo.png'
+import green_logo from './green_logo.png'
 import background from './background.html'
 import popup_html from './popup.html'
 
