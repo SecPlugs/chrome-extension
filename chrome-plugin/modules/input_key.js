@@ -3,21 +3,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("api_link").addEventListener("click", inputKey)
     document.getElementById("auto_link").addEventListener("click", function(){
         setScan("passive")
-        document.getElementById("auto_link").style.backgroundColor = "#6666ff"
+        document.getElementById("auto_link").style.backgroundColor = "#ddf1fb"
         window.close()
     })
     document.getElementById("manual_link").addEventListener("click", function(){
-        setScan("manual")
-        console.log("manual")
-        document.getElementById("manual_link").style.backgroundColor = "#6666ff"
+        setScan("manual")        
+        document.getElementById("manual_link").style.backgroundColor = "#ddf1fb"
         window.close()
     })
     getScan()
          .then(scanSetting => {
              if(scanSetting === "manual"){
-                document.getElementById("manual_link").style.backgroundColor = "#6666ff"
+                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb"
              }else{
-                document.getElementById("auto_link").style.backgroundColor = "#6666ff"
+                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb"
              }
          })
     getKeyType()

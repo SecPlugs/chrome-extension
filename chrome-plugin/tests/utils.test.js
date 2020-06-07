@@ -32,6 +32,21 @@ describe('Test getKey in utils.js', () => {
     })
 })
 
+describe('Test getScanKey in utils.js', () => {
+    it('getScanKey from local storage', () => {
+        const message = ['a']
+        const response = {"secplug_scan_count": "0"}
+        chrome.storage.local.get.mockImplementation(
+            (message, callback) => {
+                callback(response)
+            }
+        )
+        return utils.getScanCount().then(data => {
+            expect(data).toEqual("0")
+        })
+    })
+})
+
 describe('Test setKey in utils.js', ()=> {
     it('setKey in local storage', () => {
         let div = document.createElement('div')
@@ -177,6 +192,7 @@ describe('Test doScan in utils.js', () => {
             "accept": "application/json",
             "x-api-key": "invalid_key"
         }
+        
         await utils.doScan(url, tabId)
         expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
         global.fetch.mockClear();
@@ -228,8 +244,14 @@ describe('Test doScan in utils.js', () => {
         await utils.doScan(url, tabId)
         expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
 
+        const message2 = ['a']
+        const response2 = {"secplug_scan_count": "1"}
+        chrome.storage.local.get.mockImplementation(
+            (message2, callback2) => {
+                callback2(response2)
+            }
+        )
+        await utils.doScan(url, tabId)
+        expect(global.fetch).toHaveBeenCalledWith(url, {method: "GET", headers: headers})
     })
-
-
-
 })

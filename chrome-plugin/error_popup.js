@@ -1,7 +1,12 @@
 var body   = document.body || document.getElementsByTagName('body')[0],
     newpar = document.createElement('div');
     style = document.createElement('style');
-    img = document.createElement('img')
+    img = document.createElement('img');
+    meta = document.createElement('meta');
+    head = document.head || document.getElementsByTagName('head')[0]
+
+meta.name = "theme-color"
+meta.setAttribute('content', "red")
 
 img.setAttribute("src", chrome.runtime.getURL("./popup-logo.png"))
 img.style.height = "25px"
@@ -61,6 +66,7 @@ newpar.addEventListener("click", function(){
 if(document.getElementById('secplug-error-div')){
     document.getElementById('secplug-error-div').remove()
 }
+head.appendChild(meta)
 newpar.appendChild(img)
 body.insertBefore(newpar,body.childNodes[0]);
 setTimeout(function(){
