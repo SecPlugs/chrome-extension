@@ -6,14 +6,13 @@
                 padding: 0;
                 margin: 0;
                 text-align: center;
-                height: 220px;
-                width: 250px;
+                background: #FBFBFB;
             }
             .flex-container {
-                height: 200px;
-                width: 250px;
+                width: 300px;
+				padding: 10% 0%;
                 flex-basis: 0;
-                background-color: #e6f9ff;
+                background-color: #f0f4f5;
                 display: flex;
                 justify-content: space-around;
                 flex-wrap: wrap;
@@ -23,19 +22,23 @@
                 font-family: apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
             }
             .flex-link {
-                background-color: #219bd9;
-                color: white;
-                font-weight: 700;
-                font-size: 13;
-                line-height: 50px;
+                background-color: #f0f4f5;
+				border: 1px solid #c2d5da;
+                color: #1180b9;
+				font-weight: normal !important;
+				width: 100%;
+				border-radius: 5px;
+                font-size: 15;
+                line-height: 35px;
                 text-decoration: none;
-                margin: 1%;
+                margin: 1% 4%;
                 box-sizing: border-box;
                 flex-grow: 1;
-                height: 25%;
             }
+			.primary-color{  background-color: #219BD9 !important; color:#ddf1fb; }			
             .flex-link:hover{
-                background-color: #256c74;
+                background-color: #219BD9;
+				color:white;
             }
             .flex-link:active{
                 background-color: #6666ff;
@@ -48,23 +51,26 @@
             }
             .secplug-logo {
                 height: 20px;
-                width: 20px;
-                text-align: left;
+                width: 100%;
+                text-align: center;
                 margin-right: 10px;
             }
             .image-div{
                 padding: 0;
-                margin: 0;
+                margin: 10px 0px;
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
             }
+			#secplug-input-box{padding:10px !important;}
+			#secplug-button-key{height: 38px; background:#066b9e !important}
+			#secplug-input-div{background-color: #dfe6e8 !important;}
         </style>  
         <script type="module" src="./modules/input_key.js"></script>
     </head>
     <body id="secplug-popup" class="body">
         <div class="image-div">
-            <img src="popup-logo.png" alt="Secplugs" class="secplug-logo">
+            <div class="secplug-logo"> <img src="popup-logo.png" alt="Secplugs"  width="20px"> </div>
             <label class="secplugs-label">Secplugs Secure</label>
         </div>
         <label id="secplug_key_type" class="key_type_label"></label>
@@ -73,7 +79,7 @@
             <a href="#" id="manual_link" title="Choose this mode to disable automatic scanning of URLs while browsing" class="flex-link">Manual Scanning</a>
             <a href="#" id="auto_link" title="Choose this mode to enable automatic scanning of URLs while browsing" class="flex-link">Auto Scanning</a>
             <a href="#" title="Click to enter your own API key with premium features" id="api_link" class="flex-link">Enter API Key</a>
-            <a id="visit_us" href="https://secplugs.com/" title="Click to see what's new with secplug and unlock premium features" target="_blank" class="flex-link">Visit Secplugs.com</a>
+            <a id="visit_us" href="https://secplugs.com/" title="Click to see what's new with secplug and unlock premium features" target="_blank" class="flex-link primary-color">Visit Secplugs.com</a>
         </div>
     </body>
 </html>
