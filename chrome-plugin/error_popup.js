@@ -57,20 +57,21 @@ newpar.innerHTML = message;
 if(message.indexOf("malicious") === -1){
     newpar.style.webkitAnimation = "fadein 0.5s, fadeout 0.5s 2.8s"
     newpar.style.animation = "fadein 0.5s, fadeout 0.5s 2.8s"
-}
-
-newpar.addEventListener("click", function(){
-    closeDiv("secplug-error-div")
-}, false)
-
-if(document.getElementById('secplug-error-div')){
-    document.getElementById('secplug-error-div').remove()
-}
-head.appendChild(meta)
-newpar.appendChild(img)
-body.insertBefore(newpar,body.childNodes[0]);
-setTimeout(function(){
-    if(document.getElementById('secplug-error-div') && message.indexOf("malicious") === -1){
+    newpar.addEventListener("click", function(){
         closeDiv("secplug-error-div")
+    }, false)
+    
+    if(document.getElementById('secplug-error-div')){
+        document.getElementById('secplug-error-div').remove()
     }
-}, 3000)
+    head.appendChild(meta)
+    newpar.appendChild(img)
+    body.insertBefore(newpar,body.childNodes[0]);
+    setTimeout(function(){
+        if(document.getElementById('secplug-error-div') && message.indexOf("malicious") === -1){
+            closeDiv("secplug-error-div")
+        }
+    }, 3000)
+}else{
+    window.location.replace("https://www.secplugs.com");
+}
