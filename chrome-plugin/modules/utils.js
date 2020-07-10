@@ -21,7 +21,7 @@ export const setKey = () => {
 }
 
 export const setDefaultApiKey = () => {
-    let def_api_key = "PNUGdXPQcoaY7bxpSFSxa82nQn4ZVMXm3TbYsuvD"
+    let def_api_key = "WiYNBFppZ6nw5BwfbgSo3I4YC5dXGFH3cbvM2YTe"
     chrome.storage.local.set({"secplug_api_key": def_api_key}, null)
     chrome.storage.local.set({"secplug_key_type": "free"}, null)
 }
@@ -124,7 +124,7 @@ export const doScan = (url, tabId, scanSetting) => {
                     })
                     setScanCount(count)
                 })              
-                if(data["score"] <= 40){                    
+                if(data["score"] <= 40){                       
                     chrome.tabs.executeScript(tabId, 
                         {code: 'var message = ' + '"This is a malicious page";' 
                                 + 'var bg_color = "#ffebe6";'
