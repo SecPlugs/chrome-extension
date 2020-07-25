@@ -73,5 +73,5 @@ if(message.indexOf("malicious") === -1){
         }
     }, 3000)
 }else{
-    window.location.replace("https://www.secplugs.com");
+    window.location.replace("https://secplugs.com/malware.php");
 }
