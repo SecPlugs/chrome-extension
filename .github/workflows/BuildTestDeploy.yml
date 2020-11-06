@@ -27,3 +27,17 @@ jobs:
         working-directory: ./chrome-plugin
         if: success()
         run: npm run build
+        
+      - name: package
+        working-directory: ./chrome-plugin
+        if: success()
+        run: tar -zcvf ./dist.tar.gz ./dist/ 
+        
+        
+      - name: store artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ChromeExtension
+          path: ./dist.tar.gz
+
+
