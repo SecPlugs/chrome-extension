@@ -35,10 +35,9 @@ jobs:
         
         
       - name: store artifact
-        working-directory: ./chrome-plugin
         uses: actions/upload-artifact@v2
         with:
           name: ChromeExtension
-          path: ./dist.tar.gz
+          path: ./chrome-plugin/dist.tar.gz
 
 
