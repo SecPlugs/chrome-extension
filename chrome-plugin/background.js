@@ -1,11 +1,16 @@
 import { closeDiv, setDefaultApiKey, setScan, getScan, doScan, setScanCount } from './modules/utils.js'
 
-// These imports are required for webpaack
+// These imports are required for webpack
 import logo from './logo.png'
+import icon16 from './icon16.png'
+import icon32 from './icon32.png'
+import icon48 from './icon48.png'
+import icon128 from './icon128.png'
 import popup from './popup-logo.png'
 import green_logo from './green_logo.png'
 import background from './background.html'
 import popup_html from './popup.html'
+
 
 chrome.runtime.onInstalled.addListener(function (details){
     if(details.reason === "install"){
