@@ -1,5 +1,15 @@
 import { closeDiv, setDefaultApiKey, setScan, getScan, doScan, setScanCount } from './modules/utils.js'
 
+/*
+todo: make CICD post to chrome store 
+todo: produce dev, staging and production builds
+todo: fix 'we have no info on this page issue'
+todo: fix 'default to detection on failure'
+todo: auto pin 
+todo: some urls fail to submit 
+
+*/
+
 // These imports are required for webpack
 import logo from './logo.png'
 import icon16 from './icon16.png'

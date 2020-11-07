@@ -80,7 +80,7 @@ describe('Test setKey in utils.js', ()=> {
 describe('Test setDefaultAPIKey in utils.js', () => {
     it('setKey in local storage', () => {
         utils.setDefaultApiKey()
-        expect(chrome.storage.local.set).toHaveBeenCalledWith({"secplug_api_key": "WiYNBFppZ6nw5BwfbgSo3I4YC5dXGFH3cbvM2YTe"}, null)
+        expect(chrome.storage.local.set).toHaveBeenCalledWith({"secplug_api_key": "ILbW1sKwPs8CWO76E8ex47TR7zCZ2a8L50oq7sPI"}, null)
     })
 })
 
