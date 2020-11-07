@@ -1,13 +1,16 @@
 {
   "name": "secplug-chrome",
   "version": "0.0.1",
-  "description": "Secplug's Chrome plugin",
+  "description": "SecPlugs Chrome plugin",
+  "icons": { "16": "icon16.png",
+           "48": "icon48.png",
+          "128": "icon128.png" },
   "main": "background.js",
   "scripts": {
     "build": "webpack",
     "test": "jest --coverage"
   },
-  "author": "SecPlugs The Stig",
+  "author": "secplugs@secplugs.com",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.9.6",
