@@ -29,15 +29,15 @@ jobs:
         run: npm run build
         
       - name: package
-        working-directory: ./chrome-plugin
+        working-directory: ./chrome-plugin/dist
         if: success()
-        run: tar -zcvf ./dist.tar.gz ./dist/ 
+        run: zip -r package.zip ./*
         
         
       - name: store artifact
         uses: actions/upload-artifact@v2
         with:
           name: ChromeExtension
-          path: ./chrome-plugin/dist.tar.gz
+          path: ./chrome-plugin/dist/package.zip
 
 
