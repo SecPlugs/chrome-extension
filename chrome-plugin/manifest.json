@@ -1,6 +1,6 @@
 {
-    "name": "SecPlugs For Chrome",
-    "version": "1.0",
+    "name": "Secplugs Web Secure",
+    "version": "0.1",
     "description": "Web browsing security powered by SecPlugs.com.",
     "manifest_version": 2,
     "icons": {
