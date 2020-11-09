@@ -170,7 +170,7 @@ describe('Test getScan in utils.js', () => {
 
 describe('Test doScan in utils.js', () => {
     it('url includes chrome', () => {
-        let url = "chrome-url"
+        let url = "chrome://-url"
         let tabId = 1
         console.log = jest.fn()
         utils.doScan(url, tabId)
