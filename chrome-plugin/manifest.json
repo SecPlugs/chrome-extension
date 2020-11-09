@@ -1,7 +1,7 @@
 {
-    "name": "SecPlugs Chrome Plugin",
+    "name": "SecPlugs For Chrome Chrome",
     "version": "1.0",
-    "description": "Real time browser security powered SecPlugs.com",
+    "description": "Web browsing security powered by SecPlugs.com.",
     "manifest_version": 2,
     "icons": {
         "16": "icon16.png",
