@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
 
 chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
     closeDiv("secplug-error-div");
-    let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + + encodeURI(changeInfo.url);    
+    let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURI(changeInfo.url);    
     getScan()
         .then(scanSetting => {            
         if (scanSetting === "passive"){                     
