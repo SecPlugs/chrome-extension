@@ -39,7 +39,7 @@ chrome.runtime.onInstalled.addListener(function (details){
 chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
     if(request.action === "scan_url"){               
         chrome.tabs.query({active:true}, function(tabs){            
-            let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURI(tabs[0].url);
+            let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURIComponent(tabs[0].url);
             let tabId = tabs[0].tabId;               
             doScan(url, tabId, "manual");
         });
@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
 
 chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
     closeDiv("secplug-error-div");
-    let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURI(changeInfo.url);    
+    let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURIComponent(changeInfo.url);    
     getScan()
         .then(scanSetting => {            
         if (scanSetting === "passive"){                     

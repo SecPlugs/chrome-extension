@@ -80,7 +80,7 @@ export const getKeyType = () => {
 }
 
 export const doScan = (url, tabId, scanSetting) => {
-    if(!url.includes("undefined") && !url.includes("chrome")) {  
+    if(!url.includes("undefined") && !url.includes("chrome://")) {  
         getKey()
             .then(api_key => {                        
             let headers = {
