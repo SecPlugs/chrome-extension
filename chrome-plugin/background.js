@@ -58,10 +58,9 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
         return;
     }
     
-    // Needs to be http(s) or ftp
-    var uriPattern = /^((http|https|ftp):\/\/)/;
-    
-    if (uriPattern.test(changeInfo.url)){
+    // Needs to be http(s)
+    var uriPattern = /^((http|https):\/\/)/;
+    if (!uriPattern.test(changeInfo.url)){
         console.log("Skipping, not a url.");
         return;
     }
