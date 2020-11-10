@@ -55,6 +55,7 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
     // Check for url
     if (!changeInfo.url) {
         console.log("Skipping, no url.");
+        return;
     }
     
     // Needs to be http(s) or ftp
@@ -62,6 +63,7 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
     
     if (uriPattern.test(changeInfo.url)){
         console.log("Skipping, not a url.");
+        return;
     }
         
     // Set up the scan 
