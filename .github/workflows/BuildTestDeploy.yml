@@ -33,11 +33,20 @@ jobs:
         if: success()
         run: zip -r package.zip ./*
         
-        
-      - name: store artifact
+      - name: extension artifact
         uses: actions/upload-artifact@v2
         with:
           name: ChromeExtension
           path: ./chrome-plugin/dist/
 
+      - name: store listing artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: StoreListing
+          path: ./chrome-plugin/store_listing/
 
+      - name: extension debug artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ChromeExtensionDebug
+          path: ./chrome-plugin/
