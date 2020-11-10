@@ -53,14 +53,20 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
 
 chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
     closeDiv("secplug-error-div");
-    should_scan(changeInfo.url);
-    let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURIComponent(changeInfo.url);    
-    getScan()
+    
+    // todo: pendingUrl
+    if (changeInfo.url) {
+        
+        should_scan(changeInfo.url);
+        let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURIComponent(changeInfo.url);    
+        getScan()
         .then(scanSetting => {            
         if (scanSetting === "passive"){                     
             doScan(url, tabId, "passive");
         }                     
-    });  
+    }); 
+    }
+ 
 });
 
 
