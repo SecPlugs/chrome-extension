@@ -36,11 +36,7 @@ chrome.runtime.onInstalled.addListener(function (details){
     }
 });
 
-function should_scan(url)
-{
-    console.log(`should_scan() - '${url}' `);
-    return true;
-}
+
 chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
     if(request.action === "scan_url"){               
         chrome.tabs.query({active:true}, function(tabs){            
@@ -55,17 +51,28 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
     closeDiv("secplug-error-div");
     
     // todo: pendingUrl
-    if (changeInfo.url) {
+    
+    // Check for url
+    if (!changeInfo.url) {
+        console.log("Skipping, no url.");
+    }
+    
+    // Needs to be http(s) or ftp
+    var uriPattern = /^((http|https|ftp):\/\/)/;
+    
+    if (uriPattern.test(changeInfo.url)){
+        console.log("Skipping, not a url.");
+    }
         
-        should_scan(changeInfo.url);
-        let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURIComponent(changeInfo.url);    
-        getScan()
+    // Set up the scan 
+    let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURIComponent(changeInfo.url);    
+    getScan()
         .then(scanSetting => {            
         if (scanSetting === "passive"){                     
             doScan(url, tabId, "passive");
         }                     
     }); 
-    }
+
  
 });
 
