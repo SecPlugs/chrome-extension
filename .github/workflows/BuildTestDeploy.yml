@@ -45,8 +45,3 @@ jobs:
           name: StoreListing
           path: ./chrome-plugin/store_listing/
 
-      - name: extension debug artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ChromeExtensionDebug
-          path: ./chrome-plugin/

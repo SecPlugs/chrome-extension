@@ -1,6 +1,6 @@
 {
     "name": "Secplugs Web Secure",
-    "version": "0.1",
+    "version": "0.15",
     "description": "Web browsing security powered by SecPlugs.com.",
     "manifest_version": 2,
     "icons": {
