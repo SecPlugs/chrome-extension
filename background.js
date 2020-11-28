@@ -3,12 +3,12 @@ import { closeDiv, setDefaultApiKey, setScan, getScan, doScan, setScanCount } fr
 /*
 todo: build number version info etc
 todo: add client id 
+todo: fix Unchecked runtime.lastError: No tab with id: 159.
 todo: make CICD post to chrome store 
 todo: support asynchronous results
 todo: show last scanned items
 todo: show scan history
 todo: produce dev, staging and production builds
-todo: auto pin 
 todo: clean up lint errors
 
 Done but needs testing
@@ -16,6 +16,10 @@ todo: fix 'we have no info on this page issue'
 todo: fix 'default to detection on failure'
 todo: add tests for some urls fail to submit 
 todo: move images to a folder
+
+Won't do 
+todo: auto pin 
+
 
 */
 
