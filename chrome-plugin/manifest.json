@@ -4,10 +4,10 @@
     "description": "Web browsing security powered by SecPlugs.com.",
     "manifest_version": 2,
     "icons": {
-        "16": "icon16.png",
-        "32": "icon32.png",
-        "48": "icon48.png",
-        "128": "icon128.png" 
+        "16": "images/icon16.png",
+        "32": "images/icon32.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png" 
     },
     "content_scripts": [
         {
@@ -24,10 +24,10 @@
     },
     "browser_action": {
         "default_icon": {
-            "16": "icon16.png",
-            "32": "icon32.png",
-            "48": "icon48.png",
-            "128": "icon128.png" 
+            "16": "images/icon16.png",
+            "32": "images/icon32.png",
+            "48": "images/icon48.png",
+            "128": "images/icon128.png" 
         },
         "default_title": "Click here to open menu",
         "default_popup": "popup.html"
@@ -43,10 +43,13 @@
         "background.html",
         "error_popup.js",
         "utils.js",
-        "popup-logo.png",
-        "logo.png",
-        "icon16.png",
-        "green_logo.png"
+        "images/popup-logo.png",
+        "images/logo.png",
+        "images/icon16.png",
+        "images/icon32.png",
+        "images/icon48.png",
+        "images/icon128.png",
+        "images/green_logo.png"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

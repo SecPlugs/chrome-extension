@@ -1,28 +1,32 @@
 import { closeDiv, setDefaultApiKey, setScan, getScan, doScan, setScanCount } from './modules/utils.js'
 
 /*
+todo: build number version info etc
+todo: add client id 
 todo: make CICD post to chrome store 
+todo: support asynchronous results
+todo: show last scanned items
+todo: show scan history
 todo: produce dev, staging and production builds
+todo: auto pin 
+todo: clean up lint errors
+
+Done but needs testing
 todo: fix 'we have no info on this page issue'
 todo: fix 'default to detection on failure'
-todo: auto pin 
-todo: some urls fail to submit 
+todo: add tests for some urls fail to submit 
 todo: move images to a folder
-todo: clean up lint errors
-todo: build number version info etc
 
-Features 
-todo: show scan history
 */
 
 // These imports are required for webpack
-import logo from './logo.png';
-import icon16 from './icon16.png';
-import icon32 from './icon32.png';
-import icon48 from './icon48.png';
-import icon128 from './icon128.png';
-import popup from './popup-logo.png';
-import green_logo from './green_logo.png';
+import logo from './images/logo.png';
+import icon16 from './images/icon16.png';
+import icon32 from './images/icon32.png';
+import icon48 from './images/icon48.png';
+import icon128 from './images/icon128.png';
+import popup from './images/popup-logo.png';
+import green_logo from './images/green_logo.png';
 import background from './background.html';
 import popup_html from './popup.html';
 
