@@ -16,17 +16,17 @@ jobs:
       
       - name: install dependencies
         working-directory: ./chrome-plugin
-        run: npm install
+        run: ./installDependencies.sh
 
       - name: run unit test
         working-directory: ./chrome-plugin
         if: success()
-        run: npm run test
+        run: ./unitTestExtension.sh
 
       - name: run build 
         working-directory: ./chrome-plugin
         if: success()
-        run: npm run build
+        run: ./buildExtension.sh
         
       - name: package
         working-directory: ./chrome-plugin/dist
