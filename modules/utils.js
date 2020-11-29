@@ -176,16 +176,16 @@ export const doScan = (url_to_scan, tabId, scanSetting) => {
                     tabId: tabId,
                     text: count.toString()
                 });
-                chrome.browserAction.setIcon({path: "./green_logo.png"});
+                chrome.browserAction.setIcon({path: "./images/green_logo.png"});
                 setTimeout(function(){
                     chrome.browserAction.setBadgeText({
                         tabId: tabId,
                         text: ""
                     });
-                    chrome.browserAction.setIcon({path: "./logo.png"});
+                    chrome.browserAction.setIcon({path: "./images/logo.png"});
                 }, 10000);
                 setTimeout(function(){                        
-                    chrome.browserAction.setIcon({path: "./logo.png"});
+                    chrome.browserAction.setIcon({path: "./images/logo.png"});
                 }, 3000);
                 chrome.browserAction.setBadgeBackgroundColor({
                     tabId: tabId,

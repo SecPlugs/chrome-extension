@@ -8,7 +8,7 @@ var body   = document.body || document.getElementsByTagName('body')[0],
 meta.name = "theme-color"
 meta.setAttribute('content', "red")
 
-img.setAttribute("src", chrome.runtime.getURL("./popup-logo.png"))
+img.setAttribute("src", chrome.runtime.getURL("./images/popup-logo.png"))
 img.style.height = "25px"
 img.style.width = "25px"
 img.style.float = "left"
