@@ -1,7 +1,7 @@
 import { closeDiv, setDefaultApiKey, setScan, getScan, doScan, setScanCount } from './modules/utils.js'
 
 /*
-todo: build number version info etc
+
 todo: add client id 
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
 todo: make CICD post to chrome store 
@@ -16,6 +16,7 @@ todo: fix 'we have no info on this page issue'
 todo: fix 'default to detection on failure'
 todo: add tests for some urls fail to submit 
 todo: move images to a folder
+todo: build number version info etc
 
 Won't do 
 todo: auto pin 
@@ -66,13 +67,7 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
         return;
     }
     
-    // Needs to be http(s)
-    var uriPattern = /^((http|https):\/\/)/;
-    if (!uriPattern.test(changeInfo.url)){
-        console.log("Skipping, not a url.");
-        return;
-    }
-        
+ 
     // Set up the scan 
     let url = "https://api.live.secplugs.com/security/web/quickscan?url=" + encodeURIComponent(changeInfo.url);    
     getScan()
