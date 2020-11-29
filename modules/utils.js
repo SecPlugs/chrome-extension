@@ -137,11 +137,11 @@ export const getKeyType = () => {
     });
 };
 
-export const doScan = (url, tabId, scanSetting) => {
+export const doScan = (url_to_scan, tabId, scanSetting) => {
     
     // Check for urls we should not scan
-    if (isUrlExcluded(url)){
-        console.log(`url '${url}' excluded.`);
+    if (isUrlExcluded(url_to_scan)){
+        console.log(`url '${url_to_scan}' excluded.`);
         return; 
     }
  
@@ -153,7 +153,7 @@ export const doScan = (url, tabId, scanSetting) => {
         const headers = getSecPlugsAPIHeaders(api_key);
         
         // Build the url 
-        const request_url = buildSecPlugsAPIRequestUrl(url);
+        const request_url = buildSecPlugsAPIRequestUrl(url_to_scan);
         
         // Make the request
         fetch(request_url, {method: "GET", headers: headers})
