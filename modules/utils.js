@@ -1,6 +1,8 @@
 /* global chrome, fetch */
 
-// Returns true of the url is excluded from scanning
+/* 
+    Returns true of the url is excluded from scanning
+*/
 export function isUrlExcluded(url){
     
     // Check its a valid url
@@ -11,7 +13,7 @@ export function isUrlExcluded(url){
     }
     
     // Check its not secplugs.com
-    var secplugsPattern = /^((http|https):\/\/(www.|)secplugs.com(\/[^\n]+|))$/;
+    var secplugsPattern = /^((http|https):\/\/(www.|)secplugs.com(\/[^\n]*|))$/;
     if(secplugsPattern.test(url)){
         return true;
     }
@@ -20,7 +22,9 @@ export function isUrlExcluded(url){
     return false;
 }
 
-// Get the headers for a secplugs API call
+/* 
+    Get the headers for a secplugs API call
+*/
 export function getSecPlugsAPIHeaders(api_key){
     
     let headers = {    
@@ -31,7 +35,9 @@ export function getSecPlugsAPIHeaders(api_key){
     return headers;
 }
 
-// Format the url for the request
+/* 
+    Format the url for the request
+*/
 export function buildSecPlugsAPIRequestUrl(url){
     
     // Check input
@@ -64,6 +70,34 @@ export const getKey = () => {
             }else {
                 reject("API Key needs to be set");
             }            
+        });
+    });
+};
+
+/*
+    Returns promise that returns key value pairs for the provided 
+    key_list from chrome storage
+*/
+export const getLocalStorageData = (key_list) => {
+    
+    // Check its an array of key names
+    console.assert(Array.isArray(key_list));
+    
+    // Return the promise
+    return new Promise(function(resolve, reject){
+    
+        // Read them from storage
+        chrome.storage.local.get(key_list, function(items){
+
+            // Check for error
+            if(chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError.message);
+            }
+            // Resolve it with the data
+            else {
+                resolve(items);
+            }
+                    
         });
     });
 };
@@ -158,6 +192,13 @@ export const doScan = (url_to_scan, tabId, scanSetting) => {
         // Make the request
         fetch(request_url, {method: "GET", headers: headers})
         .then(response => {
+            
+            // Response is ok
+            if(response.ok){
+                return response.json();
+            }
+            
+            // Pop up box on bad key or out of credit
             if(response.status === 403 || response.status === 429){                    
                 chrome.tabs.executeScript(tabId, 
                     {code: 'var message = ' + '"Ensure key is correct with sufficient credits";' 
@@ -165,10 +206,15 @@ export const doScan = (url_to_scan, tabId, scanSetting) => {
                             + 'var closeDiv = ' + closeDiv},
                     function(){chrome.tabs.executeScript(tabId, {file: "error_popup.js"})}
                 );
-            }else if(!response.ok){
-                throw Error(response.status);
+                
             }
-            return response.json();
+            
+            // Throw error with message
+            const json_response = JSON.stringify(response.json());
+            const status = response.status;
+            var message = `fetch on '${request_url}' failed with status: ${status} and json :${json_response}`;
+            throw Error(message);
+            
         })
         .then(data => {
             getScanCount().then(count => {
@@ -219,7 +265,9 @@ export const doScan = (url_to_scan, tabId, scanSetting) => {
                         );
             }
         })
-        .catch(error => {                
+        .catch(error => {
+            
+            // Log the error
             console.log(error);
         });
     })

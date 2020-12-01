@@ -1,4 +1,4 @@
-import { closeDiv, setDefaultApiKey, setScan, getScan, doScan, setScanCount } from './modules/utils.js'
+import * as utils from './modules/utils.js';
 
 /*
 
@@ -37,15 +37,20 @@ import popup_html from './popup.html';
 
 /* global chrome */
 
+/* 
+    Handler - Post install
+*/
 chrome.runtime.onInstalled.addListener(function (details){
     if(details.reason === "install"){
-        setDefaultApiKey();
-        setScan("passive");
-        setScanCount(-1);
+        utils.setDefaultApiKey();
+        utils.setScan("passive");
+        utils.setScanCount(-1);
     }
 });
 
-
+/* 
+    Handler - User scans the current tab 
+*/
 chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
     if(request.action === "scan_url"){               
         chrome.tabs.query({active:true}, function(tabs){    
@@ -53,13 +58,16 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
             // todo:bug is this the correct tab?
             const url_to_scan = tabs[0].url;
             let tabId = tabs[0].tabId;               
-            doScan(url_to_scan, tabId);
+            utils.doScan(url_to_scan, tabId);
         });
     }    
 });
 
+/* 
+    Handler - Scan url of new tab
+*/
 chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
-    closeDiv("secplug-error-div");
+    utils.closeDiv("secplug-error-div");
     
     // todo: pendingUrl
     
@@ -69,15 +77,23 @@ chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
         return;
     }
     
- 
-    // Set up the scan 
-    const url_to_scan = changeInfo.url;    
-    getScan()
-        .then(scanSetting => {            
-        if (scanSetting === "passive"){                     
-            doScan(url_to_scan, tabId, "passive");
+   // Test catch is called
+    utils.getLocalStorageData(['secplug_scan_opt'])
+    .then(stored_data => {
+        
+        // Set up the scan 
+        const url_to_scan = changeInfo.url;    
+        if (stored_data['secplug_scan_opt'] === "passive"){                     
+            utils.doScan(url_to_scan, tabId, "passive");
         }                     
-    }); 
+    
+    })
+    .catch(data => {
+        // Failed 
+        console.log('Failed to get local storage data.');
+    });
+ 
+   
 
  
 });

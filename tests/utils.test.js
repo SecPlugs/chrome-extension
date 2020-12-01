@@ -178,6 +178,7 @@ describe('Test isUrlExcluded ', () => {
         "https://secplugs.com",
         "https://secplugs.com/someparam",
         "http://www.secplugs.com",
+        "http://www.secplugs.com/",
         "http://www.secplugs.com/path",
         "ftp://ftp.com"];
     for (const url of excluded_urls){
@@ -232,31 +233,113 @@ describe('Test buildSecPlugsAPIRequestUrl ', () => {
     });
 });
 
-
+describe('Test getLocalStorageData ', () => {
+    
+    it('Test reject', () => {
+        const key_list = ['bad_key1','bad_key2'];
+        const returned_data = {};
+        const last_error = { "message": 'error message' };
+        chrome.storage.local.get.mockImplementation(
+            (key_list, callback) => {
+                
+                // Set the error to force failure
+                chrome.runtime.lastError = last_error; 
+                callback(returned_data);
+                delete chrome.runtime.lastError;
+            }
+        );
+        
+        // Test reject call back called
+        utils.getLocalStorageData(key_list)
+        .then(data => {
+            // should NOT resolve
+            expect(false).toEqual(true);
+        }, data => {
+            // should reject
+            expect(data).toEqual(last_error.message);
+        });
+        
+        // Test catch is called
+        utils.getLocalStorageData(key_list)
+        .then(data => {
+            // should NOT resolve
+            expect(false).toEqual(true);
+        })
+        .catch(data => {
+            // should reject
+            expect(data).toEqual(last_error.message);
+        });
+        
+    });
+    
+    it('Test resolve', () => {
+        const key_list = ["key1","key2"];
+        const returned_data = {"key1" : "value1", "key2" : "value2"};
+        chrome.storage.local.get.mockImplementation(
+            (key_list, callback) => {
+                callback(returned_data);
+            }
+        );
+        return utils.getLocalStorageData(key_list)
+        .then(data => {  
+            // should resolve
+            expect(data).toEqual(returned_data);
+        })
+        .catch(data => {
+            // should NOT reject
+            expect(false).toEqual(true);
+        });
+    });
+});
 
 describe('Test doScan in utils.js', () => {
     
+    const test_url = "http://invalid.com";
+    const expected_request_url = utils.buildSecPlugsAPIRequestUrl(test_url);
+    const tabId = 1;
+    
+    const api_key = 'test_api_key';
+    const stored_secplug_api_key = {"secplug_api_key": api_key};
+    const expected_headers = utils.getSecPlugsAPIHeaders(api_key);
+    
+    // Setup tests
+    beforeEach(() => {
+        
+        // Mock storage get() to return stored_secplug_api_key
+        chrome.storage.local.get.mockImplementation(
+            (key, callback) => {
+                callback(stored_secplug_api_key);
+            }
+        );
+    });
   
     it('various url scan cases', async() => {
         
-        const test_url = "http://invalid.com";
-        const expected_request_url = utils.buildSecPlugsAPIRequestUrl(test_url)
-        const tabId = 1;
+       
+
         
-        const api_key = 'invalid_key';
-        const response = {"secplug_api_key": api_key};
-        chrome.storage.local.get.mockImplementation(
-            (message, callback) => {
-                callback(response);
-            }
-        );
+        // Mock fetch
         global.fetch = jest.fn();
-        let headers = utils.getSecPlugsAPIHeaders(api_key);
+        
         
         await utils.doScan(test_url);
         expect(global.fetch).toHaveBeenCalledWith(
             expected_request_url, 
-            {method: "GET", headers: headers});
+            {method: "GET", headers: expected_headers});
+ 
+    });
+        
+    it('various url scan cases', async() => {
+        
+        
+        // Mock fetch
+        global.fetch = jest.fn();
+        
+        
+        await utils.doScan(test_url);
+        expect(global.fetch).toHaveBeenCalledWith(
+            expected_request_url, 
+            {method: "GET", headers: expected_headers});
         global.fetch.mockClear();
         delete global.fetch;    
 
@@ -269,7 +352,7 @@ describe('Test doScan in utils.js', () => {
         await utils.doScan(test_url, tabId);
         expect(global.fetch).toHaveBeenCalledWith(
             expected_request_url, 
-            {method: "GET", headers: headers});
+            {method: "GET", headers: expected_headers});
 
         global.fetch = jest.fn(() => Promise.resolve({
             'status': 403,
@@ -280,18 +363,18 @@ describe('Test doScan in utils.js', () => {
         await utils.doScan(test_url, tabId);
         expect(global.fetch).toHaveBeenCalledWith(
             expected_request_url, 
-            {method: "GET", headers: headers});
+            {method: "GET", headers: expected_headers});
 
         global.fetch = jest.fn(() => Promise.resolve({
             'status': 400,
-            json: () => JSON.parse('{"score": 20}'),
+            json: () => JSON.parse('{"score": 21}'),
             ok: false
 
         }));
         await utils.doScan(test_url, tabId);
         expect(global.fetch).toHaveBeenCalledWith(
             expected_request_url, 
-            {method: "GET", headers: headers});
+            {method: "GET", headers: expected_headers});
 
         global.fetch = jest.fn(() => Promise.resolve({
             'status': 200,
@@ -302,7 +385,7 @@ describe('Test doScan in utils.js', () => {
         await utils.doScan(test_url, tabId);
         expect(global.fetch).toHaveBeenCalledWith(
             expected_request_url,
-            {method: "GET", headers: headers});
+            {method: "GET", headers: expected_headers});
 
         global.fetch = jest.fn(() => Promise.resolve({
             'status': 200,
@@ -313,7 +396,7 @@ describe('Test doScan in utils.js', () => {
         await utils.doScan(test_url, tabId);
         expect(global.fetch).toHaveBeenCalledWith(
             expected_request_url,
-            {method: "GET", headers: headers});
+            {method: "GET", headers: expected_headers});
 
         const message2 = ['a'];
         const response2 = {"secplug_scan_count": "1"};
@@ -325,6 +408,6 @@ describe('Test doScan in utils.js', () => {
         await utils.doScan(test_url, tabId);
         expect(global.fetch).toHaveBeenCalledWith(
             expected_request_url,
-            {method: "GET", headers: headers});
+            {method: "GET", headers: expected_headers});
     });
 });

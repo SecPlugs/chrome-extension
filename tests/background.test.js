@@ -1,3 +1,5 @@
+/* global chrome, jest, expect */
+
 afterEach(() => {
     jest.clearAllMocks();
 });
