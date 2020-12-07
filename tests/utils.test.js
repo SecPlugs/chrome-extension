@@ -296,7 +296,7 @@ describe('test doWebQuickScan', () => {
 
     it('does successful lookup', () => {
 
-        expect.assertions(2);
+        expect.assertions(3);
 
         // Mock fetch
         global.fetch = jest.fn(() => Promise.resolve({
@@ -308,12 +308,16 @@ describe('test doWebQuickScan', () => {
         // Mock displayMessage
         utils.displayMessage = jest.fn();
 
+        // Mock setScan
+        utils.setScanCount = jest.fn();
+
         return helperDoWebQuickScan(test_url, tab_id)
             .then(() => {
                 expect(global.fetch).toHaveBeenCalledWith(
                     expected_request_url, { method: "GET", headers: expected_headers });
 
                 expect(utils.displayMessage).not.toHaveBeenCalled();
+                expect(utils.setScanCount).toHaveBeenCalledWith(mock_local_state["secplugs_scan_count"] + 1);
 
             });
 
@@ -322,7 +326,7 @@ describe('test doWebQuickScan', () => {
 
     it('handles a bad api key', () => {
 
-        expect.assertions(2);
+        expect.assertions(3);
 
         // Mock fetch to return 
         global.fetch = jest.fn(() => Promise.resolve({
@@ -335,16 +339,17 @@ describe('test doWebQuickScan', () => {
         // Mock displayMessage
         utils.displayMessage = jest.fn();
 
+        // Mock setScan
+        utils.setScanCount = jest.fn();
+
         return helperDoWebQuickScan(test_url, tab_id)
             .then(() => {
                 expect(global.fetch).toHaveBeenCalledWith(
                     expected_request_url, { method: "GET", headers: expected_headers });
 
                 expect(utils.displayMessage.mock.calls.length).toEqual(1);
+                expect(utils.setScanCount).not.toHaveBeenCalled();
 
             });
-
     });
-
-
 });

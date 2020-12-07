@@ -139,7 +139,8 @@ export const getLocalState = () => {
         'secplugs_scan_opt',
         'secplugs_key_type',
         'secplugs_api_key',
-        'secplugs_client_uuid'
+        'secplugs_client_uuid',
+        'secplugs_scan_count'
     ];
 
 
@@ -173,15 +174,17 @@ export const setKey = () => {
 export function setDefaults() {
     let def_api_key = "ILbW1sKwPs8CWO76E8ex47TR7zCZ2a8L50oq7sPI";
     const defaults = {
-        "secplugs_api_key": def_api_key,
+        "secplugs_scan_opt": "passive",
         "secplugs_key_type": "free",
-        "secplugs_client_uuid": generateUUID()
+        "secplugs_api_key": def_api_key,
+        "secplugs_client_uuid": generateUUID(),
+        "secplugs_scan_count": 0
 
     };
 
     // Set the defaults
     chrome.storage.local.set(defaults, null);
-};
+}
 
 export const setScanCount = (currScanCount) => {
     chrome.storage.local.set({ "secplugs_scan_count": currScanCount + 1 }, null);
@@ -203,7 +206,6 @@ export const setScan = (scanOpt) => {
 
 /** 
  *  Used to initiate a quick scan on a url via the secplugs api 
- *  
  *  Error handling: Prompts users for user actionable errors, logs to console for others
  **/
 export function doWebQuickScan(url_to_scan, tabId, local_state) {
@@ -273,9 +275,9 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
                 tabId: tabId,
                 color: "#595959"
             });
-            // Increment
-            //setScanCount(count);
 
+            // Increment
+            exports.setScanCount(local_state["secplugs_scan_count"] + 1);
 
             // todo: only show when instigated manually?
             if (local_state['secplugs_scan_opt'] === "manual")
