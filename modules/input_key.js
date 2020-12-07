@@ -1,34 +1,60 @@
-import {setKey, closeDiv, setScan, getScan, getKeyType} from "./utils.js";
+/* global chrome */
+import * as utils from "./utils.js";
 document.addEventListener('DOMContentLoaded', function () {    
-    document.getElementById("api_link").addEventListener("click", inputKey)
-    document.getElementById("auto_link").addEventListener("click", function(){
-        setScan("passive")
-        document.getElementById("auto_link").style.backgroundColor = "#ddf1fb"
-        window.close()
+    
+    // Get the stored data
+    utils.getLocalState()
+    .then(local_state => {
+        
+        /* Set control state */
+        
+        // The manual scanning button
+        if(local_state['secplugs_scan_opt'] === "manual"){
+                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
+        }
+        else {
+                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
+        }   
+        
+        // Anonymous or paid
+        if(local_state['secplugs_key_type'] !== "paid"){
+            document.getElementById('visit_us').innerHTML = "Go Premium!";
+        }
+
+        /* Handlers for the controls */
+        
+        // Add api key
+        document.getElementById("api_link").addEventListener("click", inputKey);
+        
+        // Toggle to auto scanning
+        document.getElementById("auto_link").addEventListener("click", function(){
+            utils.setScan("passive");
+            document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
+            window.close();
+        });
+        
+        // Toggle to manual scanning
+        document.getElementById("manual_link").addEventListener("click", function(){
+            utils.setScan("manual");
+            document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
+            window.close();
+        });
+        
+        // Scan now
+        document.getElementById("scan_link").addEventListener("click", function(){
+            chrome.runtime.sendMessage({action: "scan_url"}, null);
+            window.close();
+        });
+    
+    
     })
-    document.getElementById("manual_link").addEventListener("click", function(){
-        setScan("manual")        
-        document.getElementById("manual_link").style.backgroundColor = "#ddf1fb"
-        window.close()
-    })
-    getScan()
-         .then(scanSetting => {
-             if(scanSetting === "manual"){
-                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb"
-             }else{
-                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb"
-             }
-         })
-    getKeyType()
-         .then(keyType => {
-             if(keyType !== "paid"){
-                document.getElementById('visit_us').innerHTML = "Go Premium!"
-             }
-         })
-    document.getElementById("scan_link").addEventListener("click", function(){
-        chrome.runtime.sendMessage({action: "scan_url"}, null)
-        window.close()
-    })
+    .catch(data => {
+        
+        // Failed 
+        console.log('Failed to get local storage data.');
+    });
+            
+
 });
 
 export const inputKey = () => {
@@ -86,4 +112,4 @@ export const inputKey = () => {
     newpar.appendChild(buttonKey);
     body.insertBefore(newpar,body.childNodes[0]);
 
-}
+};

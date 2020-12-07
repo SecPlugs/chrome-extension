@@ -40,9 +40,9 @@ import popup_html from './popup.html';
 /* 
     Handler - Post install
 */
-chrome.runtime.onInstalled.addListener(function (details){
-    if(details.reason === "install"){
-        utils.setDefaultApiKey();
+chrome.runtime.onInstalled.addListener(function(details) {
+    if (details.reason === "install") {
+        utils.setDefaults();
         utils.setScan("passive");
         utils.setScanCount(-1);
     }
@@ -51,51 +51,65 @@ chrome.runtime.onInstalled.addListener(function (details){
 /* 
     Handler - User scans the current tab 
 */
-chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
-    if(request.action === "scan_url"){               
-        chrome.tabs.query({active:true}, function(tabs){    
-            
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action === "scan_url") {
+        chrome.tabs.query({ active: true }, function(tabs) {
+
             // todo:bug is this the correct tab?
             const url_to_scan = tabs[0].url;
-            let tabId = tabs[0].tabId;               
-            utils.doScan(url_to_scan, tabId);
+            let tab_id = tabs[0].tabId;
+
+
+            // Get the stored data
+            utils.getLocalState()
+                .then(local_state => {
+
+                    // Do the scan
+                    return utils.doWebQuickScan(url_to_scan, tab_id, local_state);
+
+                })
+                .catch(data => {
+
+                    // Failed 
+                    console.log('scan_url Failed to get local storage data.');
+                });
+
         });
-    }    
+    }
 });
 
 /* 
-    Handler - Scan url of new tab
+    Handler - Scan new urls loaded in a tab
 */
-chrome.tabs.onUpdated.addListener(function onTabUpdate(tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     utils.closeDiv("secplug-error-div");
-    
+
     // todo: pendingUrl
-    
+
     // Check for url
     if (!changeInfo.url) {
         console.log("Skipping, no url.");
         return;
     }
-    
-   // Test catch is called
-    utils.getLocalStorageData(['secplug_scan_opt'])
-    .then(stored_data => {
-        
-        // Set up the scan 
-        const url_to_scan = changeInfo.url;    
-        if (stored_data['secplug_scan_opt'] === "passive"){                     
-            utils.doScan(url_to_scan, tabId, "passive");
-        }                     
-    
-    })
-    .catch(data => {
-        // Failed 
-        console.log('Failed to get local storage data.');
-    });
- 
-   
 
- 
+    // Get the stored data
+    utils.getLocalState()
+        .then(local_state => {
+
+
+            // Set up the scan 
+            const url_to_scan = changeInfo.url;
+            const tab_id = tabId;
+            if (local_state['secplugs_scan_opt'] === "passive") {
+                return utils.doWebQuickScan(url_to_scan, tab_id, local_state);
+            }
+
+        })
+        .catch(exception => {
+
+            // Failed 
+            console.error(`onTabUpdate ${exception}`);
+
+        });
+
 });
-
-
