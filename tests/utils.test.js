@@ -1,6 +1,6 @@
 'use strict';
 
-/* global chrome, jest, expect, afterAll */
+/* global chrome, jest, expect, afterAll, URL */
 
 // Testing constants
 const regex_uudiv4 = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
@@ -55,7 +55,6 @@ describe('Test utils.generateUUID', () => {
         expect(uuid_1).toMatch(regex_uudiv4);
     });
 
-
 });
 
 describe('Test setDefaults', () => {
@@ -66,7 +65,6 @@ describe('Test setDefaults', () => {
         chrome.storage.local.get = jest.fn();
         chrome.runtime.getManifest = jest.fn();
     });
-
 
     it('sets up the values returned by getLocalState', () => {
 
@@ -114,7 +112,6 @@ describe('Test setDefaults', () => {
                         expect(local_state["secplugs_plugin_version"]).toBe(test_version);
                         expect(local_state["secplugs_client_uuid"]).toMatch(regex_uudiv4);
                     });
-
             });
     });
 });
@@ -147,7 +144,6 @@ describe("setScan in utils.js", () => {
         expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_scan_opt": "my-option" }, null);
     });
 });
-
 
 describe('Test isUrlExcluded ', () => {
 
@@ -202,13 +198,22 @@ describe('Test buildSecPlugsAPIRequestUrl ', () => {
 
     it('request url is build ok', () => {
 
-        const request_url = utils.buildSecPlugsAPIRequestUrl(test_url);
-        const expected_request_url =
-            "https://api.live.secplugs.com/security/web/quickscan?url=http%3A%2F" +
-            "%2Ftest.com%2Fpath%3Fname%3Dvalue&scancontext=%7B%22client_uuid%22%3" +
-            "A%22test_client_id%22%2C%22plugin_version%22%3A%22test_plugin_version%22%7D";
-        expect(typeof request_url).toEqual('string');
-        expect(request_url).toEqual(expected_request_url);
+        const test_client_uuid = 'test_uuid';
+        const test_plugin_version = '2.7.1.8';
+        const mock_local_state = {
+            'secplugs_client_uuid': test_client_uuid,
+            'secplugs_plugin_version': test_plugin_version
+        };
+
+        const request_url = utils.buildSecPlugsAPIRequestUrl(test_url, mock_local_state);
+        const parsed_url = new URL(request_url);
+        const scan_context = JSON.parse(decodeURIComponent(parsed_url.searchParams.get('scancontext')));
+        expect(parsed_url.hostname).toEqual('api.live.secplugs.com');
+        expect(scan_context).toEqual({
+            "client_uuid": test_client_uuid,
+            "plugin_version": test_plugin_version
+        });
+
 
     });
 });
@@ -270,20 +275,19 @@ describe('Test getLocalStorageData ', () => {
     });
 });
 
-describe('doWebQuickScan', () => {
-
-    const test_url = "http://invalid.com";
-    const expected_request_url = utils.buildSecPlugsAPIRequestUrl(test_url);
-    const tab_id = 1;
+describe('test doWebQuickScan', () => {
 
     const api_key = 'test_api_key';
-    const expected_headers = utils.getSecPlugsAPIHeaders(api_key);
-
-    let mock_local_state = {
+    const tab_id = 72;
+    const mock_local_state = {
         "secplugs_scan_opt": "passive",
         "secplugs_api_key": api_key,
         "secplugs_scan_count": 5
     };
+
+    const test_url = "http://invalid.com";
+    const expected_request_url = utils.buildSecPlugsAPIRequestUrl(test_url, mock_local_state);
+    const expected_headers = utils.getSecPlugsAPIHeaders(api_key);
 
     // Helper function to wrap in promise and supply mocked state
     function helperDoWebQuickScan(url_to_scan, tabId) {

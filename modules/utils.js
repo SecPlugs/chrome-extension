@@ -65,7 +65,7 @@ export function getSecPlugsAPIHeaders(api_key) {
 export function displayMessage(message, tab_id, type) {
 
     chrome.tabs.executeScript(tab_id, {
-            code: 'var message = ' + '"This is a malicious page";' +
+            code: `var message = "${message}";` +
                 'var bg_color = "#ffebe6";' +
                 'var closeDiv = ' + closeDiv
         },
@@ -76,7 +76,7 @@ export function displayMessage(message, tab_id, type) {
 /**
  *   Format the url for the request
  **/
-export function buildSecPlugsAPIRequestUrl(url) {
+export function buildSecPlugsAPIRequestUrl(url, local_state) {
 
     // Check input
     console.assert(
@@ -85,11 +85,9 @@ export function buildSecPlugsAPIRequestUrl(url) {
         'url with scheme expected');
 
     // Scan context
-    const client_id = 'test_client_id';
-    const plugin_version = 'test_plugin_version';
     const scan_context = {
-        "client_uuid": client_id,
-        'plugin_version': plugin_version
+        'client_uuid': local_state['secplugs_client_uuid'],
+        'plugin_version': local_state['secplugs_plugin_version']
     };
     const encoded_scancontext = encodeURIComponent(JSON.stringify(scan_context));
 
@@ -181,6 +179,7 @@ export function setDefaults() {
 
     };
 
+    // Set the defaults
     chrome.storage.local.set(defaults, null);
 };
 
@@ -219,7 +218,7 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
     const headers = getSecPlugsAPIHeaders(local_state['secplugs_api_key']);
 
     // Build the url
-    const request_url = buildSecPlugsAPIRequestUrl(url_to_scan);
+    const request_url = buildSecPlugsAPIRequestUrl(url_to_scan, local_state);
 
     // Make the request
     fetch(request_url, { method: "GET", headers: headers })
