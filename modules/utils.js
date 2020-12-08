@@ -1,7 +1,12 @@
 /* global chrome, fetch */
 
-if (!exports) {
-    exports = global;
+
+
+if (typeof exports == "undefined") {
+
+    exports = {};
+    exports.displayMessage = displayMessage;
+    exports.setScanCount = setScanCount;
 }
 
 /**
