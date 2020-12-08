@@ -1,5 +1,9 @@
 /* global chrome, fetch */
 
+if (!exports) {
+    exports = global;
+}
+
 /**
  * Fast UUID generator, RFC4122 version 4 compliant.
  * @author Jeff Ward (jcward.com).
@@ -233,7 +237,7 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
                 if (response.status === 403 || response.status === 429) {
 
                     // Display user actionable message to user 
-                    module.exports.displayMessage("Ensure key is correct with sufficient credits.", tabId, 'alert');
+                    exports.displayMessage("Ensure key is correct with sufficient credits.", tabId, 'alert');
                 }
                 else {
 
@@ -275,9 +279,9 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
             });
 
             // Increment
-            module.exports.setScanCount(local_state["secplugs_scan_count"] + 1);
+            exports.setScanCount(local_state["secplugs_scan_count"] + 1);
 
-            // todo:  only show when instigated manually?
+            // todo: only show when instigated manually?
             if (local_state['secplugs_scan_opt'] === "manual")
                 if (json_response["score"] <= 40) {
                     displayMessage("This is a malicious page.", tabId, 'alert');
