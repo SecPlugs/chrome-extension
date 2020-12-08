@@ -305,19 +305,17 @@ describe('test doWebQuickScan', () => {
             ok: true
         }));
 
-        // Mock displayMessage
-        utils.displayMessage = jest.fn();
-
-        // Mock setScan
-        utils.setScanCount = jest.fn();
+        // Mocks
+        chrome.tabs.executeScript = jest.fn(); // displayMessage
+        chrome.storage.local.set = jest.fn(); // setScanCount
 
         return helperDoWebQuickScan(test_url, tab_id)
             .then(() => {
                 expect(global.fetch).toHaveBeenCalledWith(
                     expected_request_url, { method: "GET", headers: expected_headers });
 
-                expect(utils.displayMessage).not.toHaveBeenCalled();
-                expect(utils.setScanCount).toHaveBeenCalledWith(mock_local_state["secplugs_scan_count"] + 1);
+                expect(chrome.tabs.executeScript).not.toHaveBeenCalled();
+                expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_scan_count": mock_local_state["secplugs_scan_count"] + 1 }, null);
 
             });
 
@@ -336,19 +334,17 @@ describe('test doWebQuickScan', () => {
         }));
 
 
-        // Mock displayMessage
-        utils.displayMessage = jest.fn();
-
-        // Mock setScan
-        utils.setScanCount = jest.fn();
+        // Mocks
+        chrome.tabs.executeScript = jest.fn(); // displayMessage
+        chrome.storage.local.set = jest.fn(); // setScanCount
 
         return helperDoWebQuickScan(test_url, tab_id)
             .then(() => {
                 expect(global.fetch).toHaveBeenCalledWith(
                     expected_request_url, { method: "GET", headers: expected_headers });
 
-                expect(utils.displayMessage.mock.calls.length).toEqual(1);
-                expect(utils.setScanCount).not.toHaveBeenCalled();
+                expect(chrome.tabs.executeScript.mock.calls.length).toEqual(1);
+                expect(chrome.storage.local.set).not.toHaveBeenCalled();
 
             });
     });

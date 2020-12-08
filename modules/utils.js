@@ -1,14 +1,6 @@
 /* global chrome, fetch */
 
 
-
-if (typeof exports == "undefined") {
-
-    var exports = {};
-    exports.displayMessage = displayMessage;
-    exports.setScanCount = setScanCount;
-}
-
 /**
  * Fast UUID generator, RFC4122 version 4 compliant.
  * @author Jeff Ward (jcward.com).
@@ -195,8 +187,8 @@ export function setDefaults() {
 /**
  *   Sets the scan counter - e.g. to increment after a submission
  **/
-export const setScanCount = (currScanCount) => {
-    chrome.storage.local.set({ "secplugs_scan_count": currScanCount + 1 }, null);
+export const setScanCount = (newScanCount) => {
+    chrome.storage.local.set({ "secplugs_scan_count": newScanCount }, null);
 };
 
 export const setScan = (scanOpt) => {
@@ -242,7 +234,7 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
                 if (response.status === 403 || response.status === 429) {
 
                     // Display user actionable message to user 
-                    exports.displayMessage("Ensure key is correct with sufficient credits.", tabId, 'alert');
+                    displayMessage("Ensure key is correct with sufficient credits.", tabId, 'alert');
                 }
                 else {
 
@@ -284,7 +276,7 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
             });
 
             // Increment
-            exports.setScanCount(local_state["secplugs_scan_count"] + 1);
+            setScanCount(local_state["secplugs_scan_count"] + 1);
 
             // todo: only show when instigated manually?
             if (local_state['secplugs_scan_opt'] === "manual")
