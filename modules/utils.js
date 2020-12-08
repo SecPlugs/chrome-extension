@@ -277,7 +277,7 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
             // Increment
             module.exports.setScanCount(local_state["secplugs_scan_count"] + 1);
 
-            // todo: only show when instigated manually?
+            // todo:  only show when instigated manually?
             if (local_state['secplugs_scan_opt'] === "manual")
                 if (json_response["score"] <= 40) {
                     displayMessage("This is a malicious page.", tabId, 'alert');
