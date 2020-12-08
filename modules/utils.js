@@ -4,7 +4,7 @@
 
 if (typeof exports == "undefined") {
 
-    exports = {};
+    var exports = {};
     exports.displayMessage = displayMessage;
     exports.setScanCount = setScanCount;
 }
