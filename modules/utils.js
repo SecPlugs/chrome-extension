@@ -128,7 +128,6 @@ export const getLocalStorageData = (key_list) => {
     });
 };
 
-
 /**
  * Reads the local state data
  **/
@@ -154,8 +153,6 @@ export const getLocalState = () => {
         });
 
 };
-
-
 
 
 export const setKey = () => {
@@ -186,8 +183,15 @@ export function setDefaults() {
     chrome.storage.local.set(defaults, null);
 }
 
+/**
+ *   Sets the scan counter - e.g. to increment after a submission
+ **/
 export const setScanCount = (currScanCount) => {
     chrome.storage.local.set({ "secplugs_scan_count": currScanCount + 1 }, null);
+};
+
+export const setScan = (scanOpt) => {
+    chrome.storage.local.set({ "secplugs_scan_opt": scanOpt }, null);
 };
 
 export const closeDiv = (id) => {
@@ -200,12 +204,8 @@ export const closeDiv = (id) => {
 
 };
 
-export const setScan = (scanOpt) => {
-    chrome.storage.local.set({ "secplugs_scan_opt": scanOpt }, null);
-};
-
 /** 
- *  Used to initiate a quick scan on a url via the secplugs api 
+ *  Initiate a quick scan on a url via the secplugs api 
  *  Error handling: Prompts users for user actionable errors, logs to console for others
  **/
 export function doWebQuickScan(url_to_scan, tabId, local_state) {
@@ -233,7 +233,7 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
                 if (response.status === 403 || response.status === 429) {
 
                     // Display user actionable message to user 
-                    exports.displayMessage("Ensure key is correct with sufficient credits.", tabId, 'alert');
+                    module.exports.displayMessage("Ensure key is correct with sufficient credits.", tabId, 'alert');
                 }
                 else {
 
@@ -247,7 +247,6 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
                 // Done
                 return;
             }
-
 
             // Load json
             const json_response = response.json();
@@ -270,14 +269,13 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
                 chrome.browserAction.setIcon({ path: "./images/logo.png" });
             }, 3000);
 
-
             chrome.browserAction.setBadgeBackgroundColor({
                 tabId: tabId,
                 color: "#595959"
             });
 
             // Increment
-            exports.setScanCount(local_state["secplugs_scan_count"] + 1);
+            module.exports.setScanCount(local_state["secplugs_scan_count"] + 1);
 
             // todo: only show when instigated manually?
             if (local_state['secplugs_scan_opt'] === "manual")
