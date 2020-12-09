@@ -12,14 +12,14 @@ const utils = require('../modules/utils');
 
 describe('test chrome onInstalled event', () => {
 
-    it('test chrome.storage.local.set is called', () => {
+    it('sets up defaults when installed', () => {
         const listenerSpy = jest.fn();
         chrome.runtime.onInstalled.addListener(listenerSpy);
         chrome.runtime.onInstalled.callListeners({ reason: "install" });
         expect(listenerSpy).toBeCalledWith({ reason: "install" });
-        expect(chrome.storage.local.set).toBeCalledWith({ "secplugs_scan_opt": "passive" }, null);
+        expect(chrome.storage.local.set).toBeCalled();
     });
-    it('test chrome.storage.local.set is not called', () => {
+    it('does not set defaults when updated', () => {
         const listenerSpy = jest.fn();
         chrome.runtime.onInstalled.addListener(listenerSpy);
         chrome.runtime.onInstalled.callListeners({ reason: "updated" });

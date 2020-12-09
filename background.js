@@ -16,6 +16,7 @@ todo: UI
         scan count 
         last scanned & status
         key type
+    - merge go Premium and add api key
         
 todo: show scan history
 todo: support asynchronous results
