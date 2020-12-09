@@ -1,5 +1,5 @@
 {
-    "name": "Secplugs Web Secure",
+    "name": "SecPlugs Web Secure",
     "version": "0.15.<build_number>",
     "description": "Web browsing security powered by SecPlugs.com.",
     "manifest_version": 2,

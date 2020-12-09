@@ -2,14 +2,27 @@ import * as utils from './modules/utils.js';
 
 /*
 
-todo: add client id 
+todo: Uncaught ReferenceError: setKey is not defined
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
-todo: make CICD post to chrome store 
+todo: put default secplugs api and key in config file
+todo: Fix Scan Now
+todo: Fix and test api key
+todo: UI
+    - redo tool tip text
+    - make passive scanning a toggle 
+    - Scan Active Page - Scan Now
+    - Add status
+        version
+        scan count 
+        last scanned & status
+        key type
+        
+todo: show scan history
 todo: support asynchronous results
 todo: show last scanned items
-todo: show scan history
 todo: produce dev, staging and production builds
 todo: clean up lint errors
+todo: make CICD post to chrome store 
 
 Done but needs testing
 todo: fix 'we have no info on this page issue'
@@ -17,6 +30,9 @@ todo: fix 'default to detection on failure'
 todo: add tests for some urls fail to submit 
 todo: move images to a folder
 todo: build number version info etc
+
+Tested
+todo: add client id 
 
 Won't do 
 todo: auto pin 
@@ -43,8 +59,6 @@ import popup_html from './popup.html';
 chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason === "install") {
         utils.setDefaults();
-        utils.setScan("passive");
-        utils.setScanCount(-1);
     }
 });
 

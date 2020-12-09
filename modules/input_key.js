@@ -1,64 +1,64 @@
 /* global chrome */
 import * as utils from "./utils.js";
-document.addEventListener('DOMContentLoaded', function () {    
-    
+document.addEventListener('DOMContentLoaded', function() {
+
     // Get the stored data
     utils.getLocalState()
-    .then(local_state => {
-        
-        /* Set control state */
-        
-        // The manual scanning button
-        if(local_state['secplugs_scan_opt'] === "manual"){
-                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
-        }
-        else {
-                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
-        }   
-        
-        // Anonymous or paid
-        if(local_state['secplugs_key_type'] !== "paid"){
-            document.getElementById('visit_us').innerHTML = "Go Premium!";
-        }
+        .then(local_state => {
 
-        /* Handlers for the controls */
-        
-        // Add api key
-        document.getElementById("api_link").addEventListener("click", inputKey);
-        
-        // Toggle to auto scanning
-        document.getElementById("auto_link").addEventListener("click", function(){
-            utils.setScan("passive");
-            document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
-            window.close();
+            /* Set control state */
+
+            // The manual scanning button
+            if (local_state['secplugs_scan_opt'] === "manual") {
+                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
+            }
+            else {
+                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
+            }
+
+            // Anonymous or paid
+            if (local_state['secplugs_key_type'] !== "paid") {
+                document.getElementById('visit_us').innerHTML = "Go Premium!";
+            }
+
+            /* Handlers for the controls */
+
+            // Add api key
+            document.getElementById("api_link").addEventListener("click", inputKey);
+
+            // Toggle to auto scanning
+            document.getElementById("auto_link").addEventListener("click", function() {
+                utils.setScan("passive");
+                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
+                window.close();
+            });
+
+            // Toggle to manual scanning
+            document.getElementById("manual_link").addEventListener("click", function() {
+                utils.setScan("manual");
+                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
+                window.close();
+            });
+
+            // Scan now
+            document.getElementById("scan_link").addEventListener("click", function() {
+                chrome.runtime.sendMessage({ action: "scan_url" }, null);
+                window.close();
+            });
+
+
+        })
+        .catch(data => {
+
+            // Failed 
+            console.log('Failed to get local storage data.');
         });
-        
-        // Toggle to manual scanning
-        document.getElementById("manual_link").addEventListener("click", function(){
-            utils.setScan("manual");
-            document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
-            window.close();
-        });
-        
-        // Scan now
-        document.getElementById("scan_link").addEventListener("click", function(){
-            chrome.runtime.sendMessage({action: "scan_url"}, null);
-            window.close();
-        });
-    
-    
-    })
-    .catch(data => {
-        
-        // Failed 
-        console.log('Failed to get local storage data.');
-    });
-            
+
 
 });
 
 export const inputKey = () => {
-    var body   = document.body || document.getElementsByTagName('body')[0];
+    var body = document.body || document.getElementsByTagName('body')[0];
     var newpar = document.createElement('div');
     var inputBox = document.createElement('input');
     var buttonKey = document.createElement('input');
@@ -75,9 +75,9 @@ export const inputKey = () => {
     newpar.style.position = "-webkit-sticky";
     newpar.style.position = "sticky";
     newpar.style.bottom = "0";
-    newpar.addEventListener("click", function(event){
-        if (event.target == event.currentTarget){
-            closeDiv("secplug-input-div");
+    newpar.addEventListener("click", function(event) {
+        if (event.target == event.currentTarget) {
+            utils.closeDiv("secplug-input-div");
         }
     }, false);
 
@@ -98,18 +98,18 @@ export const inputKey = () => {
     buttonKey.style.position = "-webkit-sticky";
     buttonKey.style.position = "sticky";
     buttonKey.style.top = "5%";
-    buttonKey.addEventListener("click", function(event){
-        if(event.target == event.currentTarget){
-            setKey();
+    buttonKey.addEventListener("click", function(event) {
+        if (event.target == event.currentTarget) {
+            utils.setKey();
         }
     });
 
-    if(document.getElementById('secplug-input-div')){
+    if (document.getElementById('secplug-input-div')) {
         document.getElementById('secplug-input-div').remove();
     }
 
     newpar.appendChild(inputBox);
     newpar.appendChild(buttonKey);
-    body.insertBefore(newpar,body.childNodes[0]);
+    body.insertBefore(newpar, body.childNodes[0]);
 
 };
