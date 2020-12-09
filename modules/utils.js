@@ -209,7 +209,7 @@ export const closeDiv = (id) => {
  *  Initiate a quick scan on a url via the secplugs api 
  *  Error handling: Prompts users for user actionable errors, logs to console for others
  **/
-export function doWebQuickScan(url_to_scan, tabId, local_state) {
+export function doWebQuickScan(url_to_scan, tabId, local_state, show_message = false) {
 
     // Check for urls we should not scan
     if (isUrlExcluded(url_to_scan)) {
@@ -278,8 +278,8 @@ export function doWebQuickScan(url_to_scan, tabId, local_state) {
             // Increment
             setScanCount(local_state["secplugs_scan_count"] + 1);
 
-            // todo: only show when instigated manually?
-            if (local_state['secplugs_scan_opt'] === "manual")
+            // Display message
+            if (show_message)
                 if (json_response["score"] <= 40) {
                     displayMessage("This is a malicious page.", tabId, 'alert');
                 }

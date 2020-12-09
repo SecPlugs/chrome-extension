@@ -2,10 +2,11 @@ import * as utils from './modules/utils.js';
 
 /*
 
-todo: Uncaught ReferenceError: setKey is not defined
+todo: fix issue after you enter key there is space below 
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
 todo: put default secplugs api and key in config file
-todo: Fix Scan Now
+todo: Fix Scan Now so it shows results 
+todo: check test detection pages
 todo: Fix and test api key
 todo: UI
     - redo tool tip text
@@ -34,6 +35,7 @@ todo: build number version info etc
 
 Tested
 todo: add client id 
+todo: Uncaught ReferenceError: setKey is not defined
 
 Won't do 
 todo: auto pin 
@@ -80,7 +82,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 .then(local_state => {
 
                     // Do the scan
-                    return utils.doWebQuickScan(url_to_scan, tab_id, local_state);
+                    const show_message = true;
+                    return utils.doWebQuickScan(
+                        url_to_scan,
+                        tab_id,
+                        local_state,
+                        show_message);
 
                 })
                 .catch(data => {
