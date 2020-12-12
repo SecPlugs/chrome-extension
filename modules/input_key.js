@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
             }
 
+            // Version text
+            const version_text = 'Version: ' + local_state['secplugs_plugin_version'];
+            document.getElementById('version_text').innerHTML = version_text;
+
             // Anonymous or paid
             if (local_state['secplugs_key_type'] !== "paid") {
                 document.getElementById('visit_us').innerHTML = "Go Premium!";
@@ -63,7 +67,7 @@ export const inputKey = () => {
     var inputBox = document.createElement('input');
     var buttonKey = document.createElement('input');
 
-    newpar.setAttribute("id", "secplug-input-div");
+    newpar.setAttribute("id", "secplugs-input-div");
     newpar.style.height = "20%";
     newpar.style.width = "100%";
     newpar.style.zIndex = "10000";
@@ -77,18 +81,18 @@ export const inputKey = () => {
     newpar.style.bottom = "0";
     newpar.addEventListener("click", function(event) {
         if (event.target == event.currentTarget) {
-            utils.closeDiv("secplug-input-div");
+            utils.closeDiv("secplugs-input-div");
         }
     }, false);
 
-    inputBox.setAttribute("id", "secplug-input-box");
+    inputBox.setAttribute("id", "secplugs-input-box");
     inputBox.setAttribute("type", "text");
     inputBox.setAttribute("placeholder", "Enter Secplug API Key");
     inputBox.style.position = "-webkit-sticky";
     inputBox.style.position = "sticky";
     inputBox.style.top = "5%";
 
-    buttonKey.setAttribute("id", "secplug-button-key");
+    buttonKey.setAttribute("id", "secplugs-button-key");
     buttonKey.setAttribute("type", "submit");
     buttonKey.setAttribute("value", "Done");
     buttonKey.style.border = "None";
@@ -104,8 +108,8 @@ export const inputKey = () => {
         }
     });
 
-    if (document.getElementById('secplug-input-div')) {
-        document.getElementById('secplug-input-div').remove();
+    if (document.getElementById('secplugs-input-div')) {
+        document.getElementById('secplugs-input-div').remove();
     }
 
     newpar.appendChild(inputBox);

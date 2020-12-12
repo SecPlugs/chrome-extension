@@ -104,7 +104,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     Handler - Scan new urls loaded in a tab
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    utils.closeDiv("secplug-error-div");
+    utils.closeDiv("secplugs-error-div");
 
     // todo: pendingUrl
 

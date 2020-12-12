@@ -1,11 +1,16 @@
 /* global chrome, fetch */
 
+/**
+ * Utilities for SecPlugs Browse Secure Chrome Extension
+ * @author stig@secplugs.com
+ * @license MIT License
+ * @link https://seclugs.com
+ **/
+
 
 /**
  * Fast UUID generator, RFC4122 version 4 compliant.
- * @author Jeff Ward (jcward.com).
- * @license MIT license
- * @link http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
+ * http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
  **/
 export function generateUUID() {
     var lut = [];
@@ -158,12 +163,12 @@ export const getLocalState = () => {
 
 
 export const setKey = () => {
-    let text_val = document.getElementById('secplug-input-box').value;
+    let text_val = document.getElementById('secplugs-input-box').value;
     if (text_val && text_val.length) {
         chrome.storage.local.set({ "secplugs_api_key": text_val }, null);
         chrome.storage.local.set({ "secplugs_key_type": "paid" }, null);
         document.getElementById('visit_us').innerHTML = "Visit Secplugs.com";
-        document.getElementById("secplug-input-div").remove();
+        document.getElementById("secplugs-input-div").remove();
     }
 };
 
@@ -174,7 +179,6 @@ export function setDefaults() {
 
     // Load defaults from our data file 
     const data_file_url = chrome.runtime.getURL('data.json');
-
 
     // Load the file
     return fetch(data_file_url)

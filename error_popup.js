@@ -35,7 +35,7 @@ var keyFrames = '\
 style.innerHTML = keyFrames;
 document.getElementsByTagName('head')[0].appendChild(style);
 
-newpar.setAttribute("id", "secplug-error-div")
+newpar.setAttribute("id", "secplugs-error-div")
 newpar.style.visibility = "visible"
 newpar.style.minWidth = "20%"
 newpar.style.marginLeft = "-125px"
@@ -58,18 +58,18 @@ if(message.indexOf("malicious") === -1){
     newpar.style.webkitAnimation = "fadein 0.5s, fadeout 0.5s 2.8s"
     newpar.style.animation = "fadein 0.5s, fadeout 0.5s 2.8s"
     newpar.addEventListener("click", function(){
-        closeDiv("secplug-error-div")
+        closeDiv("secplugs-error-div")
     }, false)
     
-    if(document.getElementById('secplug-error-div')){
-        document.getElementById('secplug-error-div').remove()
+    if(document.getElementById('secplugs-error-div')){
+        document.getElementById('secplugs-error-div').remove()
     }
     head.appendChild(meta)
     newpar.appendChild(img)
     body.insertBefore(newpar,body.childNodes[0]);
     setTimeout(function(){
-        if(document.getElementById('secplug-error-div') && message.indexOf("malicious") === -1){
-            closeDiv("secplug-error-div")
+        if(document.getElementById('secplugs-error-div') && message.indexOf("malicious") === -1){
+            closeDiv("secplugs-error-div")
         }
     }, 3000)
 }else{

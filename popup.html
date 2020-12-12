@@ -49,11 +49,17 @@
                 font-size: 20;
                 font-family: 'PT Sans', sans-serif;
             }
-            .secplug-logo {
+            .secplugs-logo {
                 height: 20px;
                 width: 100%;
                 text-align: center;
                 margin-right: 10px;
+            }
+            .secplugs-version-text {
+                height: 20px;
+                width: 100%;
+                font-size: 12;
+                text-align: center;
             }
             .image-div{
                 padding: 0;
@@ -62,16 +68,17 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
-			#secplug-input-box{padding:10px !important;}
-			#secplug-button-key{height: 38px; background:#066b9e !important}
-			#secplug-input-div{background-color: #dfe6e8 !important;}
+			#secplugs-input-box{padding:10px !important;}
+			#secplugs-button-key{height: 38px; background:#066b9e !important}
+			#secplugs-input-div{background-color: #dfe6e8 !important;}
         </style>  
         <script type="module" src="./modules/input_key.js"></script>
     </head>
-    <body id="secplug-popup" class="body">
+    <body id="secplugs-popup" class="body">
         <div class="image-div">
-            <div class="secplug-logo"> <img src="images/popup-logo.png" alt="Secplugs"  width="20px"> </div>
+            <div class="secplugs-logo"> <img src="images/popup-logo.png" alt="Secplugs"  width="20px"> </div>
             <label class="secplugs-label">SecPlugs Web Secure</label>
+            <div id="version_text" class="secplugs-version-text">Version: </div>
         </div>
         <label id="secplugs_key_type" class="key_type_label"></label>
         <div class="flex-container">

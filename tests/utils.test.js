@@ -15,9 +15,9 @@ const utils = require('../modules/utils');
 describe('Test setKey in utils.js', () => {
     it('setKey in local storage', () => {
         let div = document.createElement('div');
-        div.setAttribute("id", "secplug-input-div");
+        div.setAttribute("id", "secplugs-input-div");
         let input = document.createElement('input');
-        input.setAttribute("id", "secplug-input-box");
+        input.setAttribute("id", "secplugs-input-box");
         input.setAttribute("value", "new_key");
         let label = document.createElement('label');
         label.setAttribute("id", "visit_us");
@@ -27,9 +27,9 @@ describe('Test setKey in utils.js', () => {
         utils.setKey();
         expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_api_key": "new_key" }, null);
         div = document.createElement('div');
-        div.setAttribute("id", "secplug-input-div");
+        div.setAttribute("id", "secplugs-input-div");
         input = document.createElement('input');
-        input.setAttribute("id", "secplug-input-box");
+        input.setAttribute("id", "secplugs-input-box");
         input.setAttribute("value", "");
         label = document.createElement('label');
         label.setAttribute("id", "visit_us");
@@ -146,12 +146,12 @@ describe('Test closeDiv in utils.js', () => {
 
     it('closeDiv will remove an element from DOM', () => {
         const div = document.createElement('div');
-        div.setAttribute("id", "secplug-input-div");
+        div.setAttribute("id", "secplugs-input-div");
         document.body.appendChild(div);
-        const divParams = { "id": "secplug-input-div" };
+        const divParams = { "id": "secplugs-input-div" };
         getElementById.mockReturnValue(divParams);
-        utils.closeDiv("secplug-input-div");
-        expect(document.getElementById).toHaveBeenCalledWith("secplug-input-div");
+        utils.closeDiv("secplugs-input-div");
+        expect(document.getElementById).toHaveBeenCalledWith("secplugs-input-div");
     });
 });
 
