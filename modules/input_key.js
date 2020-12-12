@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // The manual scanning button
             if (local_state['secplugs_scan_opt'] === "manual") {
-                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
+                document.getElementById("toggle_auto_scan").checked = false;
             }
             else {
-                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
+                document.getElementById("toggle_auto_scan").checked = true;
             }
 
             // Version text
@@ -31,18 +31,17 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById("api_link").addEventListener("click", inputKey);
 
             // Toggle to auto scanning
-            document.getElementById("auto_link").addEventListener("click", function() {
-                utils.setScan("passive");
-                document.getElementById("auto_link").style.backgroundColor = "#ddf1fb";
-                window.close();
+            document.getElementById("toggle_auto_scan").addEventListener("click", function() {
+
+                if (document.getElementById("toggle_auto_scan").checked) {
+                    utils.setScan("passive");
+                }
+                else {
+                    utils.setScan("manual");
+                }
             });
 
-            // Toggle to manual scanning
-            document.getElementById("manual_link").addEventListener("click", function() {
-                utils.setScan("manual");
-                document.getElementById("manual_link").style.backgroundColor = "#ddf1fb";
-                window.close();
-            });
+
 
             // Scan now
             document.getElementById("scan_link").addEventListener("click", function() {

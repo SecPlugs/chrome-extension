@@ -1,7 +1,7 @@
 /* global chrome, fetch */
 
 /**
- * Utilities for SecPlugs Browse Secure Chrome Extension
+ * Utilities for Secplugs Browse Secure Chrome Extension
  * @author stig@secplugs.com
  * @license MIT License
  * @link https://seclugs.com
@@ -55,7 +55,7 @@ export function isUrlExcluded(url) {
 /**
  *   Get the headers for a secplugs API call
  **/
-export function getSecPlugsAPIHeaders(api_key) {
+export function getSecplugsAPIHeaders(api_key) {
 
     let headers = {
         "accept": "application/json",
@@ -82,7 +82,7 @@ export function displayMessage(message, tab_id, type) {
 /**
  *   Format the url for the request
  **/
-export function buildSecPlugsAPIRequestUrl(url, local_state) {
+export function buildSecplugsAPIRequestUrl(url, local_state) {
 
     // Check input
     console.assert(
@@ -236,10 +236,10 @@ export function doWebQuickScan(url_to_scan, tabId, local_state, show_message = f
     }
 
     // Get the headers
-    const headers = getSecPlugsAPIHeaders(local_state['secplugs_api_key']);
+    const headers = getSecplugsAPIHeaders(local_state['secplugs_api_key']);
 
     // Build the url
-    const request_url = buildSecPlugsAPIRequestUrl(url_to_scan, local_state);
+    const request_url = buildSecplugsAPIRequestUrl(url_to_scan, local_state);
 
     // Make the request
     fetch(request_url, { method: "GET", headers: headers })

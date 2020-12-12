@@ -4,7 +4,6 @@ import * as utils from './modules/utils.js';
 
 todo: fix issue after you enter key there is space below 
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
-todo: put default secplugs api and key in config file
 todo: Fix Scan Now so it shows results 
 todo: check test detection pages
 todo: Fix and test api key
@@ -33,9 +32,11 @@ todo: add tests for some urls fail to submit
 todo: move images to a folder
 todo: build number version info etc
 
+
 Tested
 todo: add client id 
 todo: Uncaught ReferenceError: setKey is not defined
+todo: put default secplugs api and key in config file
 
 Won't do 
 todo: auto pin 

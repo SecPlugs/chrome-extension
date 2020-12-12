@@ -1,7 +1,7 @@
 {
   "name": "secplugs-chrome",
   "version": "0.0.1",
-  "description": "SecPlugs Chrome plugin",
+  "description": "Secplugs Chrome plugin",
   "icons": {
     "16": "images/icon16.png",
     "32": "images/icon32.png",

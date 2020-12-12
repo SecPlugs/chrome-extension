@@ -195,7 +195,7 @@ describe('Test isUrlExcluded ', () => {
 
 });
 
-describe('Test getSecPlugsAPIHeaders ', () => {
+describe('Test getSecplugsAPIHeaders ', () => {
 
     const api_key = 'test_api_key';
     const expected_headers = {
@@ -205,12 +205,12 @@ describe('Test getSecPlugsAPIHeaders ', () => {
 
     it(`headers well formed`, () => {
 
-        expect(utils.getSecPlugsAPIHeaders(api_key)).toEqual(expected_headers);
-        expect(utils.getSecPlugsAPIHeaders('bad_key_')).not.toEqual(expected_headers);
+        expect(utils.getSecplugsAPIHeaders(api_key)).toEqual(expected_headers);
+        expect(utils.getSecplugsAPIHeaders('bad_key_')).not.toEqual(expected_headers);
     });
 });
 
-describe('Test buildSecPlugsAPIRequestUrl ', () => {
+describe('Test buildSecplugsAPIRequestUrl ', () => {
 
     const test_url = 'http://test.com/path?name=value';
 
@@ -224,7 +224,7 @@ describe('Test buildSecPlugsAPIRequestUrl ', () => {
             'secplugs_security_end_point': 'https://api.com/path'
         };
 
-        const request_url = utils.buildSecPlugsAPIRequestUrl(test_url, mock_local_state);
+        const request_url = utils.buildSecplugsAPIRequestUrl(test_url, mock_local_state);
         const parsed_url = new URL(request_url);
         const scan_context = JSON.parse(decodeURIComponent(parsed_url.searchParams.get('scancontext')));
         expect(parsed_url.hostname).toEqual('api.com');
@@ -305,8 +305,8 @@ describe('test doWebQuickScan', () => {
     };
 
     const test_url = "http://invalid.com";
-    const expected_request_url = utils.buildSecPlugsAPIRequestUrl(test_url, mock_local_state);
-    const expected_headers = utils.getSecPlugsAPIHeaders(api_key);
+    const expected_request_url = utils.buildSecplugsAPIRequestUrl(test_url, mock_local_state);
+    const expected_headers = utils.getSecplugsAPIHeaders(api_key);
 
     // Helper function to wrap in promise and supply mocked state
     function helperDoWebQuickScan(url_to_scan, tabId) {
