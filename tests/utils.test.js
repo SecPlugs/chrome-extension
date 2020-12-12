@@ -155,11 +155,11 @@ describe('Test closeDiv in utils.js', () => {
     });
 });
 
-describe("setScan in utils.js", () => {
-    it('test if secplugs_scan_opt gets set', () => {
+describe("setAutoScan", () => {
+    it('test if secplugs_auto_scan_enabled gets set', () => {
         chrome.storage.local.set = jest.fn();
-        utils.setScan("my-option");
-        expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_scan_opt": "my-option" }, null);
+        utils.setAutoScan("false");
+        expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_auto_scan_enabled": "false" }, null);
     });
 });
 
@@ -299,7 +299,7 @@ describe('test doWebQuickScan', () => {
     const api_key = 'test_api_key';
     const tab_id = 72;
     const mock_local_state = {
-        "secplugs_scan_opt": "passive",
+        "secplugs_auto_scan_enabled": "true",
         "secplugs_api_key": api_key,
         "secplugs_scan_count": 5
     };

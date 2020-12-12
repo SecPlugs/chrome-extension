@@ -141,7 +141,7 @@ export const getLocalState = () => {
 
     // The keys with our data
     const key_list = [
-        'secplugs_scan_opt',
+        'secplugs_auto_scan_enabled',
         'secplugs_key_type',
         'secplugs_api_key',
         'secplugs_client_uuid',
@@ -189,7 +189,7 @@ export function setDefaults() {
             let default_api_key = json_defaults["default_api_key"];
             let default_end_point = json_defaults["security_end_point"];
             const defaults = {
-                "secplugs_scan_opt": "passive",
+                "secplugs_auto_scan_enabled": "true",
                 "secplugs_key_type": "free",
                 "secplugs_api_key": default_api_key,
                 "secplugs_client_uuid": generateUUID(),
@@ -209,8 +209,12 @@ export const setScanCount = (newScanCount) => {
     chrome.storage.local.set({ "secplugs_scan_count": newScanCount }, null);
 };
 
-export const setScan = (scanOpt) => {
-    chrome.storage.local.set({ "secplugs_scan_opt": scanOpt }, null);
+/**
+ *   Enables auto scanning (enabled = 'true' or 'false') 
+ **/
+export const setAutoScan = (enabled) => {
+    console.assert(['true', 'false'].includes(enabled));
+    chrome.storage.local.set({ "secplugs_auto_scan_enabled": enabled }, null);
 };
 
 export const closeDiv = (id) => {

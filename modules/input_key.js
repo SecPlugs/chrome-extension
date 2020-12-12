@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             /* Set control state */
 
-            // The manual scanning button
-            if (local_state['secplugs_scan_opt'] === "manual") {
+            // Auto scanning enabled button
+            if (local_state['secplugs_auto_scan_enabled'] === "false") {
                 document.getElementById("toggle_auto_scan").checked = false;
             }
             else {
@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById("toggle_auto_scan").addEventListener("click", function() {
 
                 if (document.getElementById("toggle_auto_scan").checked) {
-                    utils.setScan("passive");
+                    utils.setAutoScan("true");
                 }
                 else {
-                    utils.setScan("manual");
+                    utils.setAutoScan("false");
                 }
             });
 

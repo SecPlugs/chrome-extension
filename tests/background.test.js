@@ -65,7 +65,7 @@ describe('test chrome.tabs.onUpdated events', () => {
 
         // Mock getLocalState
         let mock_local_state = {
-            "secplugs_scan_opt": "passive",
+            "secplugs_auto_scan_enabled": "true",
             "secplugs_api_key": "test_api_key",
             "secplugs_scan_count": 5
         };

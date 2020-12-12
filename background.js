@@ -123,7 +123,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             // Set up the scan 
             const url_to_scan = changeInfo.url;
             const tab_id = tabId;
-            if (local_state['secplugs_scan_opt'] === "passive") {
+            if (local_state['secplugs_auto_scan_enabled'] === "true") {
                 return utils.doWebQuickScan(url_to_scan, tab_id, local_state);
             }
 
