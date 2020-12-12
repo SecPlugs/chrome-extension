@@ -43,6 +43,7 @@
         "background.html",
         "error_popup.js",
         "utils.js",
+        "data.json",
         "images/popup-logo.png",
         "images/logo.png",
         "images/icon16.png",

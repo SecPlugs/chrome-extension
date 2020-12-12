@@ -64,9 +64,25 @@ describe('Test setDefaults', () => {
         chrome.storage.local.set = jest.fn();
         chrome.storage.local.get = jest.fn();
         chrome.runtime.getManifest = jest.fn();
+        global.fetch = jest.fn();
     });
 
+
     it('sets up the values returned by getLocalState', () => {
+
+        // Set mock data
+        const mock_data = {
+            "default_api_key": "ILbW1sKwPs8CWO76E8ex47TR7zCZ2a8L50oq7sPI",
+            "security_end_point": "https://api.live.secplugs.com/security/web/quickscan"
+        };
+
+        // Mock fetch
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 200,
+            json: () => mock_data,
+            ok: true
+        }));
+
 
         // Mock the chrome storage get 
         var mock_chrome_storage = {};
@@ -100,17 +116,19 @@ describe('Test setDefaults', () => {
                 expect(local_state).toEqual({ "secplugs_plugin_version": manifestData.version });
 
                 // Setup defaults
-                utils.setDefaults();
+                return utils.setDefaults()
+                    .then(() => {
 
-                // .. now get state
-                return utils.getLocalState()
-                    .then(local_state => {
+                        // .. now get state
+                        return utils.getLocalState()
+                            .then(local_state => {
 
-                        // .. other values should be setup
-                        expect(local_state['secplugs_key_type']).toEqual("free");
-                        expect("secplugs_api_key" in local_state).toBe(true);
-                        expect(local_state["secplugs_plugin_version"]).toBe(test_version);
-                        expect(local_state["secplugs_client_uuid"]).toMatch(regex_uudiv4);
+                                // .. other values should be setup
+                                expect(local_state['secplugs_key_type']).toEqual("free");
+                                expect("secplugs_api_key" in local_state).toBe(true);
+                                expect(local_state["secplugs_plugin_version"]).toBe(test_version);
+                                expect(local_state["secplugs_client_uuid"]).toMatch(regex_uudiv4);
+                            });
                     });
             });
     });
@@ -202,13 +220,14 @@ describe('Test buildSecPlugsAPIRequestUrl ', () => {
         const test_plugin_version = '2.7.1.8';
         const mock_local_state = {
             'secplugs_client_uuid': test_client_uuid,
-            'secplugs_plugin_version': test_plugin_version
+            'secplugs_plugin_version': test_plugin_version,
+            'secplugs_security_end_point': 'https://api.com/path'
         };
 
         const request_url = utils.buildSecPlugsAPIRequestUrl(test_url, mock_local_state);
         const parsed_url = new URL(request_url);
         const scan_context = JSON.parse(decodeURIComponent(parsed_url.searchParams.get('scancontext')));
-        expect(parsed_url.hostname).toEqual('api.live.secplugs.com');
+        expect(parsed_url.hostname).toEqual('api.com');
         expect(scan_context).toEqual({
             "client_uuid": test_client_uuid,
             "plugin_version": test_plugin_version
@@ -321,7 +340,6 @@ describe('test doWebQuickScan', () => {
 
     });
 
-
     it('handles a bad api key', () => {
 
         expect.assertions(3);
@@ -332,7 +350,6 @@ describe('test doWebQuickScan', () => {
             json: () => JSON.parse('{}'),
             ok: false
         }));
-
 
         // Mocks
         chrome.tabs.executeScript = jest.fn(); // displayMessage

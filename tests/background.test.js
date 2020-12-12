@@ -13,18 +13,18 @@ const utils = require('../modules/utils');
 describe('test chrome onInstalled event', () => {
 
     it('sets up defaults when installed', () => {
-        const listenerSpy = jest.fn();
-        chrome.runtime.onInstalled.addListener(listenerSpy);
+
+        utils.setDefaults = jest.fn();
         chrome.runtime.onInstalled.callListeners({ reason: "install" });
-        expect(listenerSpy).toBeCalledWith({ reason: "install" });
-        expect(chrome.storage.local.set).toBeCalled();
+        expect(utils.setDefaults).toBeCalled();
+
     });
     it('does not set defaults when updated', () => {
-        const listenerSpy = jest.fn();
-        chrome.runtime.onInstalled.addListener(listenerSpy);
+
+        utils.setDefaults = jest.fn();
         chrome.runtime.onInstalled.callListeners({ reason: "updated" });
-        expect(listenerSpy).toBeCalledWith({ reason: "updated" });
-        expect(chrome.storage.local.set).not.toBeCalled();
+        expect(utils.setDefaults).not.toBeCalled();
+
     });
 });
 

@@ -93,7 +93,7 @@ export function buildSecPlugsAPIRequestUrl(url, local_state) {
     const encoded_scancontext = encodeURIComponent(JSON.stringify(scan_context));
 
     // Build and return the url
-    const endpoint = 'https://api.live.secplugs.com/security/web/quickscan';
+    const endpoint = local_state['secplugs_security_end_point'];
     const encoded_url = encodeURIComponent(url);
     let request_url = `${endpoint}?url=${encoded_url}&scancontext=${encoded_scancontext}`;
     return request_url;
@@ -140,7 +140,8 @@ export const getLocalState = () => {
         'secplugs_key_type',
         'secplugs_api_key',
         'secplugs_client_uuid',
-        'secplugs_scan_count'
+        'secplugs_scan_count',
+        'secplugs_security_end_point'
     ];
 
 
@@ -170,18 +171,31 @@ export const setKey = () => {
  *   Sets up the defaults for the installation
  **/
 export function setDefaults() {
-    let def_api_key = "ILbW1sKwPs8CWO76E8ex47TR7zCZ2a8L50oq7sPI";
-    const defaults = {
-        "secplugs_scan_opt": "passive",
-        "secplugs_key_type": "free",
-        "secplugs_api_key": def_api_key,
-        "secplugs_client_uuid": generateUUID(),
-        "secplugs_scan_count": 0
 
-    };
+    // Load defaults from our data file 
+    const data_file_url = chrome.runtime.getURL('path/to/file');
 
-    // Set the defaults
-    chrome.storage.local.set(defaults, null);
+
+    // Load the file
+    return fetch(data_file_url)
+        .then((response) => response.json()) //assuming file contains json
+        .then((json_defaults) => {
+
+            // Read the default values
+            let default_api_key = json_defaults["default_api_key"];
+            let default_end_point = json_defaults["security_end_point"];
+            const defaults = {
+                "secplugs_scan_opt": "passive",
+                "secplugs_key_type": "free",
+                "secplugs_api_key": default_api_key,
+                "secplugs_client_uuid": generateUUID(),
+                "secplugs_scan_count": 0,
+                "secplugs_security_end_point": default_end_point
+            };
+
+            // Write the values to defaults
+            return chrome.storage.local.set(defaults, null);
+        });
 }
 
 /**
