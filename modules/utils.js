@@ -238,6 +238,9 @@ export function doWebQuickScan(url_to_scan, tabId, local_state, show_message = f
     // Check for urls we should not scan
     if (isUrlExcluded(url_to_scan)) {
         console.log(`url '${url_to_scan}' excluded.`);
+        if (show_message) {
+            displayMessage("This URL is excluded from scanning. Try another page.", tabId, displayMessageType.INFO);
+        }
         return;
     }
 
