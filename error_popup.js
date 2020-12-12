@@ -1,9 +1,9 @@
-var body   = document.body || document.getElementsByTagName('body')[0],
+var body = document.body || document.getElementsByTagName('body')[0],
     newpar = document.createElement('div');
-    style = document.createElement('style');
-    img = document.createElement('img');
-    meta = document.createElement('meta');
-    head = document.head || document.getElementsByTagName('head')[0]
+style = document.createElement('style');
+img = document.createElement('img');
+meta = document.createElement('meta');
+head = document.head || document.getElementsByTagName('head')[0]
 
 meta.name = "theme-color"
 meta.setAttribute('content', "red")
@@ -50,28 +50,30 @@ newpar.style.position = "fixed"
 newpar.style.fontWeight = "600"
 newpar.style.zIndex = "10000"
 newpar.style.left = "45%"
-newpar.style.top = "30px"
-newpar.style.fontSize = "17px"
+/* global message, closeDiv, head, meta, img */
+newpar.style.top = "30px";
+newpar.style.fontSize = "17px";
 newpar.style.fontFamily = "apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol";
 newpar.innerHTML = message;
-if(message.indexOf("malicious") === -1){
-    newpar.style.webkitAnimation = "fadein 0.5s, fadeout 0.5s 2.8s"
-    newpar.style.animation = "fadein 0.5s, fadeout 0.5s 2.8s"
-    newpar.addEventListener("click", function(){
-        closeDiv("secplugs-error-div")
-    }, false)
-    
-    if(document.getElementById('secplugs-error-div')){
-        document.getElementById('secplugs-error-div').remove()
+if (message.indexOf("malicious") === -1) {
+    newpar.style.webkitAnimation = "fadein 0.5s, fadeout 0.5s 2.8s";
+    newpar.style.animation = "fadein 0.5s, fadeout 0.5s 2.8s";
+    newpar.addEventListener("click", function() {
+        closeDiv("secplugs-error-div");
+    }, false);
+
+    if (document.getElementById('secplugs-error-div')) {
+        document.getElementById('secplugs-error-div').remove();
     }
-    head.appendChild(meta)
-    newpar.appendChild(img)
-    body.insertBefore(newpar,body.childNodes[0]);
-    setTimeout(function(){
-        if(document.getElementById('secplugs-error-div') && message.indexOf("malicious") === -1){
-            closeDiv("secplugs-error-div")
+    head.appendChild(meta);
+    newpar.appendChild(img);
+    body.insertBefore(newpar, body.childNodes[0]);
+    setTimeout(function() {
+        if (document.getElementById('secplugs-error-div') && message.indexOf("malicious") === -1) {
+            closeDiv("secplugs-error-div");
         }
-    }, 3000)
-}else{
+    }, 3000);
+}
+else {
     window.location.replace("https://secplugs.com/malware.php");
 }

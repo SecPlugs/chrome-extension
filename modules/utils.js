@@ -68,12 +68,14 @@ export function getSecplugsAPIHeaders(api_key) {
 /**
  *   Put up a message box 
  **/
+const displayMessageType = { ERROR: '#fad900', INFO: '#f0f4f5', ALERT: '#f00528' };
 export function displayMessage(message, tab_id, type) {
 
+    const bg_color = type;
     chrome.tabs.executeScript(tab_id, {
             code: `var message = "${message}";` +
-                'var bg_color = "#ffebe6";' +
-                'var closeDiv = ' + closeDiv
+                `var bg_color = "${bg_color}";` +
+                `var closeDiv = ` + closeDiv
         },
         function() { chrome.tabs.executeScript(tab_id, { file: "error_popup.js" }) }
     );
@@ -256,7 +258,7 @@ export function doWebQuickScan(url_to_scan, tabId, local_state, show_message = f
                 if (response.status === 403 || response.status === 429) {
 
                     // Display user actionable message to user 
-                    displayMessage("Ensure key is correct with sufficient credits.", tabId, 'alert');
+                    displayMessage("Ensure key is correct with sufficient credits.", tabId, displayMessageType.ERROR);
                 }
                 else {
 
@@ -271,12 +273,15 @@ export function doWebQuickScan(url_to_scan, tabId, local_state, show_message = f
                 return;
             }
 
+            // Cur count alias
+            const cur_scan_count = local_state['secplugs_scan_count'];
+
             // Load json
             const json_response = response.json();
 
             chrome.browserAction.setBadgeText({
                 tabId: tabId,
-                text: local_state['secplugs_scan_count'].toString()
+                text: (cur_scan_count + 1).toString()
             });
 
             chrome.browserAction.setIcon({ path: "./images/green_logo.png" });
@@ -298,15 +303,21 @@ export function doWebQuickScan(url_to_scan, tabId, local_state, show_message = f
             });
 
             // Increment
-            setScanCount(local_state["secplugs_scan_count"] + 1);
+            setScanCount(cur_scan_count + 1);
 
             // Display message
             if (show_message)
                 if (json_response["score"] <= 40) {
-                    displayMessage("This is a malicious page.", tabId, 'alert');
+                    displayMessage(
+                        "This is a malicious page.",
+                        tabId,
+                        displayMessageType.ALERT);
                 }
             else {
-                displayMessage("This is a clean page.", tabId, 'info');
+                displayMessage(
+                    "This is a clean page.",
+                    tabId,
+                    displayMessageType.INFO);
             }
 
         })

@@ -1,3 +1,4 @@
+# c9 search exclude -node_modules/*, -dist/*, -coverage/*
 *node_modules*
 *dist*
 *coverage*

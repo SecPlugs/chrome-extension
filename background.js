@@ -9,7 +9,6 @@ todo: check test detection pages
 todo: Fix and test api key
 todo: UI
     - redo tool tip text
-    - make passive scanning a toggle 
     - Scan Active Page - Scan Now
     - Add status
         version
@@ -22,7 +21,7 @@ todo: show scan history
 todo: support asynchronous results
 todo: show last scanned items
 todo: produce dev, staging and production builds
-todo: clean up lint errors
+
 todo: make CICD post to chrome store 
 
 Done but needs testing
@@ -31,12 +30,14 @@ todo: fix 'default to detection on failure'
 todo: add tests for some urls fail to submit 
 todo: move images to a folder
 todo: build number version info etc
+todo: make passive scanning a toggle 
 
 
 Tested
 todo: add client id 
 todo: Uncaught ReferenceError: setKey is not defined
 todo: put default secplugs api and key in config file
+todo: clean up lint errors
 
 Won't do 
 todo: auto pin 
