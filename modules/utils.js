@@ -173,7 +173,7 @@ export const setKey = () => {
 export function setDefaults() {
 
     // Load defaults from our data file 
-    const data_file_url = chrome.runtime.getURL('path/to/file');
+    const data_file_url = chrome.runtime.getURL('data.json');
 
 
     // Load the file
