@@ -14,8 +14,7 @@ module.exports = {
         path: path.resolve(__dirname, "dist")
     },
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.js$/,
                 exclude: /(node_modules)/,
                 use: {
@@ -37,8 +36,10 @@ module.exports = {
     plugins: [
         new CopyPlugin({
             patterns: [
-              { from: 'manifest.json', to: 'manifest.json' }
+                { from: 'manifest.json', to: 'manifest.json' },
+                { from: 'data.json', to: 'data.json' }
+
             ],
-          })
+        })
     ]
 }
