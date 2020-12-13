@@ -173,6 +173,8 @@ describe('Test isUrlExcluded ', () => {
         "http://www.secplugs.com",
         "http://www.secplugs.com/",
         "http://www.secplugs.com/path",
+        "http://192.168.2.1",
+        "https://127.0.0.1/folder",
         "ftp://ftp.com"
     ];
     for (const url of excluded_urls) {
@@ -181,7 +183,7 @@ describe('Test isUrlExcluded ', () => {
         });
     }
 
-    // Test excluded urls
+    // Test included urls
     let normal_urls = [
         "http://someurl.com",
         "https://www.com",

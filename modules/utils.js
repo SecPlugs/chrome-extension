@@ -48,6 +48,12 @@ export function isUrlExcluded(url) {
         return true;
     }
 
+    // Check its not a local ip addesss
+    var localIPPattern = /^(http|https):\/\/((127)|(10)|(172\.(1[6-9]|2[0-9]|3[0-1]))|(192\.168))\./;
+    if (localIPPattern.test(url)) {
+        return true;
+    }
+
     // Ok to scan
     return false;
 }

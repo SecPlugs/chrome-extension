@@ -31,15 +31,27 @@ jobs:
         if: success()
         run: zip -r package.zip ./*
         
-      - name: extension artifact
+      - name: Create Production Package
         uses: actions/upload-artifact@v2
         with:
-          name: ChromeExtension
-          path: ./dist/
+          name: ChromeExtension.Production
+          path: ./dist.production/
+      
+      - name: Create Development Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: ChromeExtension.Production
+          path: ./dist.production/
 
-      - name: store listing artifact
+      - name: Chrome Store listing artifact
         uses: actions/upload-artifact@v2
         with:
           name: StoreListing
           path: ./store_listing/
+          
+      - name: Code Coverage artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: CodeCoverage
+          path: ./coverage/
 

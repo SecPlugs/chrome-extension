@@ -1,4 +1,4 @@
 #!/bin/bash
-# Builds the extension and places it in the ./dist folder
+# Runs the unit tests
 npm test
 

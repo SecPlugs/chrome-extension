@@ -1,10 +1,10 @@
-/* used to drive web pack to create the production package */
+/* used to drive web pack to create the development package */
 const path = require("path");
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    // Change this for development
-    mode: "production",
+    // This is the only change from the production version
+    mode: "development",
     entry: {
         background: path.resolve(__dirname, "background.js"),
         error_popup: path.resolve(__dirname, "error_popup.js"),

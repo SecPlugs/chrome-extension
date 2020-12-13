@@ -86,7 +86,7 @@ export const inputKey = () => {
 
     inputBox.setAttribute("id", "secplugs-input-box");
     inputBox.setAttribute("type", "text");
-    inputBox.setAttribute("placeholder", "Enter Secplug API Key");
+    inputBox.setAttribute("placeholder", "Enter Secplugs API Key");
     inputBox.style.position = "-webkit-sticky";
     inputBox.style.position = "sticky";
     inputBox.style.top = "5%";

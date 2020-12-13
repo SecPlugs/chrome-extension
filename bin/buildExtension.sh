@@ -22,4 +22,14 @@ check_return_code $?
 rm ./dist/manifest.json.original
 check_return_code $?
 
+# save that off as production
+rm -fr ./dist.production
+mv ./dist/ ./dist.production/
 
+# Now make a dev build
+./node_modules/.bin/webpack --config ./webpack.config.development.js
+cp ./dist.production/manifest.json ./dist.development/manifest.json
+
+# save that off as development
+rm -fr ./dist.development
+mv ./dist/ ./dist.development/
