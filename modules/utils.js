@@ -29,16 +29,27 @@ export function generateUUID() {
     return generate();
 }
 
+/**
+ * Returns true if the url is a supported scheme
+ **/
+export function isUrlSchemeSupported(url) {
+
+    // Check its a supported scheme
+    var uriPattern = /^((http|https):\/\/)/;
+    if (uriPattern.test(url)) {
+        return true;
+    }
+
+    return false;
+}
 
 /**
  * Returns true of the url is excluded from scanning
  **/
 export function isUrlExcluded(url) {
 
-    // Check its a valid url
-    var uriPattern = /^((http|https):\/\/)/;
-    if (url.includes("undefined") ||
-        !uriPattern.test(url)) {
+    // Check its a valid scheme
+    if (!isUrlSchemeSupported(url)) {
         return true;
     }
 

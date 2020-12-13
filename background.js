@@ -78,7 +78,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             const url_to_scan = tabs[0].url;
             let tab_id = tabs[0].tabId;
 
-
+            // Check its valid scheme (i.e. not chrome://)
+            if (!utils.isUrlSchemeSupported(url_to_scan)) {
+                console.log(`'${url_to_scan}' unsupported scheme`);
+                return;
+            }
             // Get the stored data
             utils.getLocalState()
                 .then(local_state => {
