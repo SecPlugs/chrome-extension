@@ -27,10 +27,6 @@ jobs:
             GIT_HUB_RUN_NUMBER: ${{ github.run_number }}
         run: ./bin/buildExtension.sh
         
-      - name: package
-        if: success()
-        run: zip -r package.zip ./*
-        
       - name: Create Production Package
         uses: actions/upload-artifact@v2
         with:
@@ -40,8 +36,8 @@ jobs:
       - name: Create Development Package
         uses: actions/upload-artifact@v2
         with:
-          name: ChromeExtension.Production
-          path: ./dist.production/
+          name: ChromeExtension.Development
+          path: ./dist.development/
 
       - name: Chrome Store listing artifact
         uses: actions/upload-artifact@v2
