@@ -60,12 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 export const inputKey = () => {
 
-    var api_key_control = document.getElementById("secplugs_popup_api_key_input");
-    var menu_options = document.getElementById("secplugs_popup_menu");
+    var api_key_menu = document.getElementById("secplugs_popup_apikey_menu");
+    var main_menu = document.getElementById("secplugs_popup_menu");
     var button_key = document.getElementById("secplugs-button-key");
 
-    menu_options.style.display = 'none';
-    api_key_control.style.visibility = "block";
+    main_menu.style.display = 'none';
+    api_key_menu.style.display = "block";
     button_key.addEventListener("click", function(event) {
         if (event.target == event.currentTarget) {
             utils.setKey();

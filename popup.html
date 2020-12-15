@@ -154,16 +154,8 @@
         </div>
         <label id="secplugs_key_type" class="key_type_label"></label>
         
-        <!-- Enter API Key -->
-        <div style="display : none;"
-            
-            id="secplugs_popup_api_key_input" style="height: 20%; width: 100%; z-index: 10000; background-color: rgb(255, 235, 153); font-size: 15px; text-align: center; vertical-align: middle; font-family: sans-serif, Lato, &quot;Times New Roman&quot;; position: sticky; bottom: 0px;">
-            <input id="secplugs-input-box" type="text" placeholder="Enter API Key" style="position: sticky; top: 5%;">
-            <input id="secplugs-button-key" type="submit" value="Done" style="border: none; background-color: black; color: white; margin-left: 5px; position: sticky; top: 5%;">
-        </div>
-        
-        <!-- Controls -->
-        <div id="secplugs_popup_menu" class="flex-container">
+        <!-- Top Level Menu Controls -->
+        <div id="secplugs_popup_main_menu" class="flex-container">
 
             <!--Auto URL Scanning -->
             <div class='flex-row' >
@@ -179,5 +171,14 @@
             <a href="#" title="Click to enter your own API key with premium features" id="api_link" class="flex-link">Enter API Key</a>
             <a id="visit_us" href="https://secplugs.com/" title="Click to see what's new with secplug and unlock premium features" target="_blank" class="flex-link primary-color">Visit Secplugs.com</a>
         </div>
+        
+        <!-- Enter API Key Menu Control -->
+        <div id="secplugs_popup_apikey_menu" style="display : none;" class="flex-container">
+            <div style="height: 20%; width: 100%; z-index: 10000; background-color: rgb(255, 235, 153); font-size: 15px; text-align: center; vertical-align: middle; font-family: sans-serif, Lato, &quot;Times New Roman&quot;; position: sticky; bottom: 0px;">
+                <input id="secplugs-input-box" type="text" placeholder="Enter API Key" style="position: sticky; top: 5%;">
+                <input id="secplugs-button-key" type="submit" value="Done" style="border: none; background-color: black; color: white; margin-left: 5px; position: sticky; top: 5%;">
+            </div>
+        </div>
+        
     </body>
 </html>
