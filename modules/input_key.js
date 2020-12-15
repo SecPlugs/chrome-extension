@@ -16,9 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById("toggle_auto_scan").checked = true;
             }
 
-            // Version text
-            const version_text = 'Version: ' + local_state['secplugs_plugin_version'];
-            document.getElementById('version_text').innerHTML = version_text;
+            // Version text & Key type
+            if (local_state['secplugs_key_type'] !== "paid") {
+                const version_text = 'Version: ' + local_state['secplugs_plugin_version'] + ', anonymous.';
+                document.getElementById('version_text').innerHTML = version_text;
+            }
+            else {
+                const version_text = 'Version: ' + local_state['secplugs_plugin_version'] + ', premium.';
+                document.getElementById('version_text').innerHTML = version_text;
+            }
 
             // Anonymous or paid
             if (local_state['secplugs_key_type'] !== "paid") {
