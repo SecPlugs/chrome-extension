@@ -64,8 +64,8 @@ export const inputKey = () => {
     var menu_options = document.getElementById("secplugs_popup_menu");
     var button_key = document.getElementById("secplugs-button-key");
 
-    menu_options.style.visibility = 'hidden';
-    api_key_control.style.visibility = "visible";
+    menu_options.style.display = 'none';
+    api_key_control.style.visibility = "block";
     button_key.addEventListener("click", function(event) {
         if (event.target == event.currentTarget) {
             utils.setKey();
