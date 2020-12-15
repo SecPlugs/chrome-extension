@@ -145,13 +145,7 @@
     </head>
     <body id="secplugs-popup" class="body">
         
-        <!-- Enter API Key -->
-        <div id="secplugs-input-div" style="height: 20%; width: 100%; z-index: 10000; background-color: rgb(255, 235, 153); font-size: 15px; text-align: center; vertical-align: middle; font-family: sans-serif, Lato, &quot;Times New Roman&quot;; position: sticky; bottom: 0px;">
-            <input id="secplugs-input-box" type="text" placeholder="Enter Secplug API Key" style="position: sticky; top: 5%;">
-            <input id="secplugs-button-key" type="submit" value="Done" style="border: none; background-color: black; color: white; margin-left: 5px; position: sticky; top: 5%;">
-        </div>
 
-        
         <!-- Title and logo -->
         <div class="image-div">
             <div class="secplugs-logo"> <img src="images/popup-logo.png" alt="Secplugs"  width="20px"> </div>
@@ -160,8 +154,16 @@
         </div>
         <label id="secplugs_key_type" class="key_type_label"></label>
         
+        <!-- Enter API Key -->
+        <div style="visibility : hidden;"
+            
+            id="secplugs_popup_api_key_input" style="height: 20%; width: 100%; z-index: 10000; background-color: rgb(255, 235, 153); font-size: 15px; text-align: center; vertical-align: middle; font-family: sans-serif, Lato, &quot;Times New Roman&quot;; position: sticky; bottom: 0px;">
+            <input id="secplugs-input-box" type="text" placeholder="Enter API Key" style="position: sticky; top: 5%;">
+            <input id="secplugs-button-key" type="submit" value="Done" style="border: none; background-color: black; color: white; margin-left: 5px; position: sticky; top: 5%;">
+        </div>
+        
         <!-- Controls -->
-        <div class="flex-container">
+        <div id="secplugs_popup_menu" class="flex-container">
 
             <!--Auto URL Scanning -->
             <div class='flex-row' >
