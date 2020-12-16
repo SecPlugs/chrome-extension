@@ -3,8 +3,9 @@ const path = require("path");
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    // This is the only change from the production version
+    // Dev specific changes
     mode: "development",
+    devtool: 'eval-source-map',
     entry: {
         background: path.resolve(__dirname, "background.js"),
         error_popup: path.resolve(__dirname, "error_popup.js"),
