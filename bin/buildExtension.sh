@@ -2,6 +2,9 @@
 # Builds the extension and places it in the ./dist folder
 source ./bin/utils.sh
 
+# Clean the folders
+./bin/cleanFolders.sh 
+
 # run the build
 npm run build
 check_return_code $?

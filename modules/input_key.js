@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 export const inputKey = () => {
 
     var api_key_menu = document.getElementById("secplugs_popup_apikey_menu");
-    var main_menu = document.getElementById("secplugs_popup_menu");
+    var main_menu = document.getElementById("secplugs_popup_main_menu");
     var button_key = document.getElementById("secplugs-button-key");
 
     main_menu.style.display = 'none';
