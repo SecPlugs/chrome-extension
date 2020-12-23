@@ -83,31 +83,20 @@ export function getSecplugsAPIHeaders(api_key) {
 }
 
 /**
- *   Put up a message box 
- **/
-const displayMessageType = { ERROR: '#fad900', INFO: '#f0f4f5', ALERT: '#f00528' };
-export function displayMessage(message, tab_id, type) {
-
-    const bg_color = type;
-    chrome.tabs.executeScript(tab_id, {
-            code: `var message = "${message}";` +
-                `var bg_color = "${bg_color}";` +
-                `var closeDiv = ` + closeDiv
-        },
-        function() { chrome.tabs.executeScript(tab_id, { file: "error_popup.js" }) }
-    );
-}
-
-/**
  *   Format the url for the request
+ * todo: pass variables and not local state
  **/
-export function buildSecplugsAPIRequestUrl(url, local_state) {
+export function buildSecplugsAPIRequestUrl(url, local_state, capability) {
 
-    // Check input
+    // Check valid url
     console.assert(
         typeof url == 'string' &&
         url.startsWith('http'),
         'url with scheme expected');
+
+    // Check valid capability
+    const capabilities = ['/web/score', '/web/quickscan', '/web/deepscan'];
+    console.assert(capabilities.includes(capability));
 
     // Scan context
     const scan_context = {
@@ -117,11 +106,285 @@ export function buildSecplugsAPIRequestUrl(url, local_state) {
     const encoded_scancontext = encodeURIComponent(JSON.stringify(scan_context));
 
     // Build and return the url
-    const endpoint = local_state['secplugs_security_end_point'];
+    const endpoint = local_state['secplugs_security_api'] + capability;
     const encoded_url = encodeURIComponent(url);
     let request_url = `${endpoint}?url=${encoded_url}&scancontext=${encoded_scancontext}`;
     return request_url;
 }
+
+/**
+ * Maps an api response to a scan status
+ **/
+function map_json_response_2_scan_status(json_response) {
+
+    // Build status object
+    const scan_status = {
+        url: json_response['threat_object']['url'],
+        status: json_response['status'],
+        score: json_response['score'],
+        verdict: json_response['verdict'],
+        report_id: json_response['report_id'],
+        message: ""
+    };
+
+    // Done
+    return scan_status;
+}
+
+/**
+ * Call back function that will poll for a report 
+ * until success or failure
+ * status reported back via scan_progress_callback 
+ **/
+function poll_for_report(security_api, api_key, report_id, scan_progress_callback, polling_interval = 500) {
+
+    // Timeout when interval is too large
+    const max_interval = 60 * 1000 * 5; // 5 mins
+    if (polling_interval > max_interval) {
+        console.assert(false, `timed out waiting for ${report_id}`);
+    }
+
+    // Get the headers
+    const headers = getSecplugsAPIHeaders(api_key);
+
+    // Build the url to poll for the report
+    let poll_request_url = security_api + `/${report_id}`;
+    fetch(poll_request_url, { method: "GET", headers: headers })
+        .then(response => {
+
+            // todo: report failure to scan_progress_callback
+            console.assert(response.ok);
+
+            // Load json
+            response.json()
+                .then(json_response => {
+
+                    // Check status and report back
+                    var scan_status = map_json_response_2_scan_status(json_response);
+                    scan_progress_callback && scan_progress_callback(scan_status);
+
+                    // Reschedule if still pending
+                    if (json_response['status'] == 'pending') {
+
+                        // Call with exponential back off polling_interval
+                        setTimeout(() => {
+
+                                poll_for_report(
+                                    report_id,
+                                    security_api,
+                                    api_key,
+                                    scan_progress_callback,
+                                    polling_interval * 2);
+                            },
+                            polling_interval
+                        );
+                    }
+                });
+        });
+
+}
+
+/** 
+ *  Process the response from Secplugs scan 
+ *  
+ **/
+function processAPIResponse(security_api, api_key, response, scan_progress_callback) {
+
+
+    // First handle api failure
+    if (!response.ok) {
+
+        // Format message
+        var message = "";
+        const status_code = response.status;
+        if (status_code === 403 || status_code === 429) {
+            message = "Ensure key is correct with sufficient credits.";
+        }
+        else {
+            message = `The request to the service failed with ${status_code}`;
+        }
+
+        // Send failure status if we have a call back
+        if (scan_progress_callback) {
+
+            // Build status
+            const scan_status = {
+                url: null,
+                status: 'failure',
+                score: null,
+                verdict: null,
+                report_id: null,
+                message: message
+            };
+
+            // Update progress 
+            scan_progress_callback(scan_status);
+        }
+
+        // Done
+        return;
+    }
+
+    // Load json
+    response.json()
+        .then(json_response => {
+
+            // Check status and report back
+            var scan_status = map_json_response_2_scan_status(json_response);
+            if (scan_progress_callback) {
+                scan_progress_callback(scan_status);
+            }
+
+            // Get report id
+            const report_id = json_response['report_id'];
+
+            // Reschedule if still pending
+            if (json_response['status'] == 'pending') {
+
+                // Call with exponential back off polling_interval
+                setTimeout(() => {
+                    poll_for_report(
+                        report_id,
+                        security_api,
+                        api_key,
+                        scan_progress_callback);
+                }, 0 /* todo: what should the initial poll interval be */ );
+            }
+        });
+
+
+    // Handle invalid json case
+    // todo:
+
+    // Handle pending case 
+    // todo:
+
+
+    // Handle success case 
+    // todo:
+
+    // Handle failure case 
+    // todo:
+
+}
+
+
+/** 
+ * Update the ui with status 
+ */
+function updateUIWithScanStatus(tab_id, local_state, scan_status) {
+
+
+    const status = scan_status['status'];
+    if (status == 'pending') {
+        // todo:
+    }
+    else if (status == 'failure') {
+        // todo:
+    }
+    else if (status == 'success') {
+
+        // Cur count 
+        const cur_scan_count = local_state['secplugs_scan_count'];
+
+
+        chrome.browserAction.setBadgeText({
+            tabId: tab_id,
+            text: (cur_scan_count + 1).toString()
+        });
+
+        chrome.browserAction.setIcon({ path: "./images/green_logo.png" });
+        setTimeout(function() {
+            chrome.browserAction.setBadgeText({
+                tabId: tab_id,
+                text: ""
+            });
+            chrome.browserAction.setIcon({ path: "./images/logo.png" });
+        }, 10000);
+
+        setTimeout(function() {
+            chrome.browserAction.setIcon({ path: "./images/logo.png" });
+        }, 3000);
+
+        chrome.browserAction.setBadgeBackgroundColor({
+            tabId: tab_id,
+            color: "#595959"
+        });
+
+        // Increment
+        setScanCount(cur_scan_count + 1);
+
+    }
+    else {
+        console.assert(false, 'bad status');
+    }
+
+}
+
+/** 
+ *  Initiate a quick scan on a url via the secplugs api 
+ *  Optionally takes a progress call back
+ **/
+export function doWebAnalysis(url_to_scan, tabId, local_state, capability = '/web/quickscan', scan_progress_callback = null) {
+
+    // Check for urls we should not scan
+    if (isUrlExcluded(url_to_scan)) {
+        console.log(`
+                url '${url_to_scan}'
+                excluded.
+                `);
+        if (scan_progress_callback) {
+
+            // Build status
+            const scan_status = {
+                url: url_to_scan,
+                status: 'failure',
+                score: null,
+                verdict: null,
+                report_id: null,
+                message: 'This URL is excluded from scanning.'
+            };
+
+            // Send update
+            scan_progress_callback(scan_status);
+        }
+        return;
+    }
+
+    // Get the headers
+    const headers = getSecplugsAPIHeaders(local_state['secplugs_api_key']);
+
+    // Build the url
+    const request_url = buildSecplugsAPIRequestUrl(url_to_scan, local_state, capability);
+
+    // Make the request
+    fetch(request_url, { method: "GET", headers: headers })
+        .then(response => {
+
+            // Process the response
+            processAPIResponse(
+                local_state['secplugs_security_api'],
+                local_state['secplugs_api_key'],
+                response,
+
+                // Progress call back
+                (scan_status) => {
+
+                    // Update the ui
+                    scan_status['url'] = url_to_scan;
+                    updateUIWithScanStatus(tabId, local_state, scan_status);
+                    scan_progress_callback && scan_progress_callback(scan_status);
+
+                });
+        })
+        .catch(error => {
+
+            // Log the error
+            console.error(error);
+        });
+
+}
+
 
 /**
  *   Returns promise that returns key value pairs for the provided
@@ -141,7 +404,9 @@ export const getLocalStorageData = (key_list) => {
             // Check for error
             if (chrome.runtime.lastError) {
                 const msg = chrome.runtime.lastError.message;
-                console.warn(`getLocalStorageData() - '${msg}'`);
+                console.warn(`
+                getLocalStorageData() - '${msg}'
+                `);
                 reject(msg);
             }
             // Resolve it with the data
@@ -165,7 +430,7 @@ export const getLocalState = () => {
         'secplugs_api_key',
         'secplugs_client_uuid',
         'secplugs_scan_count',
-        'secplugs_security_end_point'
+        'secplugs_security_api'
     ];
 
 
@@ -180,15 +445,52 @@ export const getLocalState = () => {
 
 };
 
+/**
+ *  Returns a promise that stores the api key and flags as registered if its valid and passes health check
+ *  otherwise rejects with error messsage
+ **/
+export const setKey = (new_api_key, local_state) => {
 
-export const setKey = () => {
-    let text_val = document.getElementById('secplugs-input-box').value;
-    if (text_val && text_val.length) {
-        chrome.storage.local.set({ "secplugs_api_key": text_val }, null);
-        chrome.storage.local.set({ "secplugs_key_type": "paid" }, null);
-        document.getElementById('visit_us').innerHTML = "Visit Secplugs.com";
-        document.getElementById("secplugs-input-div").remove();
-    }
+    return new Promise((resolve, reject) => {
+
+        // Check for invalid string
+        if (!new_api_key || !new_api_key.length) {
+
+            // Bad key
+            reject('The key is invalid or empty.');
+        }
+
+        // Check it is an authorised api-key by calling health check
+        const headers = getSecplugsAPIHeaders(new_api_key);
+
+        // Build the end point url for the health check
+        const healthcheck_request_url = local_state['secplugs_security_api'] + '/healthcheck';
+
+        // Make the request
+        fetch(healthcheck_request_url, { method: "GET", headers: headers })
+            .then(response => {
+
+                // handle failure
+                if (!response.ok) {
+
+                    reject('That api key is not authorised.');
+                }
+                else {
+
+                    // Success - store the key and flag as registered
+                    const data_to_store = {
+                        "secplugs_api_key": new_api_key,
+                        "secplugs_key_type": "registered"
+                    };
+
+                    // Store it then resolve
+                    chrome.storage.local.set(data_to_store, null);
+                    resolve(new_api_key);
+                }
+            });
+
+    });
+
 };
 
 /**
@@ -206,14 +508,14 @@ export function setDefaults() {
 
             // Read the default values
             let default_api_key = json_defaults["default_api_key"];
-            let default_end_point = json_defaults["security_end_point"];
+            let default_security_api = json_defaults["security_api"];
             const defaults = {
                 "secplugs_auto_scan_enabled": "true",
-                "secplugs_key_type": "free",
+                "secplugs_key_type": "anonymous",
                 "secplugs_api_key": default_api_key,
                 "secplugs_client_uuid": generateUUID(),
                 "secplugs_scan_count": 0,
-                "secplugs_security_end_point": default_end_point
+                "secplugs_security_api": default_security_api
             };
 
             // Write the values to defaults
@@ -235,116 +537,3 @@ export const setAutoScan = (enabled) => {
     console.assert(['true', 'false'].includes(enabled));
     chrome.storage.local.set({ "secplugs_auto_scan_enabled": enabled }, null);
 };
-
-export const closeDiv = (id) => {
-    try {
-        document.getElementById(id).remove();
-    }
-    catch (err) {
-        return;
-    }
-
-};
-
-/** 
- *  Initiate a quick scan on a url via the secplugs api 
- *  Error handling: Prompts users for user actionable errors, logs to console for others
- **/
-export function doWebQuickScan(url_to_scan, tabId, local_state, show_message = false) {
-
-    // Check for urls we should not scan
-    if (isUrlExcluded(url_to_scan)) {
-        console.log(`url '${url_to_scan}' excluded.`);
-        if (show_message) {
-            displayMessage("This URL is excluded from scanning. Try another page.", tabId, displayMessageType.INFO);
-        }
-        return;
-    }
-
-    // Get the headers
-    const headers = getSecplugsAPIHeaders(local_state['secplugs_api_key']);
-
-    // Build the url
-    const request_url = buildSecplugsAPIRequestUrl(url_to_scan, local_state);
-
-    // Make the request
-    fetch(request_url, { method: "GET", headers: headers })
-        .then(response => {
-
-            // handle failure
-            if (!response.ok) {
-
-                // Pop up box on bad key or out of credit
-                if (response.status === 403 || response.status === 429) {
-
-                    // Display user actionable message to user 
-                    displayMessage("Ensure key is correct with sufficient credits.", tabId, displayMessageType.ERROR);
-                }
-                else {
-
-                    // Record error message and return false
-                    const json_response = JSON.stringify(response.json());
-                    const status = response.status;
-                    var message = `fetch on '${request_url}' failed with status: ${status} and json :${json_response}`;
-                    console.error(message);
-                }
-
-                // Done
-                return;
-            }
-
-            // Cur count alias
-            const cur_scan_count = local_state['secplugs_scan_count'];
-
-            // Load json
-            const json_response = response.json();
-
-            chrome.browserAction.setBadgeText({
-                tabId: tabId,
-                text: (cur_scan_count + 1).toString()
-            });
-
-            chrome.browserAction.setIcon({ path: "./images/green_logo.png" });
-            setTimeout(function() {
-                chrome.browserAction.setBadgeText({
-                    tabId: tabId,
-                    text: ""
-                });
-                chrome.browserAction.setIcon({ path: "./images/logo.png" });
-            }, 10000);
-
-            setTimeout(function() {
-                chrome.browserAction.setIcon({ path: "./images/logo.png" });
-            }, 3000);
-
-            chrome.browserAction.setBadgeBackgroundColor({
-                tabId: tabId,
-                color: "#595959"
-            });
-
-            // Increment
-            setScanCount(cur_scan_count + 1);
-
-            // Display message
-            if (show_message)
-                if (json_response["score"] <= 40) {
-                    displayMessage(
-                        "This is a malicious page.",
-                        tabId,
-                        displayMessageType.ALERT);
-                }
-            else {
-                displayMessage(
-                    "This is a clean page.",
-                    tabId,
-                    displayMessageType.INFO);
-            }
-
-        })
-        .catch(error => {
-
-            // Log the error
-            console.error(error);
-        });
-
-}

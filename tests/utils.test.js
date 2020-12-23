@@ -13,32 +13,69 @@ afterEach(() => {
 const utils = require('../modules/utils');
 
 describe('Test setKey in utils.js', () => {
-    it('setKey in local storage', () => {
-        let div = document.createElement('div');
-        div.setAttribute("id", "secplugs-input-div");
-        let input = document.createElement('input');
-        input.setAttribute("id", "secplugs-input-box");
-        input.setAttribute("value", "new_key");
-        let label = document.createElement('label');
-        label.setAttribute("id", "visit_us");
-        div.appendChild(input);
-        div.appendChild(label);
-        document.body.appendChild(div);
-        utils.setKey();
-        expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_api_key": "new_key" }, null);
-        div = document.createElement('div');
-        div.setAttribute("id", "secplugs-input-div");
-        input = document.createElement('input');
-        input.setAttribute("id", "secplugs-input-box");
-        input.setAttribute("value", "");
-        label = document.createElement('label');
-        label.setAttribute("id", "visit_us");
-        div.appendChild(input);
-        div.appendChild(label);
-        document.body.appendChild(div);
-        utils.setKey();
-        expect(chrome.storage.local.set).not.toHaveBeenCalledWith();
+
+    afterAll(() => {
+        // Clear these mocks
+        global.fetch = jest.fn();
     });
+
+    // Test contants 
+    const new_key = 'new_key';
+    const expected_data = {
+        "secplugs_api_key": new_key,
+        "secplugs_key_type": "registered"
+    };
+
+    const local_state = {
+        "secplugs_security_api": 'https://mockendpoint/path'
+    };
+
+    it('does not set the key if its empty', () => {
+
+        expect.assertions(1);
+
+        utils.setKey('', local_state).catch(() => {
+            expect(chrome.storage.local.set).not.toHaveBeenCalledWith();
+        });
+
+    });
+
+    it('does not set the key if healtcheck call fails', () => {
+
+        expect.assertions(1);
+
+        // Mock fetch to pass
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 403,
+            json: () => {},
+            ok: false
+        }));
+
+        utils.setKey(new_key, local_state).catch(() => {
+            expect(chrome.storage.local.set).not.toHaveBeenCalledWith();
+        });
+
+    });
+
+    it('sets the key if its valid and healtcheck passes', () => {
+
+        expect.assertions(1);
+
+        // Mock fetch to pass
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 200,
+            json: () => {},
+            ok: true
+        }));
+
+
+        utils.setKey(new_key, local_state).then(() => {
+            expect(chrome.storage.local.set).toHaveBeenCalledWith(expected_data, null);
+        });
+
+    });
+
+
 });
 
 describe('Test utils.generateUUID', () => {
@@ -73,7 +110,7 @@ describe('Test setDefaults', () => {
         // Set mock data
         const mock_data = {
             "default_api_key": "ILbW1sKwPs8CWO76E8ex47TR7zCZ2a8L50oq7sPI",
-            "security_end_point": "https://api.live.secplugs.com/security/web/quickscan"
+            "security_api": "https://api.live.secplugs.com/security"
         };
 
         // Mock fetch
@@ -124,7 +161,7 @@ describe('Test setDefaults', () => {
                             .then(local_state => {
 
                                 // .. other values should be setup
-                                expect(local_state['secplugs_key_type']).toEqual("free");
+                                expect(local_state['secplugs_key_type']).toEqual("anonymous");
                                 expect("secplugs_api_key" in local_state).toBe(true);
                                 expect(local_state["secplugs_plugin_version"]).toBe(test_version);
                                 expect(local_state["secplugs_client_uuid"]).toMatch(regex_uudiv4);
@@ -134,26 +171,6 @@ describe('Test setDefaults', () => {
     });
 });
 
-describe('Test closeDiv in utils.js', () => {
-    const originalDoc = global.document;
-    const getElementById = jest.fn();
-    beforeEach(() => {
-        global.document.getElementById = getElementById;
-    });
-    afterAll(() => {
-        global.document = originalDoc;
-    });
-
-    it('closeDiv will remove an element from DOM', () => {
-        const div = document.createElement('div');
-        div.setAttribute("id", "secplugs-input-div");
-        document.body.appendChild(div);
-        const divParams = { "id": "secplugs-input-div" };
-        getElementById.mockReturnValue(divParams);
-        utils.closeDiv("secplugs-input-div");
-        expect(document.getElementById).toHaveBeenCalledWith("secplugs-input-div");
-    });
-});
 
 describe("setAutoScan", () => {
     it('test if secplugs_auto_scan_enabled gets set', () => {
@@ -215,6 +232,7 @@ describe('Test getSecplugsAPIHeaders ', () => {
 describe('Test buildSecplugsAPIRequestUrl ', () => {
 
     const test_url = 'http://test.com/path?name=value';
+    const test_capability = "/web/quickscan";
 
     it('request url is build ok', () => {
 
@@ -223,10 +241,10 @@ describe('Test buildSecplugsAPIRequestUrl ', () => {
         const mock_local_state = {
             'secplugs_client_uuid': test_client_uuid,
             'secplugs_plugin_version': test_plugin_version,
-            'secplugs_security_end_point': 'https://api.com/path'
+            'secplugs_security_api': 'https://api.com/path'
         };
 
-        const request_url = utils.buildSecplugsAPIRequestUrl(test_url, mock_local_state);
+        const request_url = utils.buildSecplugsAPIRequestUrl(test_url, mock_local_state, test_capability);
         const parsed_url = new URL(request_url);
         const scan_context = JSON.parse(decodeURIComponent(parsed_url.searchParams.get('scancontext')));
         expect(parsed_url.hostname).toEqual('api.com');
@@ -296,7 +314,7 @@ describe('Test getLocalStorageData ', () => {
     });
 });
 
-describe('test doWebQuickScan', () => {
+describe('test doWebAnalysis', () => {
 
     const api_key = 'test_api_key';
     const tab_id = 72;
@@ -307,40 +325,116 @@ describe('test doWebQuickScan', () => {
     };
 
     const test_url = "http://invalid.com";
-    const expected_request_url = utils.buildSecplugsAPIRequestUrl(test_url, mock_local_state);
+    const test_capability = "/web/quickscan";
+    const expected_request_url = utils.buildSecplugsAPIRequestUrl(test_url, mock_local_state, test_capability);
     const expected_headers = utils.getSecplugsAPIHeaders(api_key);
+    const test_sync_result = {
+        status: 'success',
+        score: 20,
+        verdict: 'trusted',
+        report_id: 'test_report_id',
+        threat_object: { url: test_url }
+    };
+    const test_async_result = {
+        status: 'pending',
+        report_id: 'test_report_id',
+        threat_object: { url: test_url }
+    };
 
     // Helper function to wrap in promise and supply mocked state
-    function helperDoWebQuickScan(url_to_scan, tabId) {
-        return Promise.resolve(utils.doWebQuickScan(url_to_scan, tabId, mock_local_state));
+    function helperDoWebQuickScan(url_to_scan, tabId, scan_progress_callback = null) {
+        return Promise.resolve(utils.doWebAnalysis(url_to_scan, tabId, mock_local_state, test_capability, scan_progress_callback));
     }
 
-    it('does successful lookup', () => {
 
-        expect.assertions(3);
 
-        // Mock fetch
-        global.fetch = jest.fn(() => Promise.resolve({
-            'status': 200,
-            json: () => JSON.parse('{"score": 20}'),
-            ok: true
-        }));
+    it('does successful asynchronous lookup', done => {
+
+        expect.assertions(5);
+
+        // Mock fetch,  return pending then success
+        global.fetch = jest.fn();
+        global.fetch
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    'status': 200,
+                    json: () => Promise.resolve(test_async_result),
+                    ok: true
+                }))
+            .mockReturnValue(
+                Promise.resolve({
+                    'status': 200,
+                    json: () => Promise.resolve(test_sync_result),
+                    ok: true
+                })
+            );
 
         // Mocks
-        chrome.tabs.executeScript = jest.fn(); // displayMessage
         chrome.storage.local.set = jest.fn(); // setScanCount
 
-        return helperDoWebQuickScan(test_url, tab_id)
+        //jest.useFakeTimers();
+
+        function test_scan_progress_callback(scan_status) {
+
+            if (scan_status['status'] == 'success') {
+                expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_scan_count": mock_local_state["secplugs_scan_count"] + 1 }, null);
+                //expect(setTimeout).toHaveBeenCalledTimes(1);
+                expect(global.fetch.mock.calls.length).toEqual(2);
+                done();
+            }
+
+            if (scan_status['status'] == 'pending') {
+                expect(chrome.storage.local.set).not.toHaveBeenCalled();
+            }
+        }
+
+
+        // Run the test
+        return helperDoWebQuickScan(test_url, tab_id, test_scan_progress_callback)
             .then(() => {
+
                 expect(global.fetch).toHaveBeenCalledWith(
                     expected_request_url, { method: "GET", headers: expected_headers });
+                expect(global.fetch.mock.calls.length).toEqual(1);
 
-                expect(chrome.tabs.executeScript).not.toHaveBeenCalled();
-                expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_scan_count": mock_local_state["secplugs_scan_count"] + 1 }, null);
+                //jest.runAllTimers();
+
 
             });
 
     });
+    it('does successful synchronous lookup', (done) => {
+
+        expect.assertions(2);
+
+        // Mock fetch
+        global.fetch = jest.fn(() => Promise.resolve({
+            'status': 200,
+            json: () => Promise.resolve(test_sync_result),
+            ok: true
+        }));
+
+        // Mocks
+        chrome.storage.local.set = jest.fn(); // setScanCount
+
+        function test_scan_progress_callback(scan_status) {
+            if (scan_status['status'] == 'success') {
+                expect(chrome.storage.local.set).toHaveBeenCalledWith({ "secplugs_scan_count": mock_local_state["secplugs_scan_count"] + 1 }, null);
+                done();
+            }
+        }
+
+        // Run the test
+        return helperDoWebQuickScan(test_url, tab_id, test_scan_progress_callback)
+            .then(() => {
+                expect(global.fetch).toHaveBeenCalledWith(
+                    expected_request_url, { method: "GET", headers: expected_headers });
+
+            });
+
+    });
+
+
 
     it('handles a bad api key', () => {
 
@@ -354,17 +448,19 @@ describe('test doWebQuickScan', () => {
         }));
 
         // Mocks
-        chrome.tabs.executeScript = jest.fn(); // displayMessage
+        var scan_progress_callback = jest.fn(); // call back from progress
         chrome.storage.local.set = jest.fn(); // setScanCount
 
-        return helperDoWebQuickScan(test_url, tab_id)
+        return helperDoWebQuickScan(test_url, tab_id, scan_progress_callback)
             .then(() => {
                 expect(global.fetch).toHaveBeenCalledWith(
                     expected_request_url, { method: "GET", headers: expected_headers });
 
-                expect(chrome.tabs.executeScript.mock.calls.length).toEqual(1);
+                expect(scan_progress_callback.mock.calls.length).toEqual(1);
                 expect(chrome.storage.local.set).not.toHaveBeenCalled();
 
             });
     });
+
+
 });

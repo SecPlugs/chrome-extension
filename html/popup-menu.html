@@ -1,0 +1,316 @@
+<!DOCTYPE html> 
+<html>
+    <!-- Todos 
+    todo: Make sure all style is in class
+    todo: Main: add button to View Recent Scans
+    todo: Scan Now - View Report
+    
+    
+    -->
+    <head>
+        <title>Click to Open Menu Options</title>
+        <style>
+
+            .body {
+                padding: 0;
+                margin: 0;
+                text-align: center;
+                background: #fbfbfb;
+            }
+            .flex-container {
+                width: 300px;
+				padding: 10% 0%;
+                flex-basis: 0;
+                background-color: #f0f4f5;
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                align-items: center;
+                text-align: center;
+                flex-direction: row;
+                font-family: apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            }
+            .flex-row {
+                background-color: #f0f4f5;
+				border: 1px solid #c2d5da;
+                color: #1180b9;
+				font-weight: normal;
+				width: 100%;
+				border-radius: 5px;
+                font-size: 15px;
+                line-height: 35px;
+                text-decoration: none;
+                margin: 1% 4%;
+                box-sizing: border-box;
+                flex-grow: 1;
+                padding: 5px;
+            }
+            .flex-row-text {
+                background-color: #f0f4f5;
+                color: #1180b9;
+				font-weight: normal;
+				width: 100%;
+				border-radius: 5px;
+                font-size: 15px;
+                line-height: 35px;
+                text-decoration: none;
+                margin: 1% 4%;
+                box-sizing: border-box;
+                flex-grow: 1;
+                padding: 5px;
+            }
+            .flex-link {
+                background-color: #f0f4f5;
+				border: 1px solid #c2d5da;
+                color: #1180b9;
+				font-weight: normal;
+				width: 100%;
+				border-radius: 5px;
+                font-size: 15px;
+                line-height: 35px;
+                text-decoration: none;
+                margin: 1% 4%;
+                box-sizing: border-box;
+                flex-grow: 1;
+                padding: 5px;
+            }
+			.secplugs-primary-link
+			{  
+			    background-color: #219BD9; 
+			    color:#ddf1fb; 
+			}			
+            .flex-link:hover{
+                background-color: #219BD9;
+				color:white;
+            }
+            .flex-link:active{
+                background-color: #6666ff;
+            }
+            .secplugs-title{  
+                color: #219bd9;
+                font-weight: 700;
+                font-size: 20px;
+                font-family: apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            }
+            .secplugs-logo {
+                height: 20px;
+                width: 100%;
+                text-align: center;
+                margin-right: 10px;
+            }
+            .secplugs-version-text {
+                height: 20px;
+                width: 100%;
+                font-size: 12px;
+                text-align: center;
+                color: #219bd9;
+
+            }
+            .secplugs-api-key-edit {
+                padding-left: 15px; 
+                width: 90%;
+                height: 25px;
+            }
+            .secplugs-scan-now-stats-box-left {
+                width: 48%;
+                float: left;
+            }
+            .secplugs-scan-now-stats-box-right {
+                width: 48%;
+                float: left;
+                margin-left: 4%;
+            }
+            .secplugs-scan-now-stats-box-top {
+                background: #343d42; 
+                padding: 0px; 
+                color: white; 
+                border-radius: 5px 5px 0px 0px; 
+                margin: 0px;        
+            }
+            .secplugs-scan-now-stats-box-bottom {
+                background: #dde3e6; 
+                padding: 2px; 
+                color: #212529; 
+                border-radius: 0px 0px 5px 5px; 
+                margin: 0px;
+            }
+            .verdict_pending {
+                color: #212529; 
+            }
+            .verdict_clean {
+                color: #23702c; 
+            }
+            .verdict_malware {
+                color: #9c2a11; 
+            }
+            .verdict_suspicious {
+                color: #9c2a11; 
+            }
+            .verdict_untrusted {
+                color: #d48d01; 
+            }
+            .verdict_trusted {
+                color: #23702C; 
+            }
+   
+            .image-div{
+                padding: 0;
+                margin: 10px 0px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            /* slider switch */ 
+            .switch {
+                
+              float: left;
+              position: relative;
+              width: 60px;
+              height: 34px;
+            }
+            .switch input {display:none;}
+            .slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              -webkit-transition: .4s;
+              -moz-transition: .4s;
+              -o-transition: .4s;
+              transition: .4s;
+            }
+            .slider:before {
+              position: absolute;
+              content: "";
+              height: 26px;
+              width: 26px;
+              left: 4px;
+              bottom: 4px;
+              background-color: white;
+              -webkit-transition: .4s;
+              -moz-transition: .4s;
+              -o-transition: .4s;
+              transition: .4s;
+            }
+            input:checked + .slider {
+              background-color: #219BD9;
+            }
+            input:focus + .slider {
+              box-shadow: 0 0 1px #219BD9;
+            }
+            input:checked + .slider:before {
+              -webkit-transform: translateX(26px);
+              -ms-transform: translateX(26px);
+              -moz-transform: translateX(26px);
+              -o-transform: translateX(26px);
+              transform: translateX(26px);
+            }
+            .slider.round {
+              border-radius: 34px;
+            }
+            .slider.round:before {
+              border-radius: 50%;
+            }
+
+			#secplugs-input-box{padding:10px;}
+			#secplugs-button-key{height: 38px; background:#066b9e}
+			#secplugs-input-div{background-color: #dfe6e8;}
+        </style>  
+        <script type="module" src="../modules/popup-menu.js"></script>
+    </head>
+    <body id="secplugs-popup" class="body">
+        
+
+        <!-- Title and logo -->
+        <div class="image-div">
+            <div class="secplugs-logo"> <img src="../images/popup-logo.png" alt="Secplugs"  width="20px"> </div>
+            <label class="secplugs-title">Secplugs Web Secure</label>
+            <div id="version_text" class="secplugs-version-text">Version: unknown, anonymous. </div>
+        </div>
+       
+        <!-- Top Level Menu Controls -->
+        <div id="secplugs_popup_main_menu" class="flex-container">
+
+            <!--Auto URL Scanning -->
+            <div class='flex-row' >
+            <label class="switch">
+              <input id="secplugs_main_menu_btn_toggle_auto_scan" type="checkbox">
+              <span class="slider round"></span>
+            </label>
+                <span style="padding-left: 15px; float:left;" title="Automatically scan the web page URLs as you browse"   >Auto Scanning</span>
+            </div>
+    
+            <!-- Scan Now -->
+            <a href="#" id="secplugs_main_menu_btn_scan_now" class="flex-link" title="Scan the current pages URL">Scan Now</a>
+            
+            <!-- View Scan History -->
+            <a href="#" id="secplugs_main_menu_btn_view_scan_history" title="View the scanning history" class="flex-link">View Scan History</a>
+            
+            <!-- Enter API Key -->
+            <a href="#" id="secplugs_main_menu_btn_enter_api_key" title="Click to enter your own API key with registered features" class="flex-link">Enter API Key</a>
+            
+            <!-- Visit Secplugs.com-->
+            <a href="#" id="secplugs_main_menu_btn_visit_us" title="Click to see what's new with secplug and unlock premium features" target="_blank" class="flex-link secplugs-primary-link">Visit Secplugs.com</a>
+        
+        </div>
+        
+        <!-- Enter API Key Menu Controls -->
+        <div id="secplugs_popup_api_key_menu" style="display : none;" class="flex-container">
+            
+            <!-- Description -->
+            <div class='flex-row-text' >
+                <div  id="secplugs_api_key_menu_description">
+                Enter your API key to upgrade and enable <a href=''> registered features </a>
+                </div>
+            </div>
+            
+            <!-- API key Edit -->
+            <div class='flex-row' >
+                <input id="secplugs_api_key_menu_input_api_key" class="secplugs-api-key-edit"  type="text" placeholder="Enter API Key" >
+            </div>
+            
+            <!-- OK -->
+            <a href="#" id="secplugs_api_key_menu_btn_ok" class="flex-link secplugs-primary-link" title="Set the api key">OK</a>
+            
+            <!-- Get API Key -->
+            <a href="#" id="secplugs_api_key_menu_btn_get_api_key" class="flex-link" title="Get an API Key">Get API Key...</a>
+            
+            <!-- go Back -->
+            <a href="#" id="secplugs_api_key_menu_btn_go_back" class="flex-link" title="Go back to previous menu">Go Back</a>
+            
+        </div>
+        
+         <!-- Scan Now Menu Controls -->
+        <div id="secplugs_popup_scan_now_menu" style="display : none;" class="flex-container">
+            
+            <!-- Status -->
+             <div class='flex-row' >   
+                 <div class="secplugs-scan-now-stats-box-left"> 
+                    <h5 class="secplugs-scan-now-stats-box-top"> Analysis State  </h5>
+                    <h4 class='secplugs-scan-now-stats-box-bottom' id="secplugs_scan_now_menu_progress_status" align="center">Success</h4>
+                </div>
+                <div class="secplugs-scan-now-stats-box-right" > 
+                    <h5 class="secplugs-scan-now-stats-box-top"> Threat Verdict  </h5>
+                    <h4 class='secplugs-scan-now-stats-box-bottom' id="secplugs_scan_now_menu_progress_verdict" align="center">Clean</h4>
+                </div>
+                <div style="clear: both; display: table;"> </div>
+                <div style="display: none;" id="hidden_status">success</div>
+            </div>
+            
+            <!-- Deep Scan -->
+            <a href="#" id="secplugs_scan_now_menu_btn_deep_scan" class="flex-link" title="Run a deep scan">Deep Scan</a>
+            
+            <!-- View Report -->
+            <a href="#" id="secplugs_scan_now_menu_btn_view_report" class="flex-link" title="View the analysis report">View Report...</a>
+            
+            <!-- go Back -->
+            <a href="#" id="secplugs_scan_now_menu_btn_go_back" class="flex-link" title="Go back to previous menu">Go Back</a>
+            
+        </div>
+        
+    </body>
+</html>

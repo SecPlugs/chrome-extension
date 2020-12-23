@@ -54,7 +54,7 @@ import icon128 from './images/icon128.png';
 import popup from './images/popup-logo.png';
 import green_logo from './images/green_logo.png';
 import background from './background.html';
-import popup_html from './popup.html';
+import popup_html from './html/popup-menu.html';
 
 /* global chrome */
 
@@ -78,9 +78,27 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             const url_to_scan = tabs[0].url;
             let tab_id = tabs[0].tabId;
 
+            // Build status
+            var scan_status = {
+                url: url_to_scan,
+                status: 'pending',
+                score: null,
+                verdict: null,
+                report_id: null,
+                message: ""
+            };
+
+            // Send starting message 
+            chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
+
             // Check its valid scheme (i.e. not chrome://)
             if (!utils.isUrlSchemeSupported(url_to_scan)) {
                 console.log(`'${url_to_scan}' unsupported scheme`);
+
+                // Send starting message 
+                scan_status.message = "This page can't be scanned.";
+                chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
+
                 return;
             }
             // Get the stored data
@@ -88,12 +106,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 .then(local_state => {
 
                     // Do the scan
-                    const show_message = true;
-                    return utils.doWebQuickScan(
+                    const scan_progress_callback = (scan_status) => {
+
+                        chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
+                    };
+                    return utils.doWebAnalysis(
                         url_to_scan,
                         tab_id,
                         local_state,
-                        show_message);
+                        "/web/quickscan",
+                        scan_progress_callback);
+
 
                 })
                 .catch(data => {
@@ -110,7 +133,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     Handler - Scan new urls loaded in a tab
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    utils.closeDiv("secplugs-error-div");
 
     // todo: pendingUrl
 
@@ -129,7 +151,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             const url_to_scan = changeInfo.url;
             const tab_id = tabId;
             if (local_state['secplugs_auto_scan_enabled'] === "true") {
-                return utils.doWebQuickScan(url_to_scan, tab_id, local_state);
+                return utils.doWebAnalysis(url_to_scan, tab_id, local_state, '/web/quickscan');
             }
 
         })

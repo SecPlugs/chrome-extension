@@ -30,7 +30,7 @@
             "128": "images/icon128.png" 
         },
         "default_title": "Click here to open menu",
-        "default_popup": "popup.html"
+        "default_popup": "html/popup-menu.html"
     },
     "permissions": [
         "tabs",
@@ -41,7 +41,6 @@
     "web_accessible_resources": [
         "modules/*",
         "background.html",
-        "error_popup.js",
         "utils.js",
         "data.json",
         "images/popup-logo.png",

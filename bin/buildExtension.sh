@@ -11,7 +11,7 @@ check_return_code $?
 
 # stamp with the build number 
 if [ -z "$GIT_HUB_RUN_NUMBER"  ]; then
-    GIT_HUB_RUN_NUMBER="devbuild"
+    GIT_HUB_RUN_NUMBER="000"
 fi
 mv ./dist/manifest.json ./dist/manifest.json.original
 check_return_code $?
@@ -36,3 +36,6 @@ cp ./dist.production/manifest.json ./dist/manifest.json
 # save that off as development
 rm -fr ./dist.development
 mv ./dist/ ./dist.development/
+
+# echo ip
+dig +short myip.opendns.com @resolver1.opendns.com

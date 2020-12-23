@@ -59,7 +59,7 @@ describe('test chrome onMessage event', () => {
 
 describe('test chrome.tabs.onUpdated events', () => {
 
-    it('correctly sends new urls to utils.doWebQuickScanfor scanning', () => {
+    it('correctly sends new urls to utils.doWebAnalysisfor scanning', () => {
 
         expect.assertions(2);
 
@@ -71,8 +71,8 @@ describe('test chrome.tabs.onUpdated events', () => {
         };
         utils.getLocalState = jest.fn(() => Promise.resolve(mock_local_state));
 
-        // Mock doWebQuickScan
-        utils.doWebQuickScan = jest.fn();
+        // Mock doWebAnalysis
+        utils.doWebAnalysis = jest.fn();
 
         const test_url = "http://test.url.com/folder";
         const tab_id = 1;
@@ -81,7 +81,7 @@ describe('test chrome.tabs.onUpdated events', () => {
         return Promise.resolve(chrome.tabs.onUpdated.callListeners(tab_id, { url: test_url }, null))
             .then(result => {
                 expect(utils.getLocalState).toBeCalled();
-                expect(utils.doWebQuickScan).toBeCalledWith(test_url, tab_id, mock_local_state);
+                expect(utils.doWebAnalysis).toBeCalledWith(test_url, tab_id, mock_local_state, "/web/quickscan");
             });
     });
 
