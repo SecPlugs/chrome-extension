@@ -124,7 +124,7 @@ function map_json_response_2_scan_status(json_response) {
         score: json_response['score'],
         verdict: json_response['verdict'],
         report_id: json_response['report_id'],
-        message: ""
+        err_message: null
     };
 
     // Done
@@ -195,13 +195,13 @@ function processAPIResponse(security_api, api_key, response, scan_progress_callb
     if (!response.ok) {
 
         // Format message
-        var message = "";
+        var err_message = "";
         const status_code = response.status;
         if (status_code === 403 || status_code === 429) {
-            message = "Ensure key is correct with sufficient credits.";
+            err_message = "Ensure key is correct with sufficient credits.";
         }
         else {
-            message = `The request to the service failed with ${status_code}`;
+            err_message = `The request to the service failed with ${status_code}`;
         }
 
         // Send failure status if we have a call back
@@ -214,7 +214,7 @@ function processAPIResponse(security_api, api_key, response, scan_progress_callb
                 score: null,
                 verdict: null,
                 report_id: null,
-                message: message
+                err_message: err_message
             };
 
             // Update progress 
@@ -342,7 +342,7 @@ export function doWebAnalysis(url_to_scan, tabId, local_state, capability = '/we
                 score: null,
                 verdict: null,
                 report_id: null,
-                message: 'This URL is excluded from scanning.'
+                err_message: 'This URL is excluded from scanning.'
             };
 
             // Send update

@@ -119,10 +119,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         // Verdict text 
         const verdict = scan_status['verdict'];
         var verdict_display_text = "...";
-        var verdict_display_class = "";
-        if (status == 'pending') {
-            verdict_display_text = "In Progress";
-            verdict_display_class = "verdict_pending";
+        var verdict_display_class = "verdict_pending";
+        if (status == 'failure' ||
+            status == 'pending') {
+            // no op use defaults
         }
         else if (verdict == 'clean') {
             verdict_display_text = "Clean";
@@ -165,6 +165,21 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         }
         else {
             viewReportElement.classList.remove('secplugs-primary-link');
+        }
+
+        // Handle error message display
+        if (status == 'failure') {
+
+            // Show error
+            const err_message = scan_status.err_message || "unknown error.";
+            showHideControls(['secplugs_scan_now_menu_error_message'], []);
+            document.getElementById('secplugs_scan_now_menu_error_message').innerHTML = err_message;
+        }
+        else {
+
+            // Clear error
+            showHideControls([], ['secplugs_scan_now_menu_error_message']);
+            document.getElementById('secplugs_scan_now_menu_error_message').innerHTML = "";
         }
 
     }

@@ -2,7 +2,7 @@ import * as utils from './modules/utils.js';
 
 /*
 
-
+todo: display error message on scan now
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
 todo: Fix Scan Now so it shows results 
 todo: check test detection pages
@@ -87,7 +87,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             score: null,
             verdict: null,
             report_id: null,
-            message: ""
+            err_message: null,
         };
 
         // Send starting message 
