@@ -372,8 +372,6 @@ describe('test doWebAnalysis', () => {
         // Mocks
         chrome.storage.local.set = jest.fn(); // setScanCount
 
-        //jest.useFakeTimers();
-
         function test_scan_progress_callback(scan_status) {
 
             if (scan_status['status'] == 'success') {
@@ -388,7 +386,6 @@ describe('test doWebAnalysis', () => {
             }
         }
 
-
         // Run the test
         return helperDoWebQuickScan(test_url, tab_id, test_scan_progress_callback)
             .then(() => {
@@ -396,9 +393,6 @@ describe('test doWebAnalysis', () => {
                 expect(global.fetch).toHaveBeenCalledWith(
                     expected_request_url, { method: "GET", headers: expected_headers });
                 expect(global.fetch.mock.calls.length).toEqual(1);
-
-                //jest.runAllTimers();
-
 
             });
 
@@ -443,7 +437,7 @@ describe('test doWebAnalysis', () => {
         // Mock fetch to return 
         global.fetch = jest.fn(() => Promise.resolve({
             'status': 403,
-            json: () => JSON.parse('{}'),
+            json: () => Promise.resolve({ message: "error message" }),
             ok: false
         }));
 

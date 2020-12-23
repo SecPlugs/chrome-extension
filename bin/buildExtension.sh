@@ -2,8 +2,10 @@
 # Builds the extension and places it in the ./dist folder
 source ./bin/utils.sh
 
-# Clean the folders
-./bin/cleanFolders.sh 
+# Clean the build folders
+rm -fr ./dist
+rm -fr ./dist.production
+rm -fr ./dist.development
 
 # run the build
 npm run build

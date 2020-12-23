@@ -1,10 +1,10 @@
 import * as utils from './modules/utils.js';
 
 /*
-
+todo: Fix Scan Now so it shows results 
+todo: decide on what to do with web deepscan
 todo: display error message on scan now
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
-todo: Fix Scan Now so it shows results 
 todo: check test detection pages
 todo: Fix and test api key
 todo: UI
