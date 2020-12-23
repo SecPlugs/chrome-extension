@@ -2,7 +2,7 @@ import * as utils from './modules/utils.js';
 
 /*
 
-todo: fix issue after you enter key there is space below 
+
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
 todo: Fix Scan Now so it shows results 
 todo: check test detection pages
@@ -15,22 +15,24 @@ todo: UI
         scan count 
         last scanned & status
         key type
-    - merge go Premium and add api key
         
 todo: show scan history
 todo: support asynchronous results
 todo: show last scanned items
-todo: produce dev, staging and production builds
 
+todo: add favicon to context 
 todo: make CICD post to chrome store 
+todo: add context menu 'scan with secplugs'
 
 Done but needs testing
+todo: put up alert on scan now for un scannable urls 
 todo: fix 'we have no info on this page issue'
 todo: fix 'default to detection on failure'
 todo: add tests for some urls fail to submit 
 todo: move images to a folder
 todo: build number version info etc
 todo: make passive scanning a toggle 
+todo: produce dev, staging and production builds
 
 
 Tested
@@ -71,62 +73,50 @@ chrome.runtime.onInstalled.addListener(function(details) {
     Handler - User scans the current tab 
 */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action === "scan_url") {
-        chrome.tabs.query({ active: true }, function(tabs) {
+    if (request.action === "secplugs_popup_scan_now") {
 
-            // todo:bug is this the correct tab?
-            const url_to_scan = tabs[0].url;
-            let tab_id = tabs[0].tabId;
+        // Get values from the message
+        const url_to_scan = request.url;
+        const tab_id = request.tab_id;
+        const capability = request.capability;
 
-            // Build status
-            var scan_status = {
-                url: url_to_scan,
-                status: 'pending',
-                score: null,
-                verdict: null,
-                report_id: null,
-                message: ""
-            };
+        // Build status
+        var scan_status = {
+            url: url_to_scan,
+            status: 'pending',
+            score: null,
+            verdict: null,
+            report_id: null,
+            message: ""
+        };
 
-            // Send starting message 
-            chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
+        // Send starting message 
+        chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
 
-            // Check its valid scheme (i.e. not chrome://)
-            if (!utils.isUrlSchemeSupported(url_to_scan)) {
-                console.log(`'${url_to_scan}' unsupported scheme`);
+        // Get the stored data
+        utils.getLocalState()
+            .then(local_state => {
 
-                // Send starting message 
-                scan_status.message = "This page can't be scanned.";
-                chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
+                // Do the scan
+                const scan_progress_callback = (scan_status) => {
 
-                return;
-            }
-            // Get the stored data
-            utils.getLocalState()
-                .then(local_state => {
+                    chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
+                };
+                return utils.doWebAnalysis(
+                    url_to_scan,
+                    tab_id,
+                    local_state,
+                    capability,
+                    scan_progress_callback);
 
-                    // Do the scan
-                    const scan_progress_callback = (scan_status) => {
+            })
+            .catch(data => {
 
-                        chrome.runtime.sendMessage({ action: "scan_progress_update", scan_status: scan_status }, null);
-                    };
-                    return utils.doWebAnalysis(
-                        url_to_scan,
-                        tab_id,
-                        local_state,
-                        "/web/quickscan",
-                        scan_progress_callback);
-
-
-                })
-                .catch(data => {
-
-                    // Failed 
-                    console.log('scan_url Failed to get local storage data.');
-                });
-
-        });
+                // Failed 
+                console.log('secplugs_popup_scan_now Failed to get local storage data.');
+            });
     }
+
 });
 
 /* 

@@ -85,6 +85,13 @@ function setControlState(local_state) {
 
 }
 
+// Open a new 
+function openInNewTab(url) {
+    var win = window.open(url, '_blank');
+    win.focus();
+}
+
+
 // Handle messages
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
@@ -160,8 +167,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             viewReportElement.classList.remove('secplugs-primary-link');
         }
 
-
-
     }
 });
 
@@ -196,10 +201,35 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
 
-            // Show Scan Now menu and start a scan
+            // Show Scan Now menu and start a web quickscan
             document.getElementById("secplugs_main_menu_btn_scan_now").addEventListener("click", function() {
-                showHideControls(['secplugs_popup_scan_now_menu'], ['secplugs_popup_api_key_menu', 'secplugs_popup_main_menu']);
-                chrome.runtime.sendMessage({ action: "scan_url" }, null);
+
+                // Get the current tab
+                chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+
+                    console.assert(tabs.length == 1);
+                    const url_to_scan = tabs[0].url;
+
+                    // Alert if its excluded
+                    if (utils.isUrlExcluded(url_to_scan)) {
+
+                        alert('The current page is safe and excluded from scanning. Choose another page.');
+                    }
+                    else {
+
+                        // Switch to the sub menu 
+                        showHideControls(['secplugs_popup_scan_now_menu'], ['secplugs_popup_api_key_menu', 'secplugs_popup_main_menu']);
+
+                        // and kick off the scan
+                        const message = {
+                            action: "secplugs_popup_scan_now",
+                            url: url_to_scan,
+                            tab_id: tabs[0].tabId,
+                            capability: "/web/quickscan"
+                        };
+                        chrome.runtime.sendMessage(message, null);
+                    }
+                });
 
             });
 
@@ -239,7 +269,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Start a deep scan
             document.getElementById("secplugs_scan_now_menu_btn_deep_scan").addEventListener("click", function() {
-                chrome.runtime.sendMessage({ action: "scan_url" }, null);
+
+                // Get the current tab
+                chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+
+                    console.assert(tabs.length == 1);
+                    const url_to_scan = tabs[0].url;
+
+                    // and kick off the scan
+                    const message = {
+                        action: "secplugs_popup_scan_now",
+                        url: url_to_scan,
+                        tab_id: tabs[0].tabId,
+                        capability: "/web/deepscan"
+                    };
+                    chrome.runtime.sendMessage(message, null);
+                });
             });
 
             // Back to main menu

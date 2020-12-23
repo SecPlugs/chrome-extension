@@ -37,20 +37,20 @@ describe('test chrome onMessage event', () => {
 
         chrome.tabs.query.mockImplementation((message, callback) => callback(response));
         chrome.runtime.onMessage.addListener(messageListenerSpy);
-        chrome.runtime.onMessage.callListeners({ action: "scan_url" }, null, sendResponse);
-        expect(messageListenerSpy).toBeCalledWith({ action: "scan_url" }, null, sendResponse);
+        chrome.runtime.onMessage.callListeners({ action: "secplugs_popup_scan_now" }, null, sendResponse);
+        expect(messageListenerSpy).toBeCalledWith({ action: "secplugs_popup_scan_now" }, null, sendResponse);
         expect(chrome.storage.local.get).toBeCalled();
     });
 
-    it('test action is not scan_url', () => {
+    it('test action is not secplugs_popup_scan_now', () => {
         const messageListenerSpy = jest.fn();
         const sendResponse = jest.fn();
         let response = [{ tabId: 1, url: "http://invalid.com" }];
 
         chrome.tabs.query.mockImplementation((message, callback) => callback(response));
         chrome.runtime.onMessage.addListener(messageListenerSpy);
-        chrome.runtime.onMessage.callListeners({ action: "not_scan_url" }, null, sendResponse);
-        expect(messageListenerSpy).toBeCalledWith({ action: "not_scan_url" }, null, sendResponse);
+        chrome.runtime.onMessage.callListeners({ action: "not_secplugs_popup_scan_now" }, null, sendResponse);
+        expect(messageListenerSpy).toBeCalledWith({ action: "not_secplugs_popup_scan_now" }, null, sendResponse);
         expect(chrome.storage.local.get).not.toBeCalled();
     });
 });
