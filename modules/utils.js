@@ -430,7 +430,8 @@ export const getLocalState = () => {
         'secplugs_api_key',
         'secplugs_client_uuid',
         'secplugs_scan_count',
-        'secplugs_security_api'
+        'secplugs_security_api',
+        'secplugs_portal'
     ];
 
 
@@ -509,13 +510,15 @@ export function setDefaults() {
             // Read the default values
             let default_api_key = json_defaults["default_api_key"];
             let default_security_api = json_defaults["security_api"];
+            let default_portal = json_defaults["portal"];
             const defaults = {
                 "secplugs_auto_scan_enabled": "true",
                 "secplugs_key_type": "anonymous",
                 "secplugs_api_key": default_api_key,
                 "secplugs_client_uuid": generateUUID(),
                 "secplugs_scan_count": 0,
-                "secplugs_security_api": default_security_api
+                "secplugs_security_api": default_security_api,
+                "secplugs_portal": default_portal
             };
 
             // Write the values to defaults

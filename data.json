@@ -1,4 +1,5 @@
 {
   "default_api_key": "ILbW1sKwPs8CWO76E8ex47TR7zCZ2a8L50oq7sPI",
-  "security_api": "https://api.live.secplugs.com/security"
+  "security_api": "https://api.live.secplugs.com/security",
+  "portal" : "https://test.dev.secplugs.com"
 }

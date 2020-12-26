@@ -43,9 +43,6 @@ function setControlState(local_state) {
         // Enter Api key 
         document.getElementById('secplugs_main_menu_btn_enter_api_key').innerHTML = "Enter API Key..";
 
-        // Visit us button on the main menu
-        document.getElementById('secplugs_main_menu_btn_visit_us').innerHTML = "Upgrade...";
-
         // Description text on the api key menu
         const api_key_menu_description_text = "Enter your API key to upgrade and enable <a href=''> registered features </a>";
         document.getElementById('secplugs_api_key_menu_description').innerHTML = api_key_menu_description_text;
@@ -54,7 +51,7 @@ function setControlState(local_state) {
         document.getElementById('secplugs_api_key_menu_btn_ok').innerHTML = 'Apply API Key';
 
         // Get API Key
-        document.getElementById('secplugs_api_key_menu_btn_get_api_key').innerHTML = 'Get API Key...';
+        document.getElementById('secplugs_api_key_menu_btn_get_api_key').innerHTML = 'Get API Key';
 
     }
 
@@ -68,9 +65,6 @@ function setControlState(local_state) {
         // Change Api key 
         document.getElementById('secplugs_main_menu_btn_enter_api_key').innerHTML = "Change API Key..";
 
-        // Visit us button on the main menu
-        document.getElementById('secplugs_main_menu_btn_visit_us').innerHTML = "Visit Secplus.com";
-
         // Description text on the api key menu
         const api_key_menu_description_text = "You're using an api key and have access to <a href=''> registered features </a>";
         document.getElementById('secplugs_api_key_menu_description').innerHTML = api_key_menu_description_text;
@@ -79,16 +73,42 @@ function setControlState(local_state) {
         document.getElementById('secplugs_api_key_menu_btn_ok').innerHTML = 'Update API Key';
 
         // Get New API Key
-        document.getElementById('secplugs_api_key_menu_btn_get_api_key').innerHTML = 'Get New API Key...';
+        document.getElementById('secplugs_api_key_menu_btn_get_api_key').innerHTML = 'Get New API Key';
 
     }
 
 }
 
-// Open a new 
-function openInNewTab(url) {
-    var win = window.open(url, '_blank');
-    win.focus();
+// Open a new window at the url by posting the params to it
+function openLandingPage(local_state, landing_page, params) {
+
+    // Build the url
+    const action_url = local_state['secplugs_portal'] + "/plugin_landing/" + landing_page;
+
+    // Create the form
+    const target = "openLandingPage";
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", action_url);
+    form.setAttribute("target", target);
+
+    // Copy the required values from local state into params
+    params['api_key'] = local_state['secplugs_api_key'];
+    params['client_uuid'] = local_state['secplugs_client_uuid'];
+
+    // Create the hidden fields for the post
+    for (const [key, value] of Object.entries(params)) {
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", key);
+        hiddenField.setAttribute("value", value);
+        form.appendChild(hiddenField);
+    }
+
+    // Open the window and submit 
+    document.body.appendChild(form);
+    window.open('', target);
+    form.submit();
 }
 
 
@@ -167,6 +187,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             viewReportElement.classList.remove('secplugs-primary-link');
         }
 
+        // Set the view report button's report_id if we one, otherwise remove
+        const report_id = scan_status['report_id'];
+        if (report_id) {
+            viewReportElement.setAttribute('report_id', report_id);
+        }
+        else {
+            viewReportElement.removeAttribute('report_id');
+        }
+
+
         // Handle error message display
         if (status == 'failure') {
 
@@ -197,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             /* Handlers for the main menu buttons */
 
-            // Toggle to auto scanning
+            // Toggle Auto Scanning Button
             document.getElementById("secplugs_main_menu_btn_toggle_auto_scan").addEventListener("click", function() {
 
                 if (document.getElementById("secplugs_main_menu_btn_toggle_auto_scan").checked) {
@@ -210,13 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // Show enter Api Key menu
-            document.getElementById("secplugs_main_menu_btn_enter_api_key").addEventListener("click", () => {
-                showHideControls(['secplugs_popup_api_key_menu'], ['secplugs_popup_main_menu', 'secplugs_popup_scan_now_menu']);
-            });
-
-
-            // Show Scan Now menu and start a web quickscan
+            // Scan Now Button
             document.getElementById("secplugs_main_menu_btn_scan_now").addEventListener("click", function() {
 
                 // Get the current tab
@@ -248,6 +272,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
             });
 
+            // View Scan History Button
+            document.getElementById("secplugs_main_menu_btn_view_scan_history").addEventListener("click", function() {
+                openLandingPage(local_state, "viewscanhistory.php", {});
+            });
+
+            // Enter API Key Button
+            document.getElementById("secplugs_main_menu_btn_enter_api_key").addEventListener("click", () => {
+                showHideControls(['secplugs_popup_api_key_menu'], ['secplugs_popup_main_menu', 'secplugs_popup_scan_now_menu']);
+            });
+
+            // Visit Secplugs Button
+            document.getElementById("secplugs_main_menu_btn_visit_us").addEventListener("click", () => {
+                openLandingPage(local_state, "visitus.php", {});
+            });
+
             /* Handlers for the api key Menu */
 
             // Validate and set the api key
@@ -273,6 +312,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
+            // Get API key Button
+            document.getElementById("secplugs_api_key_menu_btn_get_api_key").addEventListener("click", () => {
+                openLandingPage(local_state, "getapikey.php", {});
+            });
+
             // Back to main menu
             document.getElementById("secplugs_api_key_menu_btn_go_back").addEventListener("click", () => {
                 showHideControls(['secplugs_popup_main_menu'], ['secplugs_popup_api_key_menu', 'secplugs_popup_scan_now_menu']);
@@ -280,7 +324,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
             /* Handlers for Scan Now Menu*/
-
 
             // Start a deep scan
             document.getElementById("secplugs_scan_now_menu_btn_deep_scan").addEventListener("click", function() {
@@ -300,6 +343,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     };
                     chrome.runtime.sendMessage(message, null);
                 });
+            });
+
+            // View the report
+            var viewReportElement = document.getElementById("secplugs_scan_now_menu_btn_view_report");
+            viewReportElement.addEventListener("click", () => {
+                const report_id = viewReportElement.getAttribute('report_id');
+                if (report_id) {
+                    openLandingPage(local_state, "viewreport.php", { report_id: report_id });
+                }
+                else {
+                    console.warn('No report_id');
+                }
             });
 
             // Back to main menu
