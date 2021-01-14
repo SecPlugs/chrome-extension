@@ -34,6 +34,7 @@ mv ./dist/ ./dist.production/
 # Now make a dev build
 ./node_modules/.bin/webpack --config ./webpack.config.development.js
 cp ./dist.production/manifest.json ./dist/manifest.json
+cp ./data.development.json ./dist/data.json
 
 # save that off as development
 rm -fr ./dist.development

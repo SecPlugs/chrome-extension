@@ -1,7 +1,7 @@
 # plugins
 contains code for plugins
 
-todo: Fix Scan Now so it shows results 
+done: Fix Scan Now so it shows results 
 todo: decide on what to do with web deepscan
 todo: display error message on scan now
 todo: fix Unchecked runtime.lastError: No tab with id: 159.
@@ -16,9 +16,9 @@ todo: UI
         last scanned & status
         key type
         
-todo: show scan history
-todo: support asynchronous results
-todo: show last scanned items
+done: show scan history
+done: support asynchronous results
+done: show last scanned items
 
 todo: add favicon to context 
 todo: make CICD post to chrome store 
