@@ -1,13 +1,19 @@
 {
-  "name": "secplug-chrome",
+  "name": "secplugs-chrome",
   "version": "0.0.1",
-  "description": "Secplug's Chrome plugin",
+  "description": "Secplugs Chrome plugin",
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
   "main": "background.js",
   "scripts": {
     "build": "webpack",
     "test": "jest --coverage"
   },
-  "author": "Deval Jain",
+  "author": "secplugs@secplugs.com",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -18,11 +24,12 @@
     "file-loader": "^6.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.0.1",
+    "jest-chrome": "^0.7.0",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.10.1",
-    "@bumble/jest-chrome": "^0.5.1",
+    "jest-chrome": "latest",
     "webpack": "^4.43.0"
   }
 }

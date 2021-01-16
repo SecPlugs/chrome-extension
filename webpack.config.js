@@ -1,0 +1,47 @@
+/* used to drive web pack to create the production package */
+const path = require("path");
+const CopyPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+    // Change this for development
+    mode: "production",
+    entry: {
+        background: path.resolve(__dirname, "background.js"),
+        content: path.resolve(__dirname, "content.js"),
+        "./modules/popup-menu": path.resolve(__dirname, "./modules/popup-menu.js"),
+        "./modules/utils": path.resolve(__dirname, "./modules/utils.js")
+    },
+    output: {
+        filename: "[name].js",
+        path: path.resolve(__dirname, "dist")
+    },
+    module: {
+        rules: [{
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            },
+            {
+                test: /\.(png|jpe?g|gif|html)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[path][name].[ext]',
+                },
+            },
+        ]
+    },
+    plugins: [
+        new CopyPlugin({
+            patterns: [
+                { from: 'manifest.json', to: 'manifest.json' },
+                { from: 'data.json', to: 'data.json' }
+
+            ],
+        })
+    ]
+};

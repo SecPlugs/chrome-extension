@@ -1,4 +1,6 @@
+# c9 search exclude -node_modules/*, -dist.development/*, -dist.production/*, -coverage/*
 *node_modules*
 *dist*
 *coverage*
 .c9/*
+*.tgz
