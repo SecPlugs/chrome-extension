@@ -84,7 +84,6 @@ export function getSecplugsAPIHeaders(api_key) {
 
 /**
  *   Format the url for the request
- * todo: pass variables and not local state
  **/
 export function buildSecplugsAPIRequestUrl(url, local_state, capability) {
 
@@ -138,7 +137,7 @@ function map_json_response_2_scan_status(json_response) {
  **/
 function poll_for_report(security_api, api_key, report_id, scan_progress_callback, polling_interval = 500) {
 
-    // Timeout when interval is too large
+    // Trace timeout when interval is too large
     const max_interval = 60 * 1000 * 5; // 5 mins
     if (polling_interval > max_interval) {
         console.assert(false, `timed out waiting for ${report_id}`);
@@ -152,7 +151,7 @@ function poll_for_report(security_api, api_key, report_id, scan_progress_callbac
     fetch(poll_request_url, { method: "GET", headers: headers })
         .then(response => {
 
-            // todo: report failure to scan_progress_callback
+            // Trace error
             console.assert(response.ok);
 
             // Load json
@@ -241,30 +240,16 @@ function processAPIResponse(security_api, api_key, response, scan_progress_callb
             // Reschedule if still pending
             if (json_response['status'] == 'pending') {
 
-                // Call with exponential back off polling_interval
+                // Schedule a poll
                 setTimeout(() => {
                     poll_for_report(
                         report_id,
                         security_api,
                         api_key,
                         scan_progress_callback);
-                }, 0 /* todo: what should the initial poll interval be */ );
+                }, 0 /* Poll immediately */ );
             }
         });
-
-
-    // Handle invalid json case
-    // todo:
-
-    // Handle pending case 
-    // todo:
-
-
-    // Handle success case 
-    // todo:
-
-    // Handle failure case 
-    // todo:
 
 }
 
@@ -276,23 +261,34 @@ function updateUIWithScanStatus(tab_id, local_state, scan_status) {
 
 
     const status = scan_status['status'];
+    const cur_scan_count = local_state['secplugs_scan_count'];
     if (status == 'pending') {
-        // todo:
+        // Nothing, dont constantly animate
     }
     else if (status == 'failure') {
-        // todo:
-    }
-    else if (status == 'success') {
 
-        // Cur count 
-        const cur_scan_count = local_state['secplugs_scan_count'];
-
-
+        // Set the badge text to the count and make it red
         chrome.browserAction.setBadgeText({
             tabId: tab_id,
             text: (cur_scan_count + 1).toString()
         });
 
+        // Set the colour to red
+        chrome.browserAction.setBadgeBackgroundColor({
+            tabId: tab_id,
+            color: "#f20a0a"
+        });
+
+    }
+    else if (status == 'success') {
+
+        // Set the badge text to the count
+        chrome.browserAction.setBadgeText({
+            tabId: tab_id,
+            text: (cur_scan_count + 1).toString()
+        });
+
+        // Clear the badge text after 10 secs
         chrome.browserAction.setIcon({ path: "./images/green_logo.png" });
         setTimeout(function() {
             chrome.browserAction.setBadgeText({
@@ -302,10 +298,12 @@ function updateUIWithScanStatus(tab_id, local_state, scan_status) {
             chrome.browserAction.setIcon({ path: "./images/logo.png" });
         }, 10000);
 
+        // Clear the success logo after 3 secs
         setTimeout(function() {
             chrome.browserAction.setIcon({ path: "./images/logo.png" });
         }, 3000);
 
+        // Set the colour
         chrome.browserAction.setBadgeBackgroundColor({
             tabId: tab_id,
             color: "#595959"
