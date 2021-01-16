@@ -253,61 +253,65 @@ function processAPIResponse(security_api, api_key, response, scan_progress_callb
 
 }
 
+/** 
+ * Update browsers extension icon, text and background
+ * Handle the case where the tab_id no longer exists
+ */
+function updateIconAndBadge(tab_id, icon_path, badge_text, badge_background_color) {
+
+    // Set the icon path
+    chrome.browserAction.setIcon({ path: icon_path, tabId: tab_id },
+        // Call back
+        () => {
+            // Check for error
+            if (chrome.runtime.lastError) {
+                // Failed - tab is gone
+                console.log(`Tab ${tab_id} no longer exists.`);
+            }
+            else {
+
+                // Ok - Set the badge text 
+                chrome.browserAction.setBadgeText({
+                    tabId: tab_id,
+                    text: badge_text
+                });
+
+                // Set the back ground colour
+                chrome.browserAction.setBadgeBackgroundColor({
+                    tabId: tab_id,
+                    color: badge_background_color
+                });
+            }
+        });
+}
 
 /** 
  * Update the ui with status 
  */
-function updateUIWithScanStatus(tab_id, local_state, scan_status) {
+function updateUIWithScanStatus(tab_id, local_state, status) {
 
-
-    const status = scan_status['status'];
     const cur_scan_count = local_state['secplugs_scan_count'];
+
     if (status == 'pending') {
-        // Nothing, dont constantly animate
+
+        // Display green but no badge yet
+        updateIconAndBadge(tab_id, "./images/green_logo.png", "", "#595959");
     }
     else if (status == 'failure') {
 
-        // Set the badge text to the count and make it red
-        chrome.browserAction.setBadgeText({
-            tabId: tab_id,
-            text: (cur_scan_count + 1).toString()
-        });
-
-        // Set the colour to red
-        chrome.browserAction.setBadgeBackgroundColor({
-            tabId: tab_id,
-            color: "#f20a0a"
-        });
+        // Show scan count badge with red background
+        updateIconAndBadge(tab_id, "./images/logo.png", (cur_scan_count + 1).toString(), "#f20a0a");
 
     }
     else if (status == 'success') {
 
-        // Set the badge text to the count
-        chrome.browserAction.setBadgeText({
-            tabId: tab_id,
-            text: (cur_scan_count + 1).toString()
-        });
+        // Display success - green and scan count in badge
+        updateIconAndBadge(tab_id, "./images/green_logo.png", (cur_scan_count + 1).toString(), "#595959");
 
-        // Clear the badge text after 10 secs
-        chrome.browserAction.setIcon({ path: "./images/green_logo.png" });
+        // Clear after 7 secs
         setTimeout(function() {
-            chrome.browserAction.setBadgeText({
-                tabId: tab_id,
-                text: ""
-            });
-            chrome.browserAction.setIcon({ path: "./images/logo.png" });
-        }, 10000);
-
-        // Clear the success logo after 3 secs
-        setTimeout(function() {
-            chrome.browserAction.setIcon({ path: "./images/logo.png" });
-        }, 3000);
-
-        // Set the colour
-        chrome.browserAction.setBadgeBackgroundColor({
-            tabId: tab_id,
-            color: "#595959"
-        });
+            updateIconAndBadge(tab_id, "./images/logo.png", "", "#595959");
+        }, 7000);
 
         // Increment
         setScanCount(cur_scan_count + 1);
@@ -355,6 +359,9 @@ export function doWebAnalysis(url_to_scan, tabId, local_state, capability = '/we
     // Build the url
     const request_url = buildSecplugsAPIRequestUrl(url_to_scan, local_state, capability);
 
+    // Display pending status
+    updateUIWithScanStatus(tabId, local_state, 'pending');
+
     // Make the request
     fetch(request_url, { method: "GET", headers: headers })
         .then(response => {
@@ -370,7 +377,7 @@ export function doWebAnalysis(url_to_scan, tabId, local_state, capability = '/we
 
                     // Update the ui
                     scan_status['url'] = url_to_scan;
-                    updateUIWithScanStatus(tabId, local_state, scan_status);
+                    updateUIWithScanStatus(tabId, local_state, scan_status['status']);
                     scan_progress_callback && scan_progress_callback(scan_status);
 
                 });

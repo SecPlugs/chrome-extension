@@ -19,7 +19,7 @@ done: add client id
 done: put default secplugs api and key in config file
 done: clean up lint errors
 done: Uncaught ReferenceError: setKey is not defined
-todo: fix Unchecked runtime.lastError: No tab with id: 159.
+done: fix Unchecked runtime.lastError: No tab with id: 159.
 todo: check test detection pages
 done: Fix and test api key
 done: UI Scan Active Page - Scan Now
