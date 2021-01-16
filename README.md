@@ -1,45 +1,29 @@
 # plugins
-contains code for plugins
+
 
 done: Fix Scan Now so it shows results 
-todo: decide on what to do with web deepscan
-todo: display error message on scan now
-todo: fix Unchecked runtime.lastError: No tab with id: 159.
-todo: check test detection pages
-todo: Fix and test api key
-todo: UI
-    - redo tool tip text
-    - Scan Active Page - Scan Now
-    - Add status
-        version
-        scan count 
-        last scanned & status
-        key type
-        
+done: decide on what to do with web deepscan
+done: display error message on scan now
 done: show scan history
 done: support asynchronous results
 done: show last scanned items
-
-todo: add favicon to context 
-todo: make CICD post to chrome store 
-todo: add context menu 'scan with secplugs'
-
-Done but needs testing
-todo: put up alert on scan now for un scannable urls 
-todo: fix 'we have no info on this page issue'
-todo: fix 'default to detection on failure'
-todo: add tests for some urls fail to submit 
-todo: move images to a folder
-todo: build number version info etc
-todo: make passive scanning a toggle 
-todo: produce dev, staging and production builds
-
-
-Tested
-todo: add client id 
-todo: Uncaught ReferenceError: setKey is not defined
-todo: put default secplugs api and key in config file
-todo: clean up lint errors
-
-Won't do 
-todo: auto pin 
+done: put up alert on scan now for un scannable urls 
+done: fix 'we have no info on this page issue'
+done: fix 'default to detection on failure'
+done: add tests for some urls fail to submit 
+done: move images to a folder
+done: build number version info etc
+done: make passive scanning a toggle 
+done: produce dev, staging and production builds
+done: add client id 
+done: put default secplugs api and key in config file
+done: clean up lint errors
+done: Uncaught ReferenceError: setKey is not defined
+todo: fix Unchecked runtime.lastError: No tab with id: 159.
+todo: check test detection pages
+done: Fix and test api key
+done: UI Scan Active Page - Scan Now
+wont: auto pin 
+wont: add favicon to context 
+wont: make CICD post to chrome store 
+wont: add context menu 'scan with secplugs'

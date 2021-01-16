@@ -44,7 +44,7 @@ function setControlState(local_state) {
         document.getElementById('secplugs_main_menu_btn_enter_api_key').innerHTML = "Enter API Key..";
 
         // Description text on the api key menu
-        const api_key_menu_description_text = "Enter your API key to upgrade and enable <a href=''> registered features </a>";
+        const api_key_menu_description_text = "Enter your API key to upgrade and enable registered features.";
         document.getElementById('secplugs_api_key_menu_description').innerHTML = api_key_menu_description_text;
 
         // Apply API Key
@@ -66,7 +66,7 @@ function setControlState(local_state) {
         document.getElementById('secplugs_main_menu_btn_enter_api_key').innerHTML = "Change API Key..";
 
         // Description text on the api key menu
-        const api_key_menu_description_text = "You're using an api key and have access to <a href=''> registered features </a>";
+        const api_key_menu_description_text = "You're using an api key and have access to registered features.";
         document.getElementById('secplugs_api_key_menu_description').innerHTML = api_key_menu_description_text;
 
         // Update API Key
@@ -322,28 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showHideControls(['secplugs_popup_main_menu'], ['secplugs_popup_api_key_menu', 'secplugs_popup_scan_now_menu']);
             });
 
-
             /* Handlers for Scan Now Menu*/
-
-            // Start a deep scan
-            document.getElementById("secplugs_scan_now_menu_btn_deep_scan").addEventListener("click", function() {
-
-                // Get the current tab
-                chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-
-                    console.assert(tabs.length == 1);
-                    const url_to_scan = tabs[0].url;
-
-                    // and kick off the scan
-                    const message = {
-                        action: "secplugs_popup_scan_now",
-                        url: url_to_scan,
-                        tab_id: tabs[0].tabId,
-                        capability: "/web/deepscan"
-                    };
-                    chrome.runtime.sendMessage(message, null);
-                });
-            });
 
             // View the report
             var viewReportElement = document.getElementById("secplugs_scan_now_menu_btn_view_report");

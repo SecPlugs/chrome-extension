@@ -81,11 +81,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
-    // todo: pendingUrl
-
     // Check for url
     if (!changeInfo.url) {
-        console.log("Skipping, no url.");
         return;
     }
 
