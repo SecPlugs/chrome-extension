@@ -22,7 +22,7 @@ The repo contains a Chrome Extension Secplugs Plugin
 - [x] done: clean up lint errors
 - [x] done: Uncaught ReferenceError: setKey is not defined
 - [x] done: fix Unchecked runtime.lastError: No tab with id: 159.
-- [ ] todo: check test detection pages
+- [x] done: check test detection pages
 - [x] done: Fix and test api key
 - [x] done: UI Scan Active Page - Scan Now
 - [ ] wont: auto pin 

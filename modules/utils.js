@@ -366,19 +366,42 @@ export function doWebAnalysis(url_to_scan, tabId, local_state, capability = '/we
     fetch(request_url, { method: "GET", headers: headers })
         .then(response => {
 
+            // Local state values
+            const secplugs_security_api = local_state['secplugs_security_api'];
+            const secplugs_api_key = local_state['secplugs_api_key'];
+            const secplugs_portal = local_state['secplugs_portal'];
+
             // Process the response
             processAPIResponse(
-                local_state['secplugs_security_api'],
-                local_state['secplugs_api_key'],
+                secplugs_security_api,
+                secplugs_api_key,
                 response,
 
                 // Progress call back
                 (scan_status) => {
 
+                    console.log('Got status call back');
                     // Update the ui
                     scan_status['url'] = url_to_scan;
                     updateUIWithScanStatus(tabId, local_state, scan_status['status']);
                     scan_progress_callback && scan_progress_callback(scan_status);
+
+                    // Check for detection 
+                    if (scan_status.verdict == 'malware') {
+
+                        // Trace detection
+                        console.log('Received a malware verdict, redirecting...');
+
+                        // Build redirect script
+                        const report_id = scan_status.report_id;
+                        const redirect_url = `${secplugs_portal}/plugin_landing/showalert.php?report_id=${report_id}`;
+                        var redirect_script = `window.location.href = '${redirect_url}';`;
+
+                        // Execute redirect
+                        chrome.tabs.executeScript(
+                            tabId, { code: redirect_script },
+                            () => { console.log('..done.') });
+                    }
 
                 });
         })
