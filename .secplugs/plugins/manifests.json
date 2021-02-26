@@ -6,5 +6,9 @@
     {
     "name" : "WebSecure 2",
     "description" : "WebSecure 2"
+    },
+        {
+    "name" : "GMail Plugin",
+    "description" : "Scans Attachments in GMail"
     }
 ]
