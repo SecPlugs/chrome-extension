@@ -9,6 +9,6 @@
     },
         {
     "name" : "GMail Plugin",
-    "description" : "Scans Attachments in GMail"
+    "description" : "Scans Attachments in GMail with a choice of scanners"
     }
 ]
