@@ -1,14 +1,10 @@
 [
-    {
-    "name" : "WebSecure",
-    "description" : "WebSecure this is my description"
-    },
-    {
-    "name" : "WebSecure 3",
-    "description" : "WebSecure 2"
-    },
+  
+    
         {
-    "name" : "GMail Plugin",
-    "description" : "Scans Attachments in GMail with a choice of scanners"
+        "name" : "test_repo_plugin",
+        "type" : "generic",
+        "title" : "Test Repo Plugin",
+        "description" : "For testing Git Hub API access"
     }
 ]
