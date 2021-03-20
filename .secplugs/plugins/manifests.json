@@ -5,8 +5,6 @@
                 "title" : "Web Secure",
                 "description" : "Chrome extension to scan visited web sites.",
                 "summary_html" : "@.secplugs/plugins/web_secure/summary.html",
-                "detail_html" : "@.secplugs/plugins/web_secure/detail.html",
-                "small_image" : "@.secplugs/plugins/web_secure/small_image.png",
-                "normal_image" : "@.secplugs/plugins/web_secure/normal_image.png"
+                "detail_html" : "@.secplugs/plugins/web_secure/detail.html"
         }
 ]
