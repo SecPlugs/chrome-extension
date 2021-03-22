@@ -3,6 +3,7 @@
                 "name" : "chrome_extension",
                 "type" : "browser",
                 "title" : "Chrome Extension",
+                "created_by" : "DeeJay@secplugs.com",
                 "description" : "Chrome extension to scan visited web sites.",
                 "summary_html" : "@.secplugs/plugins/chrome_extension/summary.html",
                 "detail_html" : "@.secplugs/plugins/chrome_extension/detail.html",
