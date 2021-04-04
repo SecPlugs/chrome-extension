@@ -8,6 +8,9 @@
                 "summary_html" : "@.secplugs/plugins/chrome_extension/summary.html",
                 "detail_html" : "@.secplugs/plugins/chrome_extension/detail.html",
                 "small_image" : "@.secplugs/plugins/chrome_extension/small_image.png",
-                "normal_image" : "@.secplugs/plugins/chrome_extension/normal_image.png"
+                "normal_image" : "@.secplugs/plugins/chrome_extension/normal_image.png",
+                "download_link" : "@.secplugs/plugins/chrome_extension/normal_image.png",
+                "github_link" : "https://github.com/SecPlugs/chrome-extension",
+                "moreinfo_link" : "https://github.com/SecPlugs/chrome-extension/wiki"
         }
 ]
