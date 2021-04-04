@@ -9,8 +9,8 @@
                 "detail_html" : "@.secplugs/plugins/chrome_extension/detail.html",
                 "small_image" : "@.secplugs/plugins/chrome_extension/small_image.png",
                 "normal_image" : "@.secplugs/plugins/chrome_extension/normal_image.png",
-                "download_link" : "@.secplugs/plugins/chrome_extension/normal_image.png",
+                "download_link" : "https://chrome.google.com/webstore/detail/secplugs-web-secure/pdhkebbpndcoebankoedojjiepmgomgc",
                 "github_link" : "https://github.com/SecPlugs/chrome-extension",
-                "moreinfo_link" : "https://github.com/SecPlugs/chrome-extension/wiki"
+                "more_info_link" : "https://github.com/SecPlugs/chrome-extension/wiki"
         }
 ]
