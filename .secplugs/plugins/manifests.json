@@ -11,6 +11,7 @@
                 "small_image" : "@.secplugs/plugins/chrome_extension/small_image.png",
                 "normal_image" : "@.secplugs/plugins/chrome_extension/normal_image.png",
                 "gallery_image" : [
+                        "@store_listing/screen_shot_0.png",
                         "@store_listing/screen_shot_1.png",
                         "@store_listing/screen_shot_2.png",
                         "@store_listing/screen_shot_3.png",
