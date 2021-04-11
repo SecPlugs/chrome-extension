@@ -15,19 +15,19 @@
       "gallery":[
         {
           "img":"@store_listing/screen_shot_0.png",
-          "caption":"View the scanning history"
+          "caption":"Pop up menu to toggle background scanning and other functions."
         },
         {
           "img":"@store_listing/screen_shot_1.png",
-          "caption":"View the scanning history"
+          "caption":"View the scanning history from within the tool."
         },
         {
           "img":"@store_listing/screen_shot_2.png",
-          "caption":"View the scanning history"
+          "caption":"Initiate a scan on the current page."
         },
         {
           "img":"@store_listing/screen_shot_3.png",
-          "caption":"View the scanning history"
+          "caption":"Browse time protection alert for a malicous url."
         }
       ]
     },
