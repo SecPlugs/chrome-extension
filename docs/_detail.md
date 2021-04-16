@@ -20,9 +20,9 @@ You should be able to see the sec plugs icon turning green for all the clean hit
 Download and install web secure directly from the [Google Chrome Store Listing](https://chrome.google.com/webstore/detail/secplugs-web-secure/pdhkebbpndcoebankoedojjiepmgomgc), post installation, surf the web as you normally would.
 Use the secplugs console to view activity, run reports and do deeper retro spective analysis.
 
-To use additional features and the privacy of your own account, after registering in Secplugs.com, login with your username and create an API key to use with the scripts. 
-Replace the key in the samples or create new scripts using these as an example.
-Use can then use the Secplugs console to view activity, run reports and do deeper retrospective threat analysis.  
+To use additional features and the privacy of your own account, after registering in Secplugs.com, login with your username and create an API key to use.
+Replace the key in the extension via the 'Change API Key' button. You can use the same key across multiple users.
+Use can then use the Secplugs portal to view activity, run reports and do deeper retrospective threat analysis. 
 
 Note : Google Chrome extensions are housed on the Chrome Web Store, where you can download and add them directly to your browser. Any extensions you add will be saved in the right-hand corner of Chrome, allowing you easy access to their settings.
 
