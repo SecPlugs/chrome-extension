@@ -6,8 +6,8 @@
     "created_by":"DeeJay@secplugs.com",
     "description":"Chrome extension to scan visited web sites.",
     "content":{
-      "summary":"@.secplugs/plugins/chrome_extension/summary.html",
-      "detail":"@.secplugs/plugins/chrome_extension/detail.html"
+      "summary":"https://secplugs.github.io/chrome-extension/docs/summary.html",
+      "detail":"https://secplugs.github.io/chrome-extension/docs/detail.html"
     },
     "images":{
       "small":"@.secplugs/plugins/chrome_extension/small_image.png",
