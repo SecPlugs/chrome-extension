@@ -13,7 +13,8 @@ The Chrome Extension works from within the Chrome browser to scan web sites as y
 #### How does it work?
 
 Once installed, the plugin is notified by the browser of page requests and then sends them to Secplugs for analysis.
-You should be able to see the sec plugs icon turning green for all the clean hits and a red floater for all the malicious URLs and you can perform automated and manual on-demand URL scans. The plugin icon also shows you how many URLs you have scanned across all sites. To configure the extension to use the vendor of your choice, you need to register in secplugs.com
+If you 'pin' the extension you can see an icon that indicates status and when click shows a pop menu. 
+The menu provodes functions like 'Scan Now' and 'View Scan History'.
 
 #### How do I get started?
 
