@@ -6,8 +6,6 @@ The Chrome Extension works from within the Chrome browser to scan web sites as y
 - __Auto Scanning__ - Scan web sites as you visit them. 
 - __Scan Now__ - Scan the current website and provide a report.
 - __View Scan History__ - Show the websites you've visited and the scan result
-- __Re-analyse sites__ - From the Secplugs portal, re analyse sites retrosepetively by resubmitting them.
-- __Run Reports__ - From the Secplugs portal, view reports
 - __Secplugs Portal__ - With a registered API key you can access all the core Secplugs features via the portal.
 
 #### How does it work?
