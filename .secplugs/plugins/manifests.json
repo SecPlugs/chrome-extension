@@ -4,7 +4,7 @@
     "type":"browser",
     "title":"Chrome Extension",
     "created_by":"DeeJay@secplugs.com",
-    "description":"Chrome extension to scan visited web sites.",
+    "description":"Chrome extension to scan web sites as you browse.",
     "content":{
       "summary":"https://secplugs.github.io/chrome-extension/docs/summary.html",
       "detail":"https://secplugs.github.io/chrome-extension/docs/detail.html"
