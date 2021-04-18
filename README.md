@@ -6,3 +6,4 @@
 The repo contains a Chrome Extension Secplugs Plugin
 
 For usage information to the [Secplugs Chrome Extension](https://secplugs.github.io/chrome-extension/docs)
+
