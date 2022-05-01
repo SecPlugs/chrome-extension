@@ -1,4 +1,4 @@
-theme: jekyll-theme-midnight
-title: Secplugs Chrome Extension
-google_analytics: G-4MB8SZYEBR
-description: A Google Chrome extension to scan web sites as you browse.
+markdown: kramdown
+kramdown:
+   syntax_highlighter_opts:
+      disable : true
